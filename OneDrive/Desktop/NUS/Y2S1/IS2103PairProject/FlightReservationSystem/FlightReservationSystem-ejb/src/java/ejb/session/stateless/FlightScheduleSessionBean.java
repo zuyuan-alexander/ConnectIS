@@ -42,17 +42,6 @@ public class FlightScheduleSessionBean implements FlightScheduleSessionBeanRemot
         FlightSchedulePlan newFSP = em.find(FlightSchedulePlan.class, newFSPid);
         fs.setFlightSchedulePlan(newFSP);
         newFSP.getFlightschedules().add(fs);
-        
-        /*
-        // when you create a flight schedule, you should initialize all the seats for the flight schedule
-        List<CabinClass> cabinClassList = newFSP.getFlight().getAircraftConfiguration().getCabinClasses();
-        
-        for (CabinClass cabinClass : cabinClassList) {
-            // initialize seat for every cabin class for that particular flight schedule
-            seatInit(fs, cabinClass);
-        }
-        */
-        
         em.persist(fs);
         em.flush();
         return fs.getFlightscheduleid();

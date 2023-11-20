@@ -725,6 +725,7 @@ public class MainApp {
                             throw new OverlappingScheduleException("Overlap found on the " + newFS.getDepartureDate() + " Cannot create new Flight Schedule Plan.");
                         }
                     }
+                      System.out.println("old fsid " + newFS.getFlightscheduleid() + "with departure date " + newFS.getDepartureDate());
 
                     //add the main fs
                     Calendar calendar = Calendar.getInstance();
@@ -782,7 +783,7 @@ public class MainApp {
                 System.out.println(ex.getMessage());
             } 
             
-            System.out.println(f.getFlightNumber() + ", " + newFSP.getScheduleType().name() + ": was created successfully");
+            System.out.println("\n" + f.getFlightNumber() + ", " + newFSP.getScheduleType().name() + ": was created successfully");
         } else if(response == 3)
         {
             newFSP.setScheduleType(ScheduleTypeEnum.RECURRENTNDAY);

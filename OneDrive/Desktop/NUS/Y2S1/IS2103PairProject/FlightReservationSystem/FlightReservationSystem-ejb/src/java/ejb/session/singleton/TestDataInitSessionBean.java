@@ -364,6 +364,7 @@ public class TestDataInitSessionBean {
         Flight f = new Flight();
         String flightnumber = "ML111";
         
+        
         try
         {
            f = flightSessionBean.retrieveFlightByFlightNumber(flightnumber);
@@ -386,7 +387,7 @@ public class TestDataInitSessionBean {
         //System.out.println("Enter End Date> dd MMM yy");
         String endDateStr = "30 Dec 2023";
         //System.out.println("Enter Flight Duration> HH Hours mm Minutes");
-        String flightDurationStr = "14 Hours 30 Minutes";
+        String flightDurationStr = "12 Hours 00 Minutes";
 
         //set the departureTime and flightDuration of the new FS
 
@@ -400,16 +401,29 @@ public class TestDataInitSessionBean {
             Date endDate = dateFormat.parse(endDateStr);
             Date flightDuration = timeFormat.parse(flightDurationStr);
             Date departureTime = departureFormat.parse(departureTimestr);
+            
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
 
+            // Find the next occurrence of the specified day of the week
+            int desiredDayOfWeek = convertToCalendarDayOfWeek(dayOfWeek);
+            int currentDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+            int daysToAdd = (desiredDayOfWeek - currentDayOfWeek + 7) % 7;
+
+            // Increment the start date to the next occurrence of the desired day of the week
+            cal.add(Calendar.DAY_OF_YEAR, daysToAdd);
+            Date departureDate = cal.getTime();
 
             newFSP.setDayOfWeek(dayOfWeek);
             newFSP.setStartDate(startDate);
             newFSP.setEndDate(endDate);
             newFSP.setNdays(7);
-            newFS.setDepartureDate(startDate);
+            newFS.setDepartureDate(departureDate);
             newFS.setDepartureTime(departureTime);
             newFS.setEstimatedFlightDuration(flightDuration);
-            newFS.calculateAndSetArrivalDateTime();
+            newFS.calculateAndSetArrivalDateTime();   
+            
+            
             
             List<Fare> fares = new ArrayList<>();
             List<BigDecimal> fareAmountList = new ArrayList<>();
@@ -417,46 +431,58 @@ public class TestDataInitSessionBean {
             fareAmountList.add(BigDecimal.valueOf(3000));
             fareAmountList.add(BigDecimal.valueOf(1000));
             Integer counter = 0;
-            Long newfspid = Long.MIN_VALUE;
-            try
-            {
-                newfspid = flightSchedulePlanSessionBeanLocal.createNewRWFlightSchedulePlan(f, newFSP, newFS);
-            } catch(InputDataValidationException ex)
-            {
-                System.out.println(ex.getMessage());
-            }
-             
-            
+            Long newfspid = Long.MAX_VALUE;
+            Long newfsid = Long.MAX_VALUE;
+           
+                    
+            newfspid = flightSchedulePlanSessionBeanLocal.createNewRWFlightSchedulePlan(f, newFSP, newFS);
+            newfsid  = flightScheduleSessionBeanLocal.createNewFlightSchedule(newFS, newfspid);
+             System.out.println("curr fs id:" + newFS.getFlightscheduleid());
+ 
             for(CabinClass cabinClass : f.getAircraftConfiguration().getCabinClasses()) {
                 Fare fare = new Fare("farebc", fareAmountList.get(counter), cabinClass.getCabinClassType());
                 //fareSessionBeanLocal.createNewFare(fare, newFSP);
                 counter++;
             }
-            
-            Long newfsid = flightScheduleSessionBeanLocal.createNewFlightSchedule(newFS, newfspid);
+
             System.out.println("Main Id " + newfsid);
+           
             System.out.println("Main Date " + newFS.getDepartureDate());
-            while(newFS.getDepartureDate().before(endDate))
+            FlightSchedule fs = new FlightSchedule();
+            Date currdate = newFS.getDepartureDate();
+            int test = 0;
+            while(currdate.before(endDate))
             {
                 Calendar calendar = Calendar.getInstance();
-                calendar.setTime(newFS.getDepartureDate());
+                calendar.setTime(currdate);
                 calendar.add(Calendar.DAY_OF_MONTH, 7); // Increment by 7 days
                 Date newDate = calendar.getTime();
                 System.out.println("Testing date " + newDate);
-                FlightSchedule fs = newFS;
+                
+                currdate = newDate;
+                fs = new FlightSchedule();
+                
                 fs.setDepartureDate(newDate);
+                fs.setDepartureTime(departureTime);
+                fs.setEstimatedFlightDuration(flightDuration);
                 fs.calculateAndSetArrivalDateTime(); 
+                if(currdate.after(endDate))
+                {
+                    break;
+                }
+                // System.out.println("old fsid " + newfsid);
                 newfsid = flightScheduleSessionBeanLocal.createNewFlightSchedule(fs, newfspid);
-                System.out.println("Created new fs " + newfsid);
+ 
             }
-
-            //em.persist(newFSP)
 
         } catch (ParseException ex)
         {
             ex.printStackTrace();
         } catch (FlightDisabledException ex) {
             System.out.println(ex.getMessage() + "\n");
+        } catch(InputDataValidationException ex)
+        {
+           System.out.println(ex.getMessage());
         }
     }
     
@@ -464,5 +490,26 @@ public class TestDataInitSessionBean {
         Customer customer = new Customer("root", "customer", "rootcustomer@gmail.com", "123456789", "nus", "nus", "root", "password");
         em.persist(customer);
         em.flush();
+    }
+    
+     private int convertToCalendarDayOfWeek(String dayOfWeek) {
+        switch (dayOfWeek.toLowerCase()) {
+            case "sunday":
+                return Calendar.SUNDAY;
+            case "monday":
+                return Calendar.MONDAY;
+            case "tuesday":
+                return Calendar.TUESDAY;
+            case "wednesday":
+                return Calendar.WEDNESDAY;
+            case "thursday":
+                return Calendar.THURSDAY;
+            case "friday":
+                return Calendar.FRIDAY;
+            case "saturday":
+                return Calendar.SATURDAY;
+            default:
+                throw new IllegalArgumentException("Invalid day of week input");
+        }
     }
 }

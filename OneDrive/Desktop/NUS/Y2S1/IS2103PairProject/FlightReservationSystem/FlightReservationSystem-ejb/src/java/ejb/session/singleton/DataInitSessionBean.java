@@ -61,6 +61,7 @@ import util.exception.UpdateFlightException;
 @Singleton
 @LocalBean
 @Startup
+
 public class DataInitSessionBean {
 
     @PersistenceContext(unitName = "FlightReservationSystem-ejbPU")
@@ -87,6 +88,7 @@ public class DataInitSessionBean {
     public DataInitSessionBean() {
     }
 
+    
     @PostConstruct
     public void postConstruct() {
         initEmployee();
@@ -97,10 +99,11 @@ public class DataInitSessionBean {
         initFlightRoute();
         initFlight();
         initFlightSchedulePlan();
-        
+
         Customer customer = new Customer("root", "customer", "rootcustomer@gmail.com", "abcdefghi", "nus", "nus", "root", "password");
         em.persist(customer);
         em.flush();
+
     }
     
     public void initEmployee() {
@@ -390,6 +393,135 @@ public class DataInitSessionBean {
         }
     }
     
+      public void initFlightSchedulePlan() {
+        // Parse dates and FlightDuration
+        FlightSchedulePlan newFSP = new FlightSchedulePlan();
+        FlightSchedule newFS = new FlightSchedule();
+        Flight f = new Flight();
+        String flightnumber = "ML111";
+        
+        
+        try
+        {
+           f = flightSessionBeanLocal.retrieveFlightByFlightNumber(flightnumber);
+        } catch (FlightNotFoundException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH 'Hours' mm 'Minute'");
+        SimpleDateFormat departureFormat = new SimpleDateFormat("hh:mm a");
+        
+        newFSP.setScheduleType(ScheduleTypeEnum.RECURRENTWEEKLY);
+        //System.out.println("Enter Day Of Week> ");
+        String dayOfWeek = "Monday";
+        //System.out.println("Enter Departure Time> eg: 9:00 AM");
+        String departureTimestr = "9:00 AM";
+        //System.out.println("Enter Start Date> dd MMM yy");
+        String startDateStr = "01 Dec 2023";
+        //System.out.println("Enter End Date> dd MMM yy");
+        String endDateStr = "30 Dec 2023";
+        //System.out.println("Enter Flight Duration> HH Hours mm Minutes");
+        String flightDurationStr = "12 Hours 00 Minutes";
+
+        //set the departureTime and flightDuration of the new FS
+
+        //call the FS sessionBean to create the FS
+
+
+        // Parse dates and FlightDuration
+        try
+        {
+            Date startDate = dateFormat.parse(startDateStr);
+            Date endDate = dateFormat.parse(endDateStr);
+            Date flightDuration = timeFormat.parse(flightDurationStr);
+            Date departureTime = departureFormat.parse(departureTimestr);
+            
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
+
+            // Find the next occurrence of the specified day of the week
+            int desiredDayOfWeek = convertToCalendarDayOfWeek(dayOfWeek);
+            int currentDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+            int daysToAdd = (desiredDayOfWeek - currentDayOfWeek + 7) % 7;
+
+            // Increment the start date to the next occurrence of the desired day of the week
+            cal.add(Calendar.DAY_OF_YEAR, daysToAdd);
+            Date departureDate = cal.getTime();
+
+            newFSP.setDayOfWeek(dayOfWeek);
+            newFSP.setStartDate(startDate);
+            newFSP.setEndDate(endDate);
+            newFSP.setNdays(7);
+            newFS.setDepartureDate(departureDate);
+            newFS.setDepartureTime(departureTime);
+            newFS.setEstimatedFlightDuration(flightDuration);
+            newFS.calculateAndSetArrivalDateTime();   
+            
+            
+            
+            List<Fare> fares = new ArrayList<>();
+            List<BigDecimal> fareAmountList = new ArrayList<>();
+            fareAmountList.add(BigDecimal.valueOf(6000));
+            fareAmountList.add(BigDecimal.valueOf(3000));
+            fareAmountList.add(BigDecimal.valueOf(1000));
+            Integer counter = 0;
+            Long newfspid = Long.MAX_VALUE;
+            Long newfsid = Long.MAX_VALUE;
+           
+                    
+            newfspid = flightSchedulePlanSessionBeanLocal.createNewRWFlightSchedulePlan(f, newFSP, newFS);
+            newfsid  = flightScheduleSessionBeanLocal.createNewFlightSchedule(newFS, newfspid);
+             System.out.println("curr fs id:" + newFS.getFlightscheduleid());
+ 
+            for(CabinClass cabinClass : f.getAircraftConfiguration().getCabinClasses()) {
+                Fare fare = new Fare("farebc", fareAmountList.get(counter), cabinClass.getCabinClassType());
+                //fareSessionBeanLocal.createNewFare(fare, newFSP);
+                counter++;
+            }
+
+            System.out.println("Main Id " + newfsid);
+           
+            System.out.println("Main Date " + newFS.getDepartureDate());
+            FlightSchedule fs = new FlightSchedule();
+            Date currdate = newFS.getDepartureDate();
+            int test = 0;
+            while(currdate.before(endDate))
+            {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currdate);
+                calendar.add(Calendar.DAY_OF_MONTH, 7); // Increment by 7 days
+                Date newDate = calendar.getTime();
+                System.out.println("Testing date " + newDate);
+                
+                currdate = newDate;
+                fs = new FlightSchedule();
+                
+                fs.setDepartureDate(newDate);
+                fs.setDepartureTime(departureTime);
+                fs.setEstimatedFlightDuration(flightDuration);
+                fs.calculateAndSetArrivalDateTime(); 
+                if(currdate.after(endDate))
+                {
+                    break;
+                }
+                // System.out.println("old fsid " + newfsid);
+                newfsid = flightScheduleSessionBeanLocal.createNewFlightSchedule(fs, newfspid);
+ 
+            }
+
+        } catch (ParseException ex)
+        {
+            ex.printStackTrace();
+        } catch (FlightDisabledException ex) {
+            System.out.println(ex.getMessage() + "\n");
+        } catch(InputDataValidationException ex)
+        {
+           System.out.println(ex.getMessage());
+        }
+    }
+    /*
     public void initFlightSchedulePlan() {
         FlightSchedulePlan newFSP = new FlightSchedulePlan();
         FlightSchedule newFS = new FlightSchedule();
@@ -571,7 +703,7 @@ public class DataInitSessionBean {
         catch (FlightDisabledException ex) {
             System.out.println(ex.getMessage());
         }
-    }
+    }*/
     
     public boolean checkOverlap(FlightSchedule schedule1, FlightSchedule schedule2) {
         // Combining departure date and time for schedule1
@@ -602,6 +734,27 @@ public class DataInitSessionBean {
         cal.set(Calendar.SECOND, timeCal.get(Calendar.SECOND));
 
         return cal.getTime();
+    }
+    
+    private int convertToCalendarDayOfWeek(String dayOfWeek) {
+        switch (dayOfWeek.toLowerCase()) {
+            case "sunday":
+                return Calendar.SUNDAY;
+            case "monday":
+                return Calendar.MONDAY;
+            case "tuesday":
+                return Calendar.TUESDAY;
+            case "wednesday":
+                return Calendar.WEDNESDAY;
+            case "thursday":
+                return Calendar.THURSDAY;
+            case "friday":
+                return Calendar.FRIDAY;
+            case "saturday":
+                return Calendar.SATURDAY;
+            default:
+                throw new IllegalArgumentException("Invalid day of week input");
+        }
     }
 
 }
