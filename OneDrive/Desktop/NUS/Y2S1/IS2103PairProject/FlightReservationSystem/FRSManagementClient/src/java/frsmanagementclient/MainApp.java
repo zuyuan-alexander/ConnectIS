@@ -541,7 +541,7 @@ public class MainApp {
         Flight f = new Flight();
         Scanner sc = new Scanner(System.in);
         System.out.println("*** FRS Schedule Manager Menu: Create New Flight Schedule Plan ***\n");
-        System.out.println("Enter Flight Number> ");  
+        System.out.print("Enter Flight Number> ");  
         String flightnumber = sc.nextLine();
         
         
@@ -581,7 +581,7 @@ public class MainApp {
         Integer response = 0;
         while(true)
         {
-             System.out.println("Select Flight SchedulePlanType (1: Single, 2: Multiple, 3: RecurrentNDay, 4: RecurrentWeekly)> ");
+             System.out.print("Select Flight SchedulePlanType (1: Single, 2: Multiple, 3: RecurrentNDay, 4: RecurrentWeekly)> ");
              response = sc.nextInt();
              sc.nextLine();
              if(response>=1 && response <=4)
@@ -603,20 +603,20 @@ public class MainApp {
         if(response == 4)
         {
             newFSP.setScheduleType(ScheduleTypeEnum.RECURRENTWEEKLY);
-            System.out.println("Enter Day Of Week> ");
+            System.out.print("Enter Day Of Week > ");
             String dayOfWeek = sc.nextLine();
-            System.out.println("Enter Departure Time> eg: 9:00 AM");
+            System.out.print("Enter Departure Time (eg: 9:00 AM)");
             String departureTimestr = sc.nextLine();
-            System.out.println("Enter Start Date> dd MMM yy");
+            System.out.print("Enter Start Date (dd MMM yy) > ");
             String startDateStr = sc.nextLine();
-            System.out.println("Enter End Date> dd MMM yy");
+            System.out.print("Enter End Date (dd MMM yy) > ");
             String endDateStr = sc.nextLine();
-            System.out.println("Enter Flight Duration> HH Hours mm Minutes");
+            System.out.print("Enter Flight Duration (HH Hours mm Minutes) > ");
             String flightDurationStr = sc.nextLine();
             String layoverDurationStr = "";
             if(hasComFlight)
             {
-                System.out.println("Enter Layover Duration for " + compf.getFlightNumber() + "> HH Hours mm Minutes");
+                System.out.println("Enter Layover Duration for " + compf.getFlightNumber() + " (HH Hours mm Minutes) > ");
                 layoverDurationStr = sc.nextLine();
             }
             
@@ -786,22 +786,22 @@ public class MainApp {
         } else if(response == 3)
         {
             newFSP.setScheduleType(ScheduleTypeEnum.RECURRENTNDAY);
-            System.out.println("Enter NDay> ");
+            System.out.println("Enter NDay > ");
             Integer nDay = sc.nextInt();
             sc.nextLine();
-            System.out.println("Enter Departure Time> eg: 9:00 AM");
+            System.out.print("Enter Departure Time (eg: 9:00 AM) > ");
             String departureTimestr = sc.nextLine();
-            System.out.println("Enter Start Date> dd MMM yy");
+            System.out.print("Enter Start Date (dd MMM yy) > ");
             String startDateStr = sc.nextLine();
-            System.out.println("Enter End Date> dd MMM yy");
+            System.out.print("Enter End Date (dd MMM yy) > ");
             String endDateStr = sc.nextLine();
-            System.out.println("Enter Flight Duration> HH Hours mm Minutes");
+            System.out.print("Enter Flight Duration (HH Hours mm Minutes) > ");
            
             String flightDurationStr = sc.nextLine();
              String layoverDurationStr = "";
             if(hasComFlight)
             {
-                System.out.println("Enter Layover Duration for " + compf.getFlightNumber() + "> HH Hours mm Minutes");
+                System.out.print("Enter Layover Duration for " + compf.getFlightNumber() + " (HH Hours mm Minutes) > ");
                 layoverDurationStr = sc.nextLine();
             }
             
@@ -937,7 +937,7 @@ public class MainApp {
         } else if(response == 2)
         {
             newFSP.setScheduleType(ScheduleTypeEnum.MULTIPLE);
-            System.out.println("Enter Number of Flight Schedules> ");
+            System.out.print("Enter Number of Flight Schedules> ");
             Integer numFS = sc.nextInt();
             sc.nextLine();
 
@@ -948,16 +948,16 @@ public class MainApp {
                 Date layoverDuration = new Date();
 
                 // Prompt and create the first flight schedule
-                System.out.println("Enter Departure Date for FlightSchedule 1: (dd MMM yy)");
+                System.out.print("Enter Departure Date for FlightSchedule 1: (dd MMM yy) > ");
                 String departuredatestr = sc.nextLine();
-                System.out.println("Enter Departure Time for FlightSchedule 1: (eg: 9:00 AM)");
+                System.out.print("Enter Departure Time for FlightSchedule 1: (eg: 9:00 AM) > ");
                 String departureTimestr = sc.nextLine();
-                System.out.println("Enter Flight Duration: (HH Hours mm Minutes)");
+                System.out.print("Enter Flight Duration: (HH Hours mm Minutes) > ");
                 String layoverDurationStr = "";
                 String flightDurationStr = sc.nextLine();
                 if(hasComFlight)
                 {
-                    System.out.println("Enter Layover Duration for " + compf.getFlightNumber() + "> HH Hours mm Minutes");
+                    System.out.print("Enter Layover Duration for " + compf.getFlightNumber() + " (HH Hours mm Minutes) > ");
                     layoverDurationStr = sc.nextLine();
                 }
 
@@ -1017,9 +1017,9 @@ public class MainApp {
                 // Create additional flight schedules based on user input
                 for (int i = 2; i <= numFS; i++)
                 {
-                    System.out.println("Enter Departure Date for FlightSchedule " + i + ": (dd MMM yy)");
+                    System.out.println("Enter Departure Date for FlightSchedule " + i + ": (dd MMM yy) > ");
                     departuredatestr = sc.nextLine();
-                    System.out.println("Enter Departure Time for FlightSchedule " + i + ": (eg: 9:00 AM)");
+                    System.out.println("Enter Departure Time for FlightSchedule " + i + ": (eg: 9:00 AM) > ");
                     departureTimestr = sc.nextLine();
                     
 
@@ -1105,16 +1105,16 @@ public class MainApp {
                 Date layoverDuration;
 
                 // Prompt and create the first flight schedule
-                System.out.println("Enter Departure Date for FlightSchedule 1: (dd MMM yy)");
+                System.out.println("Enter Departure Date for FlightSchedule 1: (dd MMM yy) > ");
                 String departuredatestr = sc.nextLine();
-                System.out.println("Enter Departure Time for FlightSchedule 1: (eg: 9:00 AM)");
+                System.out.println("Enter Departure Time for FlightSchedule 1: (eg: 9:00 AM) > ");
                 String departureTimestr = sc.nextLine();
                 System.out.println("Enter Flight Duration: (HH Hours mm Minutes)");
                 String flightDurationStr = sc.nextLine();
                 String layoverDurationStr = "";
                 if(hasComFlight)
                 {
-                    System.out.println("Enter Layover Duration for " + compf.getFlightNumber() + "> HH Hours mm Minutes");
+                    System.out.println("Enter Layover Duration for " + compf.getFlightNumber() + " (HH Hours mm Minutes) > ");
                     layoverDurationStr = sc.nextLine();
                 }
 

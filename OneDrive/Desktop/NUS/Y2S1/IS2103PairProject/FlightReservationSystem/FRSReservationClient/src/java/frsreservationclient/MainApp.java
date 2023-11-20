@@ -91,11 +91,10 @@ public class MainApp {
             System.out.println("*** Welcome to FRS Reservation System***\n");
             System.out.println("1: Register");
             System.out.println("2: Login");
-             System.out.println("3: Search For Flights");
-            System.out.println("4: Exit\n");
+            System.out.println("3: Exit\n");
             response = 0;
             
-            while(response < 1 || response > 4)
+            while(response < 1 || response > 3)
             {
                 System.out.print("> ");
 
@@ -123,7 +122,7 @@ public class MainApp {
                 {
                     doSearchFlight();
               
-                } else if (response == 4)
+                } else if (response == 3)
                 {
                     break;
                 }
@@ -133,7 +132,7 @@ public class MainApp {
                 }
             }
             
-            if(response == 4)
+            if(response == 3)
             {
                 break;
             }
@@ -198,33 +197,31 @@ public class MainApp {
         
         while(true) {
             System.out.println("*** Welcome to Main Menu ***");
-            System.out.println("1: Search Flight");
-            System.out.println("2: Reserve Flight");
-            System.out.println("3: View My Flight Reservation");
-            System.out.println("4: View My Flight Reservation Details");
-            System.out.println("5: Logout\n");
+            System.out.println("1: Search Flight (Reserve Flight)");
+            //System.out.println("2: Reserve Flight");
+            System.out.println("2: View My Flight Reservation");
+            System.out.println("3: View My Flight Reservation Details");
+            System.out.println("4: Logout\n");
             response = 0;
             
-            while(response < 1 || response > 5) {
+            while(response < 1 || response > 4) {
                 System.out.print("> ");
                 response = sc.nextInt();
                 
                 if (response == 1) {
                     doSearchFlight();
                 } else if (response == 2) {
-                    //doReserveFlight();
-                } else if (response == 3) {
                     doViewMyFlightReservations();
-                } else if (response == 4) {
+                } else if (response == 3) {
                     doViewMyFlightReservationDetails();
-                } else if (response == 5) {
+                } else if (response == 4) {
                     break;
                 } else {
                     System.out.println("Invalid option, please try again!\n");
                 }
             }
             
-            if (response == 5) {
+            if (response == 4) {
                 break;
             }
         }
@@ -430,7 +427,7 @@ public class MainApp {
             
             //List<FlightSchedule> fsFirstList = flightReservationSessionBeanRemote.searchFlightConnectingFlightFirst(origin, destination, newDate, numOfPassengers, cabinClassType);
             //List<FlightSchedule> fsSecondList = flightReservationSessionBeanRemote.searchFlightConnectingFlightSecond(origin, destination, newDate, numOfPassengers, cabinClassType);
-            List<Object[]> fsFirstList = flightReservationSessionBeanRemote.searchFlightConnectingFlightFirst(origin, destination, newDate, numOfPassengers, cabinClassType);
+            List<Object[]> fsFirstList = flightReservationSessionBeanRemote.searchFlightConnectingFlight(origin, destination, newDate, numOfPassengers, cabinClassType);
             if(!fsFirstList.isEmpty())
             {
                 //displayFlightSchedule(fsFirstList, numOfPassengers);
@@ -441,7 +438,7 @@ public class MainApp {
         
         // on the departure date
         System.out.println("*** On Departure Date ***");
-        List<Object[]> currentFSFirstList = flightReservationSessionBeanRemote.searchFlightConnectingFlightFirst(origin, destination, date, numOfPassengers, cabinClassType);
+        List<Object[]> currentFSFirstList = flightReservationSessionBeanRemote.searchFlightConnectingFlight(origin, destination, date, numOfPassengers, cabinClassType);
         displayConnectingFlightSchedule(currentFSFirstList, numOfPassengers);
         //List<FlightSchedule> currentFSFirstList = flightReservationSessionBeanRemote.searchFlightConnectingFlightFirst(origin, destination, date, numOfPassengers, cabinClassType);
         //List<FlightSchedule> currentFSSecondList = flightReservationSessionBeanRemote.searchFlightConnectingFlightSecond(origin, destination, date, numOfPassengers, cabinClassType);
@@ -459,7 +456,7 @@ public class MainApp {
             
             //List<FlightSchedule> fsFirstList = flightReservationSessionBeanRemote.searchFlightConnectingFlightFirst(origin, destination, newDate, numOfPassengers, cabinClassType);
             //List<FlightSchedule> fsSecondList = flightReservationSessionBeanRemote.searchFlightConnectingFlightSecond(origin, destination, newDate, numOfPassengers, cabinClassType);
-            List<Object[]> fsFirstList = flightReservationSessionBeanRemote.searchFlightConnectingFlightFirst(origin, destination, newDate, numOfPassengers, cabinClassType);
+            List<Object[]> fsFirstList = flightReservationSessionBeanRemote.searchFlightConnectingFlight(origin, destination, newDate, numOfPassengers, cabinClassType);
             if(!fsFirstList.isEmpty())
             {
                 //displayFlightSchedule(fsFirstList, numOfPassengers);
@@ -492,6 +489,7 @@ public class MainApp {
                 System.out.println(ex.getMessage());
             } 
             
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++");
             System.out.println("Flight Schedule ID #" + currFirstFS.getFlightscheduleid());
             System.out.println("Flight Number <" + currFirstFS.getFlightSchedulePlan().getFlight().getFlightNumber() + ">");
             System.out.println("Flight from " + currFirstFS.getFlightSchedulePlan().getFlight().getFlightRoute().getOrigin() + " -> " + currFirstFS.getFlightSchedulePlan().getFlight().getFlightRoute().getDestination());
@@ -505,11 +503,6 @@ public class MainApp {
                 String cabinclasstype = fare.getCabinClassType().toString();
                   System.out.println("Fare Price per Passenger for " + cabinclasstype + ": " + 
                         fareamount + "; Total Price for " + numOfPassengers + " Passengers: " + fareamount.multiply(BigDecimal.valueOf(numOfPassengers)));
-                
-                /*
-                BigDecimal fareAmount = fareSessionBeanRemote.retrieveFareAmountByCabinClassType(fs.getFlightSchedulePlan().getFares(), cabinClass);
-                System.out.println("Fare Price per Passenger for " + cabinClass.getCabinClassType() + ": " + 
-                        fareAmount + "; Total Price for " + numOfPassengers + " Passengers: " + fareAmount.multiply(BigDecimal.valueOf(numOfPassengers))); */
             }
             System.out.println();
             
@@ -526,13 +519,8 @@ public class MainApp {
                 String cabinclasstype = fare.getCabinClassType().toString();
                   System.out.println("Fare Price per Passenger for " + cabinclasstype + ": " + 
                         fareamount + "; Total Price for " + numOfPassengers + " Passengers: " + fareamount.multiply(BigDecimal.valueOf(numOfPassengers)));
-                
-                /*
-                BigDecimal fareAmount = fareSessionBeanRemote.retrieveFareAmountByCabinClassType(fs.getFlightSchedulePlan().getFares(), cabinClass);
-                System.out.println("Fare Price per Passenger for " + cabinClass.getCabinClassType() + ": " + 
-                        fareAmount + "; Total Price for " + numOfPassengers + " Passengers: " + fareAmount.multiply(BigDecimal.valueOf(numOfPassengers))); */
             }
-            System.out.println();
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++\n\n");
         }
     }
     
@@ -587,16 +575,26 @@ public class MainApp {
         //Long fsId = null;
         Long mainfsid = null;
         Long returnfsid = null;
-        if (flightPreferenceInt == 0 || flightPreferenceInt == 1) {
+        Long mainFirstFSId = null;
+        Long mainSecondFSId = null;
+        Long returnFirstFSId = null;
+        Long returnSecondFSId = null;
+        if (flightPreferenceInt == 0) {
+            System.out.print("Enter flight preference for reservation (1: Direct, 2: Connecting) > ");
+            flightPreferenceInt = sc.nextInt();
+            sc.nextLine();
+        }
+        
+        if (flightPreferenceInt == 1) {
             System.out.print("Enter flight schedule id to reserve> ");
             mainfsid = sc.nextLong();
             sc.nextLine();
         } else if (flightPreferenceInt == 2) {
             System.out.print("Enter first flight schedule id to reserve> ");
-            Long firstFSId = sc.nextLong();
+            mainFirstFSId = sc.nextLong();
             sc.nextLine();
             System.out.print("Enter second flight schedule id to reserve> ");
-            Long secondFSList = sc.nextLong();
+            mainSecondFSId = sc.nextLong();
             sc.nextLine();
         }
         
@@ -609,16 +607,20 @@ public class MainApp {
                 sc.nextLine();
             } else if (flightPreferenceInt == 2) {
                 System.out.print("Enter first return flight schedule id to reserve> ");
-                Long firstFSId = sc.nextLong();
+                returnFirstFSId = sc.nextLong();
                 sc.nextLine();
                 System.out.print("Enter second return flight schedule id to reserve> ");
-                Long secondFSList = sc.nextLong();
+                returnSecondFSId = sc.nextLong();
                 sc.nextLine();
             }
         }
         
         FlightSchedule mainfs = new FlightSchedule();
         FlightSchedule returnfs = new FlightSchedule();
+        FlightSchedule mainFirstFS = new FlightSchedule();
+        FlightSchedule mainSecondFS = new FlightSchedule();
+        FlightSchedule returnFirstFS = new FlightSchedule();
+        FlightSchedule returnSecondFS = new FlightSchedule();
         CabinClassTypeEnum cabinClassType = cabinClassTypeEnum; 
         if (cabinClassType == null) {
             System.out.print("Enter cabin class type (F: First, J: Business, W: Premium Economy, Y: Economy) > ");
@@ -640,31 +642,85 @@ public class MainApp {
         CabinClass preferedCabinClass = new CabinClass();
         try 
         {
-            mainfs = flightScheduleSessionBeanRemote.retrieveFlightScheduleById(mainfsid);
-            mainfsid = mainfs.getFlightscheduleid();
-            
-            //Flight f = flight
-            //List<CabinClass> cabinclassavail = fs.getFlightSchedulePlan().getFlight().getAircraftConfiguration().getCabinClasses();
-            //printSeatViewForCabinClasses(cabinclassavail);
-            
-            // display this cabin class only
-            System.out.println("*** Departure Flight Schedule ***");
-            List<CabinClass> cabinclassavail = mainfs.getFlightSchedulePlan().getFlight().getAircraftConfiguration().getCabinClasses();
-            preferedCabinClass = cabinClassSessionBeanRemote.retrievePreferedCabinClassType(cabinclassavail, cabinClassType);
-            List<CabinClass> temp = new ArrayList<>();
-            temp.add(preferedCabinClass);
-            printSeatViewForCabinClasses(temp);
-            
-            if (tripTypeInt == 2) {
-                System.out.println("*** Return Flight Schedules ***");
-                returnfs = flightScheduleSessionBeanRemote.retrieveFlightScheduleById(returnfsid);
-                returnfsid = returnfs.getFlightscheduleid();
+            if (flightPreferenceInt == 1) {
+                // direct flight
+                mainfs = flightScheduleSessionBeanRemote.retrieveFlightScheduleById(mainfsid);
+                mainfsid = mainfs.getFlightscheduleid();
+
+                //Flight f = flight
+                //List<CabinClass> cabinclassavail = fs.getFlightSchedulePlan().getFlight().getAircraftConfiguration().getCabinClasses();
+                //printSeatViewForCabinClasses(cabinclassavail);
+
+                // display this cabin class only
+                System.out.println("*** Departure Flight Schedule ***");
+                System.out.println("Flight Number: " + mainfs.getFlightSchedulePlan().getFlight().getFlightNumber());
+                List<CabinClass> cabinclassavail = mainfs.getFlightSchedulePlan().getFlight().getAircraftConfiguration().getCabinClasses();
+                preferedCabinClass = cabinClassSessionBeanRemote.retrievePreferedCabinClassType(cabinclassavail, cabinClassType);
+                List<CabinClass> temp = new ArrayList<>();
+                temp.add(preferedCabinClass);
+                printSeatViewForCabinClasses(temp);
+
+                if (tripTypeInt == 2) {
+                    System.out.println("*** Return Flight Schedules ***");
+                    returnfs = flightScheduleSessionBeanRemote.retrieveFlightScheduleById(returnfsid);
+                    returnfsid = returnfs.getFlightscheduleid();
+                    System.out.println("Flight Number: " + returnfs.getFlightSchedulePlan().getFlight().getFlightNumber());
+                    cabinclassavail = returnfs.getFlightSchedulePlan().getFlight().getAircraftConfiguration().getCabinClasses();
+                    preferedCabinClass = cabinClassSessionBeanRemote.retrievePreferedCabinClassType(cabinclassavail, cabinClassType);
+                    temp = new ArrayList<>();
+                    temp.add(preferedCabinClass);
+                    printSeatViewForCabinClasses(temp);
+                }
+            } else if (flightPreferenceInt == 2) {
+                // connecting flight
+                mainFirstFS = flightScheduleSessionBeanRemote.retrieveFlightScheduleById(mainFirstFSId);
+                mainFirstFSId = mainFirstFS.getFlightscheduleid();
+
+                //Flight f = flight
+                //List<CabinClass> cabinclassavail = fs.getFlightSchedulePlan().getFlight().getAircraftConfiguration().getCabinClasses();
+                //printSeatViewForCabinClasses(cabinclassavail);
+
+                // display this cabin class only
+                System.out.println("*** Departure Flight Schedule ***");
+                System.out.println("Flight Number: " + mainFirstFS.getFlightSchedulePlan().getFlight().getFlightNumber());
+                List<CabinClass> cabinclassavail = mainFirstFS.getFlightSchedulePlan().getFlight().getAircraftConfiguration().getCabinClasses();
+                preferedCabinClass = cabinClassSessionBeanRemote.retrievePreferedCabinClassType(cabinclassavail, cabinClassType);
+                List<CabinClass> temp = new ArrayList<>();
+                temp.add(preferedCabinClass);
+                printSeatViewForCabinClasses(temp);
+                System.out.println("\n");
                 
-                cabinclassavail = returnfs.getFlightSchedulePlan().getFlight().getAircraftConfiguration().getCabinClasses();
+                mainSecondFS = flightScheduleSessionBeanRemote.retrieveFlightScheduleById(mainSecondFSId);
+                mainSecondFSId = mainSecondFS.getFlightscheduleid();
+                System.out.println("Flight Number: " + mainSecondFS.getFlightSchedulePlan().getFlight().getFlightNumber());
+                cabinclassavail = mainSecondFS.getFlightSchedulePlan().getFlight().getAircraftConfiguration().getCabinClasses();
                 preferedCabinClass = cabinClassSessionBeanRemote.retrievePreferedCabinClassType(cabinclassavail, cabinClassType);
                 temp = new ArrayList<>();
                 temp.add(preferedCabinClass);
                 printSeatViewForCabinClasses(temp);
+
+                if (tripTypeInt == 2) {
+                    System.out.println("*** Return Flight Schedules ***");
+                    returnFirstFS = flightScheduleSessionBeanRemote.retrieveFlightScheduleById(returnFirstFSId);
+                    returnFirstFSId = returnFirstFS.getFlightscheduleid();
+                    System.out.println("Flight Number: " + returnFirstFS.getFlightSchedulePlan().getFlight().getFlightNumber());
+                    cabinclassavail = returnFirstFS.getFlightSchedulePlan().getFlight().getAircraftConfiguration().getCabinClasses();
+                    preferedCabinClass = cabinClassSessionBeanRemote.retrievePreferedCabinClassType(cabinclassavail, cabinClassType);
+                    temp = new ArrayList<>();
+                    temp.add(preferedCabinClass);
+                    printSeatViewForCabinClasses(temp);
+                    System.out.println("\n");
+                    
+                    returnSecondFS = flightScheduleSessionBeanRemote.retrieveFlightScheduleById(returnSecondFSId);
+                    returnSecondFSId = returnSecondFS.getFlightscheduleid();
+                    System.out.println("Flight Number: " + returnSecondFS.getFlightSchedulePlan().getFlight().getFlightNumber());
+                    cabinclassavail = returnSecondFS.getFlightSchedulePlan().getFlight().getAircraftConfiguration().getCabinClasses();
+                    preferedCabinClass = cabinClassSessionBeanRemote.retrievePreferedCabinClassType(cabinclassavail, cabinClassType);
+                    temp = new ArrayList<>();
+                    temp.add(preferedCabinClass);
+                    printSeatViewForCabinClasses(temp);
+                    
+                }
             }
         } catch (FlightScheduleNotFoundException ex) {
             System.out.println(ex.getMessage() + "\n");
@@ -678,14 +734,31 @@ public class MainApp {
         for (int i=1; i<=numOfPassengers; i++) {
             TripTypeEnum tripTemp = tripTpe;
             CabinClass cabinClassTemp = preferedCabinClass;
-            System.out.println("---Departure Flight Reservation for Passenger " + i + "---");
-            reserveFlightPassengerInput(cabinClassTemp, mainfs, mainfsid, tripTemp);
-            System.out.println("\n"); 
-            if (tripTypeInt == 2) {
-                System.out.println("---Return Flight Reservation for Passenger " + i + "---");
-                reserveFlightPassengerInput(cabinClassTemp, returnfs, returnfsid, tripTemp);
+            
+            if (tripTypeInt == 1) {
+                System.out.println("---Departure Flight Reservation for Passenger " + i + "---");
+                reserveFlightPassengerInput(cabinClassTemp, mainfs, mainfsid, tripTemp);
+                System.out.println("\n"); 
+
+                if (tripTypeInt == 2) {
+                    System.out.println("---Return Flight Reservation for Passenger " + i + "---");
+                    reserveFlightPassengerInput(cabinClassTemp, returnfs, returnfsid, tripTemp);
+                }
+                System.out.println("\n\n");
+                
+            } else if (tripTypeInt == 2) {
+                System.out.println("---Departure Flight Reservation for Passenger " + i + "---");
+                reserveFlightPassengerInput(cabinClassTemp, mainFirstFS, mainFirstFSId, tripTemp);
+                reserveFlightPassengerInput(cabinClassTemp, mainSecondFS, mainSecondFSId, tripTemp);
+                System.out.println("\n"); 
+
+                if (tripTypeInt == 2) {
+                    System.out.println("---Return Flight Reservation for Passenger " + i + "---");
+                    reserveFlightPassengerInput(cabinClassTemp, returnFirstFS, returnFirstFSId, tripTemp);
+                    reserveFlightPassengerInput(cabinClassTemp, returnSecondFS, returnSecondFSId, tripTemp);
+                }
+                System.out.println("\n\n");
             }
-            System.out.println("\n\n");
         }
     }
     
@@ -781,38 +854,54 @@ public class MainApp {
     
     public void printSeatViewForCabinClasses(List<CabinClass> cabinClasses) {
         CabinClass currcc = new CabinClass();
+        List<FlightReservation> frList = this.currentCustomer.getFlightReservations();
+        
+        
         for (CabinClass cabinClass : cabinClasses) {
-        try
-        {
-             currcc = cabinClassSessionBeanRemote.retrieveCabinClassByID(cabinClass.getCabinClassId());
-        } catch (CabinClassNotFoundException ex)
-        {
-            System.out.println(ex.getMessage());
+            try
+            {
+                 currcc = cabinClassSessionBeanRemote.retrieveCabinClassByID(cabinClass.getCabinClassId());
+            } catch (CabinClassNotFoundException ex)
+            {
+                System.out.println(ex.getMessage());
+            }
+
+            System.out.println("Cabin Class: " + currcc.getCabinClassType());
+            List<Seat> seats = currcc.getSeats();
+
+            System.out.println("Total seat size : " + seats.size());
+            List<Seat> reservedSeats = seatSessionBeanRemote.retrieveAllReservedSeats(cabinClass.getCabinClassId());
+
+            int seatIndex = 0;
+            for (int row = 1; row <= currcc.getNumOfRows(); row++) {
+                for (int seatAbreast = 0; seatAbreast < currcc.getNumOfSeatsAbreast(); seatAbreast++) {
+                    if (seatIndex < seats.size()) {
+
+                        Seat seat = seats.get(seatIndex);
+                        if (reservedSeats.contains(seats.get(seatIndex))) {
+                            System.out.print(seat.toString() + "* ");
+                        } else {
+                            System.out.print(seat.toString() + " ");
+                        }
+                        seatIndex++;
+                    }
+                }
+                System.out.println();
+            } 
+            System.out.println();
+        }
+    }
+    
+    /*
+    public List<Seat> checkSeatReserved(Seat seat, Customer customer) {
+        List<FlightReservation> frList = customer.getFlightReservations();
+        List<Seat> seats = new ArrayList<>();
+        
+        for (FlightReservation fr : frList) {
+            Seat reservedSeat = fr.getPassenger().getSeat();
+            seats.add(reservedSeat);
         }
         
-        System.out.println("Cabin Class: " + currcc.getCabinClassType());
-        List<Seat> seats = currcc.getSeats();
-        
-        System.out.println("Total seat size : " + seats.size());
-
-        
-        int seatIndex = 0;
-        for (int row = 1; row <= currcc.getNumOfRows(); row++) {
-            for (int seatAbreast = 0; seatAbreast < currcc.getNumOfSeatsAbreast(); seatAbreast++) {
-                if (seatIndex < seats.size()) {
-                    
-                    Seat seat = seats.get(seatIndex);
-                    if (seats.get(seatIndex).isReserved()) {
-                        System.out.print(seat.toString() + "* ");
-                    } else {
-                        System.out.print(seat.toString() + " ");
-                    }
-                    seatIndex++;
-                }
-            }
-            System.out.println();
-        } 
-        System.out.println();
-    }
-}
+        return seats;
+    }*/
 }

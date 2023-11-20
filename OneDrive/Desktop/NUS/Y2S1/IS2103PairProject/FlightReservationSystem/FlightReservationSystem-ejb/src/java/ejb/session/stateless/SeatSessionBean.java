@@ -6,6 +6,7 @@ package ejb.session.stateless;
 
 import entity.Passenger;
 import entity.Seat;
+import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -83,6 +84,13 @@ public class SeatSessionBean implements SeatSessionBeanRemote, SeatSessionBeanLo
         } else {
             throw new SeatNotFoundException("Seat with Seat Id " + id + " does not exist!");
         }
+    }
+    
+    @Override
+    public List<Seat> retrieveAllReservedSeats(Long cabinClassId) {
+        Query query = em.createQuery("SELECT s FROM Passenger p JOIN p.seat s WHERE s.cabinClass.cabinClassId = :inCabinClassId");
+        query.setParameter("inCabinClassId", cabinClassId);
+        return query.getResultList();
     }
     
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Seat>>constraintViolations)

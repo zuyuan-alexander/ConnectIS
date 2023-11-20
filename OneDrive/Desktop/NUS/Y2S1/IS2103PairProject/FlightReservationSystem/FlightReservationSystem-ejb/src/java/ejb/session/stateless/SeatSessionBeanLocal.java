@@ -5,6 +5,7 @@
 package ejb.session.stateless;
 
 import entity.Seat;
+import java.util.List;
 import javax.ejb.Local;
 import util.exception.InputDataValidationException;
 import util.exception.SeatNotFoundException;
@@ -22,6 +23,8 @@ public interface SeatSessionBeanLocal {
     public Seat retrieveSeatBySeatLetterAndRowNumber(Character seatLetter, Integer rowNumber, Long cabinClassId)  throws SeatNotFoundException;
 
     public Seat retrieveSeatBySeatId(Long id) throws SeatNotFoundException;
+
+    public List<Seat> retrieveAllReservedSeats(Long cabinClassId);
 
     
 }

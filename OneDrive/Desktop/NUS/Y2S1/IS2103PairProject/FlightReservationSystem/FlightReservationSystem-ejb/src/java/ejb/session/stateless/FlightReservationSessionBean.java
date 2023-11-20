@@ -96,16 +96,19 @@ public class FlightReservationSessionBean implements FlightReservationSessionBea
     }
     
     @Override
-    public List<Object[]> searchFlightConnectingFlightFirst(String departureAirport, String destinationAirport, Date date, Integer numOfPassengers, CabinClassTypeEnum cabinClassType) {
+    public List<Object[]> searchFlightConnectingFlight(String departureAirport, String destinationAirport, Date date, Integer numOfPassengers, CabinClassTypeEnum cabinClassType) {
         Query query = em.createQuery("SELECT DISTINCT fs1, fs2 FROM FlightSchedule fs1" + 
                 ", FlightSchedule fs2 WHERE fs1.flightSchedulePlan.flight.flightRoute.destination = fs2.flightSchedulePlan.flight.flightRoute.origin " + 
                 "AND fs1.flightSchedulePlan.flight.flightRoute.origin = :inOrigin " +
                 "AND fs2.flightSchedulePlan.flight.flightRoute.destination = :inDestination " +
-                "AND fs1.departureDate = :inDepartureDate");
+                "AND fs1.departureDate = :inDepartureDate " + 
+                "AND fs1.arrivalDate <= fs2.departureDate " + 
+                "AND fs1.arrivalTime < fs2.departureTime");
         query.setParameter("inDepartureDate", date).setParameter("inOrigin", departureAirport).setParameter("inDestination", destinationAirport);
         return query.getResultList();
     }
     
+    /*
     @Override
     public List<FlightSchedule> searchFlightConnectingFlightSecond(String departureAirport, String destinationAirport, Date date, Integer numOfPassengers, CabinClassTypeEnum cabinClassType) {
         Query query = em.createQuery("SELECT DISTINCT fs2 FROM FlightSchedule fs2" + 
@@ -116,7 +119,7 @@ public class FlightReservationSessionBean implements FlightReservationSessionBea
         query.setParameter("inDepartureDate", date).setParameter("inOrigin", departureAirport).setParameter("inDestination", destinationAirport);
         return query.getResultList();
     }
-  
+  */
     
     // reserve flight will create a passenger from customer
     
