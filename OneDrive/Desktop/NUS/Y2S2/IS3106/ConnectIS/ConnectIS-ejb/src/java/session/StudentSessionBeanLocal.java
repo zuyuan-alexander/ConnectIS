@@ -4,7 +4,9 @@
  */
 package session;
 
+import entity.Student;
 import javax.ejb.Local;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -12,5 +14,12 @@ import javax.ejb.Local;
  */
 @Local
 public interface StudentSessionBeanLocal {
+    
+
+    public Student retrieveStudentByEmail(String email) throws NoResultException;
+
+    public void createStudent(Student s);
+
+    public Student getStudent(Long cId) throws NoResultException;
     
 }
