@@ -8,9 +8,9 @@ import javax.ejb.Local;
 
 /**
  *
- * @author zuyua
+ * @author alvintjw
  */
 @Local
-public interface UserSessionBeanLocal {
+public interface StudentSessionBeanLocal {
     
 }

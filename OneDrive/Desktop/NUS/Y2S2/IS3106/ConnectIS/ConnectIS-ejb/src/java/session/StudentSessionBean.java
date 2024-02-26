@@ -8,10 +8,10 @@ import javax.ejb.Stateless;
 
 /**
  *
- * @author zuyua
+ * @author alvintjw
  */
 @Stateless
-public class UserSessionBean implements UserSessionBeanLocal {
+public class StudentSessionBean implements StudentSessionBeanLocal {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
