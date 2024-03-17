@@ -3,13 +3,58 @@
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
 -->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConnectIS - Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-900 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-orange-500 font-bold text-xl">ConnectIS</a>
+            <div class="flex items-center">
+                <input type="text" placeholder="Search..." class="rounded p-2 mr-4">
+                <button class="bg-orange-500 text-white rounded py-2 px-4">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto my-8">
+        <header class="mb-8">
+            <h1 class="text-4xl font-bold text-center text-blue-900">Welcome to ConnectIS</h1>
+            <p class="text-xl text-center text-gray-600 mt-2">Connecting NUS Information Systems students</p>
+        </header>
+
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Trending Posts -->
+            <div class="col-span-2">
+                <h2 class="text-2xl font-bold text-blue-900 mb-4">Trending Posts</h2>
+                <!-- Posts will be dynamically loaded here -->
+            </div>
+
+            <!-- Side Bar -->
+            <aside>
+                <h3 class="text-xl font-bold text-blue-900 mb-4">Upcoming Courses</h3>
+                <!-- Course links will be dynamically loaded here -->
+            </aside>
+        </section>
+    </div>
+
+    <footer class="bg-blue-900 text-white p-4 text-center">
+        <p>&copy; 2024 ConnectIS - National University of Singapore</p>
+    </footer>
+</body>
+
 </html>
