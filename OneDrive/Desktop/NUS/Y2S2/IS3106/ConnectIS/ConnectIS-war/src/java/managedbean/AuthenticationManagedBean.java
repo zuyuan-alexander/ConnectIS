@@ -6,9 +6,9 @@ package managedbean;
 
 import entity.Student;
 import javax.inject.Named;
-import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
 import javax.persistence.NoResultException;
 import session.StudentSessionBeanLocal;
 
@@ -17,7 +17,7 @@ import session.StudentSessionBeanLocal;
  * @author alvintjw
  */
 @Named(value = "authenticationManagedBean")
-@ViewScoped
+@SessionScoped
 public class AuthenticationManagedBean implements Serializable {
 
     @EJB
