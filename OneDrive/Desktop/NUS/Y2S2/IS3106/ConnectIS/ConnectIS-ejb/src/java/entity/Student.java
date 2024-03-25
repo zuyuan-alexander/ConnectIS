@@ -5,10 +5,13 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -27,6 +30,9 @@ public class Student implements Serializable {
     private String firstname;
     private String lastname;
     private String password;
+    
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts;
 
     public Long getId() {
         return id;
@@ -75,6 +81,15 @@ public class Student implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+    
     
 
     @Override
