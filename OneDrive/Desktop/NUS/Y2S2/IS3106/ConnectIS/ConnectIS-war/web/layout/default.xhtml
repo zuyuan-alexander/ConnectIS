@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="css/bootstrap.min.css"/>
+        <h:outputStylesheet name="css/sidebar-style.css"/>
+        <h:outputStylesheet name="css/templatemo-stand-blog.css"/>
+        <h:outputStylesheet name="css/tooplate-artxhibition.css"/>
+        <title>ConnectIS home</title>
+    </h:head>
+    <h:body>
+        <div id="top" class="top">
+            <nav class="navbar navbar-expand-lg">
+                <div class="container">
+                    <a class="navbar-brand" href="myEvents.xhtml"><h2>ConnectIS<em>.</em></h2></a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarResponsive" style="margin-left: 200px;">
+                        <form class="form-inline my-2 my-lg-0">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
+                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                        <h:form>
+                            <p:commandButton value="Logout" action="#{authenticationManagedBean.logout}" styleClass="nav-link" ajax="false" style="margin-top: 20px; margin-left: 200px;"/>
+                        </h:form>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        
+        <div class="wrapper d-flex">
+            <nav id="sidebar">
+                <div class="img bg-wrap text-center py-4" style="background-image: url(/EventEase-war/resources/bg_01.jpg);">
+                    <div class="user-logo">
+                        <div class="img" style="background-image: url(/EventEase-war/resources/logo.jpg);"></div>
+                        <h3>Catriona Henderson</h3>
+                    </div>
+                </div>
+                <ul class="list-unstyled components mb-5">
+                    <li class="active">
+                        <a href="#"><span class="fa fa-home mr-3"></span> Home</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="fa fa-download mr-3 notif"><small class="d-flex align-items-center justify-content-center">5</small></span> Download</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="fa fa-gift mr-3"></span> Gift Code</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="fa fa-trophy mr-3"></span> Top Review</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="fa fa-cog mr-3"></span> Settings</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="fa fa-support mr-3"></span> Support</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="fa fa-sign-out mr-3"></span> Sign Out</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="content-wrapper">
+                <div id="content" class="center_content">
+                    <ui:insert name="content">Content</ui:insert>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+            }
+
+
+            .top {
+                background-color: #CACACA;
+            }
+
+
+            .sidebar {
+                width: 200px;
+                background-color: #005CC5; /* Change sidebar background color */
+                height: 100%;
+                position: fixed;
+                left: 0 !important;
+                top: 80px;
+                padding-top: 0;
+            }
+
+            .sidebar ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .sidebar li a {
+                display: block;
+                color: white; /* Change sidebar item color */
+                padding: 8px 16px;
+                text-decoration: none;
+            }
+
+            .sidebar li a:hover {
+                background-color: transparent; /* Remove background color on hover */
+            }
+
+            .content-wrapper {
+                margin-left: 220px;
+                padding: 20px;
+            }
+
+            .sidebar ul li {
+                position: relative;
+            }
+
+            .sidebar ul li ul.dropdown {
+                display: none;
+                position: absolute;
+                top: 100%; /* Position the dropdown below the parent list item */
+                left: 0; /* Align the dropdown with the left edge of the sidebar */
+                background-color: #005CC5;
+                padding: 0;
+                margin: 0;
+            }
+
+            .sidebar ul li ul.dropdown li a {
+                padding: 8px 16px;
+                text-decoration: none;
+                display: block;
+                color: white;
+            }
+
+            .sidebar ul li ul.dropdown.active {
+                display: block;
+            }
+
+        </style>
+
+        <script>
+            // Get the "Courses" link element and the dropdown menu element
+            const coursesLink = document.querySelector('.sidebar ul li:nth-child(2) > a');
+            const dropdownMenu = document.querySelector('.sidebar ul li:nth-child(2) > ul.dropdown');
+
+            // Add a click event listener to the "Courses" link
+            coursesLink.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent the default link behavior
+                dropdownMenu.classList.toggle('active'); // Toggle the "active" class on the dropdown menu
+            });
+        </script>
+        
+        <ui:insert name="script">Script</ui:insert>
+        
+        <ui:insert name ="style">Style</ui:insert>
+
+
+    </h:body>
+
+</html>
+
