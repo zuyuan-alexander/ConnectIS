@@ -5,6 +5,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -30,6 +33,15 @@ public class Student implements Serializable {
     private String firstname;
     private String lastname;
     private String password;
+    
+    private byte degree;
+    private byte gender;
+    private int year;
+    @Temporal(TemporalType.DATE)
+    private Date dob;
+    private String specialization;
+    private boolean isUserAnonymous;
+    private String anonymousName;
     
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
@@ -90,6 +102,103 @@ public class Student implements Serializable {
         this.posts = posts;
     }
     
+    /**
+     * @return the degree
+     */
+    public byte getDegree() {
+        return degree;
+    }
+
+    /**
+     * @param degree the degree to set
+     */
+    public void setDegree(byte degree) {
+        this.degree = degree;
+    }
+
+    /**
+     * @return the gender
+     */
+    public byte getGender() {
+        return gender;
+    }
+
+    /**
+     * @param gender the gender to set
+     */
+    public void setGender(byte gender) {
+        this.gender = gender;
+    }
+
+    /**
+     * @return the year
+     */
+    public int getYear() {
+        return year;
+    }
+
+    /**
+     * @param year the year to set
+     */
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    /**
+     * @return the dob
+     */
+    public Date getDob() {
+        return dob;
+    }
+
+    /**
+     * @param dob the dob to set
+     */
+    public void setDob(Date dob) {
+        this.dob = dob;
+    }
+
+    /**
+     * @return the specialization
+     */
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    /**
+     * @param specialization the specialization to set
+     */
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
+    }
+
+    /**
+     * @return the isUserAnonymous
+     */
+    public boolean getIsUserAnonymous() {
+        return isUserAnonymous;
+    }
+
+    /**
+     * @param isUserAnonymous the isUserAnonymous to set
+     */
+    public void setIsUserAnonymous(boolean isUserAnonymous) {
+        this.isUserAnonymous = isUserAnonymous;
+    }
+
+    /**
+     * @return the anonymousName
+     */
+    public String getAnonymousName() {
+        return anonymousName;
+    }
+
+    /**
+     * @param anonymousName the anonymousName to set
+     */
+    public void setAnonymousName(String anonymousName) {
+        this.anonymousName = anonymousName;
+    }
     
 
     @Override
@@ -116,5 +225,5 @@ public class Student implements Serializable {
     public String toString() {
         return "entity.Student[ id=" + id + " ]";
     }
-    
+
 }

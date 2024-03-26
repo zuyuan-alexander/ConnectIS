@@ -49,6 +49,19 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
             throw new NoResultException("Student email " + email + " does not exist!");
         }
     }
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    
+    @Override
+    public void updateStudent(Student s) {
+        Student oldStudent = getStudent(s.getId());
+        oldStudent.setDegree(s.getDegree());
+        oldStudent.setGender(s.getGender());
+        oldStudent.setYear(s.getYear());
+        oldStudent.setDob(s.getDob());
+        oldStudent.setSpecialization(s.getSpecialization());
+        oldStudent.setEmail(s.getEmail());
+        oldStudent.setFirstname(s.getFirstname());
+        oldStudent.setLastname(s.getLastname());
+        oldStudent.setIsUserAnonymous(s.getIsUserAnonymous());
+        oldStudent.setAnonymousName(s.getAnonymousName());
+    }
 }
