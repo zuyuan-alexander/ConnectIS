@@ -9,19 +9,23 @@ import javax.inject.Named;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.persistence.NoResultException;
 import session.StudentSessionBeanLocal;
+import session.AuthenticationSessionBeanLocal;
 
 /**
  *
  * @author alvintjw
  */
-@Named(value = "authenticationManagedBean")
+@Named(value = "authentificationManagedBean")
 @SessionScoped
 public class AuthenticationManagedBean implements Serializable {
 
     @EJB
     private StudentSessionBeanLocal studentSessionBean;
+    private AuthenticationSessionBeanLocal authentificationSessionBean;
     private String email;
     private String contactnumber;
     private String firstname;
@@ -29,35 +33,41 @@ public class AuthenticationManagedBean implements Serializable {
     private String password;
     private String confirmpassword;
     private Student loggedinStudent;
-    /**
-     * Creates a new instance of AuthenticationManagedBean
-     */
+    
     public AuthenticationManagedBean() {
     }
     
-     public String register() {
-        
-        if (!password.equals(confirmpassword)) {
-            System.out.println("password is: " + password);
-            System.out.println("confirmpassword is: " + confirmpassword);
-            
-            // Add error message about passwords not matching
-            return "signup";
+     public String signup() {
+         
+        FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            System.out.print("entering boolean success");
+            System.out.print(email + " " + firstname + " " + lastname  + " " + contactnumber + " " + password);
+            boolean success = authentificationSessionBean.registerStudent(email, firstname, lastname, contactnumber, password);
+            System.out.print("teehee NOT SUCCESSFUL" + success);
+            if (success) {
+                context.addMessage(null, new FacesMessage("Successful sign-up!"));
+                return "/login.xhtml?faces-redirect=true"; // Navigate to login page on success
+            } else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Authentification Error", "Sign-up failed!"));
+                return "signup.xhtml";
+            }
+        } catch (Exception e) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Exception Error", "Sign-up failed!"));
+            e.printStackTrace();
+            return "signup.xhtml";
         }
-        
-        // Create and persist the new user entity
-        Student newStudent = new Student();
-        newStudent.setEmail(email);
-        newStudent.setContactnumber(contactnumber);
-        newStudent.setFirstname(firstname);
-        newStudent.setLastname(lastname);
-        newStudent.setPassword(password);
-        studentSessionBean.createStudent(newStudent);        
-        return "login.xhtml"; // Redirect to login page on successful registration
+//        if (!password.equals(confirmpassword)) {
+//            System.out.println("password is: " + password);
+//            System.out.println("confirmpassword is: " + confirmpassword);
+//            
+//            // Add error message about passwords not matching
+//            return "signup";
+//        }
     }
 
     public String login() {
-        
+        FacesContext context = FacesContext.getCurrentInstance();
         try {
             loggedinStudent = studentSessionBean.retrieveStudentByEmail(email);
         } catch (NoResultException ex)
@@ -65,26 +75,17 @@ public class AuthenticationManagedBean implements Serializable {
             System.out.println(ex.getMessage());
         }
         
-        if (loggedinStudent != null && loggedinStudent.getPassword().equals(this.getPassword())) {
-            //login successful
-            //store the logged in user id
-            //setUserId(10);
-            //do redirect
-            return "index.xhtml?faces-redict=true";
+        if (loggedinStudent != null && loggedinStudent.getEmail().equals(this.getEmail())) {
+            return "index.xhtml?faces-redirect=true";
             //return "/secret/secret.xhtml?faces-redirect=true";
         } else {
-            //login failed
-            setEmail(null);
-            setPassword(null);
-            //setUserId(-1);
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Exception Error", "Login unsuccessful!"));
             return "login.xhtml";
         }
     }
 
     public String logout() {
-        setEmail(null);
-        setPassword(null);
-        //setUserId(-1);
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/login.xhtml?faces-redirect=true";
     }
      

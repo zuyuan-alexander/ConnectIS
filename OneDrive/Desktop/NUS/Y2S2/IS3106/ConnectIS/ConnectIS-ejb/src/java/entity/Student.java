@@ -29,6 +29,18 @@ public class Student implements Serializable {
     private String contactnumber;
     private String firstname;
     private String lastname;
+
+    public Student() {
+    }
+    
+
+    public Student(String email, String contactnumber, String firstname, String lastname, String password) {
+        this.email = email;
+        this.contactnumber = contactnumber;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.password = password;
+    }
     private String password;
     
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)

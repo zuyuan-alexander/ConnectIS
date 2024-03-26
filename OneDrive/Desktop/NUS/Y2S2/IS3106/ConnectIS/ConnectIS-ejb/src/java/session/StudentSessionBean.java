@@ -49,6 +49,22 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
             throw new NoResultException("Student email " + email + " does not exist!");
         }
     }
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+   
+    @Override
+    public Boolean checkIfEmailExists(String email) {
+        Query q = em.createQuery("SELECT COUNT(s) FROM Student s WHERE p.email = :inEmail");
+        q.setParameter("inEmail", email);
+        Long count = (Long) q.getSingleResult();
+        return count > 0;
+    }
+    
+    @Override
+    public Boolean checkIfContactExists(String contact) {
+        Query q = em.createQuery("SELECT COUNT(s) FROM Student s WHERE s.contact = :inContact");
+        q.setParameter("inContact", contact);
+        Long count = (Long) q.getSingleResult();
+        return count > 0;
+    }
+    
+    
 }
