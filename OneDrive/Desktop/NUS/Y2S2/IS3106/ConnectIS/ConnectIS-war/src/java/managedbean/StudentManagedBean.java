@@ -8,7 +8,12 @@ import entity.Student;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -37,7 +42,7 @@ public class StudentManagedBean implements Serializable {
     
     private byte degree;
     private byte gender;
-    private int year;
+    private int academicYear;
     private Date dob;
     private String specialization;
     private boolean isUserAnonymous;
@@ -48,12 +53,31 @@ public class StudentManagedBean implements Serializable {
     public StudentManagedBean() {
     }
     
+    public void createStudent(ActionEvent evt) {
+        Student newStudent = new Student();
+        newStudent.setEmail(email);
+        newStudent.setContactnumber(contactnumber);
+        newStudent.setFirstname(firstname);
+        newStudent.setLastname(lastname);
+        newStudent.setDegree(degree);
+        newStudent.setGender(gender);
+        newStudent.setAcademicYear(academicYear);
+        newStudent.setDob(dob);
+        newStudent.setSpecialization(specialization);
+        newStudent.setIsUserAnonymous(false);
+        newStudent.setAnonymousName("");
+        studentSessionBeanLocal.createStudent(newStudent);
+    }
+    
     public void loadSelectedStudent() {
+        /*
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         HttpSession session = request.getSession();
 
         Long studentId = (Long) session.getAttribute("studentId");
-        selectedStudent = studentSessionBeanLocal.getStudent(studentId);
+        */
+        Student temp = studentSessionBeanLocal.retrieveStudentByEmail("user1@u.nus.edu");
+        selectedStudent = studentSessionBeanLocal.getStudent(temp.getId());
         
         setId(selectedStudent.getId());
         setEmail(selectedStudent.getEmail());
@@ -63,7 +87,7 @@ public class StudentManagedBean implements Serializable {
         setPassword(selectedStudent.getPassword());
         setDegree(selectedStudent.getDegree());
         setGender(selectedStudent.getGender());
-        setYear(selectedStudent.getYear());
+        setAcademicYear(selectedStudent.getAcademicYear());
         setDob(selectedStudent.getDob());
         setSpecialization(selectedStudent.getSpecialization());
         setIsUserAnonymous(selectedStudent.getIsUserAnonymous());
@@ -71,18 +95,21 @@ public class StudentManagedBean implements Serializable {
     }
     
     public void updateStudent(ActionEvent evt) {
-        selectedStudent.setEmail(email);
-        selectedStudent.setContactnumber(contactnumber);
-        selectedStudent.setFirstname(firstname);
-        selectedStudent.setLastname(lastname);
-        selectedStudent.setDegree(degree);
-        selectedStudent.setGender(gender);
-        selectedStudent.setYear(year);
-        selectedStudent.setDob(dob);
-        selectedStudent.setSpecialization(specialization);
-        selectedStudent.setIsUserAnonymous(isUserAnonymous);
-        selectedStudent.setAnonymousName(anonymousName);
+        selectedStudent.setContactnumber(getContactnumber());
+        selectedStudent.setFirstname(getFirstname());
+        selectedStudent.setLastname(getLastname());
+        selectedStudent.setDegree(getDegree());
+        selectedStudent.setGender(getGender());
+        selectedStudent.setAcademicYear(getAcademicYear());
+        selectedStudent.setDob(getDob());
+        selectedStudent.setSpecialization(getSpecialization());
+        selectedStudent.setIsUserAnonymous(getIsUserAnonymous());
+        selectedStudent.setAnonymousName(getAnonymousName());
         studentSessionBeanLocal.updateStudent(selectedStudent);
+    }
+    
+    public String cancelAction(ActionEvent evt) {
+        return "viewProfile.xhtml?faces-redirect=true";
     }
     
     // getter and setter
@@ -150,12 +177,12 @@ public class StudentManagedBean implements Serializable {
         this.gender = gender;
     }
 
-    public int getYear() {
-        return year;
+    public int getAcademicYear() {
+        return academicYear;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setAcademicYear(int academicYear) {
+        this.academicYear = academicYear;
     }
 
     public Date getDob() {
@@ -174,7 +201,7 @@ public class StudentManagedBean implements Serializable {
         this.specialization = specialization;
     }
 
-    public boolean isIsUserAnonymous() {
+    public boolean getIsUserAnonymous() {
         return isUserAnonymous;
     }
 

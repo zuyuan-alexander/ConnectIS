@@ -38,16 +38,17 @@ public class DataInitSessionBean{
     @EJB
     private StudentSessionBeanLocal studentSessionBean;
     
-    
-    
-    
-
     @PersistenceContext(unitName = "ConnectIS-ejbPU")
     private EntityManager em;
     
  
     @PostConstruct
     public void postConstruct() {
+        if (em.find(Student.class, 1L) == null) {
+            Student testStudent = new Student("student@nus.edu.sg", "12345", "Student", "One", "password");
+            studentSessionBean.createStudent(testStudent);
+        }
+        
         Student s = new Student();
         s.setFirstname("Alvin");
         s.setEmail("Alvin");

@@ -27,22 +27,31 @@ public class Student implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
     private String email;
     private String contactnumber;
     private String firstname;
     private String lastname;
     private String password;
-    
     private byte degree;
     private byte gender;
-    private int year;
+    private int academicYear;
     @Temporal(TemporalType.DATE)
     private Date dob;
     private String specialization;
     private boolean isUserAnonymous;
     private String anonymousName;
-    
+
+    public Student() {
+    }
+
+    public Student(String email, String contactnumber, String firstname, String lastname, String password) {
+        this.email = email;
+        this.contactnumber = contactnumber;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.password = password;
+    }
+
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
 
@@ -101,7 +110,7 @@ public class Student implements Serializable {
     public void setPosts(List<Post> posts) {
         this.posts = posts;
     }
-    
+
     /**
      * @return the degree
      */
@@ -133,15 +142,15 @@ public class Student implements Serializable {
     /**
      * @return the year
      */
-    public int getYear() {
-        return year;
+    public int getAcademicYear() {
+        return academicYear;
     }
 
     /**
      * @param year the year to set
      */
-    public void setYear(int year) {
-        this.year = year;
+    public void setAcademicYear(int academicYear) {
+        this.academicYear = academicYear;
     }
 
     /**
@@ -199,7 +208,6 @@ public class Student implements Serializable {
     public void setAnonymousName(String anonymousName) {
         this.anonymousName = anonymousName;
     }
-    
 
     @Override
     public int hashCode() {

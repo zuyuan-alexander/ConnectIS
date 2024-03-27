@@ -24,4 +24,8 @@ public interface StudentSessionBeanLocal {
 
     public void updateStudent(Student s);
     
+    public Boolean checkIfEmailExists(String email);
+    
+    public Boolean checkIfContactExists(String contact);
+    
 }
