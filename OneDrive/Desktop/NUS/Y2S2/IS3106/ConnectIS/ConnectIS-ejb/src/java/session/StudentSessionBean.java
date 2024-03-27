@@ -5,6 +5,11 @@
 package session;
 
 import entity.Student;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -21,6 +26,29 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
 
     @PersistenceContext(unitName = "ConnectIS-ejbPU")
     private EntityManager em;
+
+    @PostConstruct
+    public void tempCreateNewStudent() {
+        Student newStudent = new Student();
+        newStudent.setEmail("user1@u.nus.edu");
+        newStudent.setContactnumber("123456789");
+        newStudent.setFirstname("User");
+        newStudent.setLastname("One");
+        byte tempByte = 1;
+        newStudent.setDegree(tempByte);
+        newStudent.setGender(tempByte);
+        newStudent.setAcademicYear(1);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            newStudent.setDob(dateFormat.parse("03/01/2004"));
+        } catch (ParseException ex) {
+            Logger.getLogger(StudentSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        newStudent.setSpecialization("Financial Technology");
+        newStudent.setIsUserAnonymous(false);
+        newStudent.setAnonymousName("");
+        createStudent(newStudent);
+    }
 
     @Override
     public void createStudent(Student s) {
@@ -39,7 +67,7 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
     }
 
     @Override
-    public Student retrieveStudentByEmail(String email) throws NoResultException{
+    public Student retrieveStudentByEmail(String email) throws NoResultException {
         Query query = em.createQuery("SELECT s FROM Student s WHERE s.email = :inEmail");
         query.setParameter("inEmail", email);
 
@@ -49,7 +77,22 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
             throw new NoResultException("Student email " + email + " does not exist!");
         }
     }
-   
+
+    @Override
+    public void updateStudent(Student s) {
+        Student oldStudent = getStudent(s.getId());
+        oldStudent.setDegree(s.getDegree());
+        oldStudent.setGender(s.getGender());
+        oldStudent.setAcademicYear(s.getAcademicYear());
+        oldStudent.setDob(s.getDob());
+        oldStudent.setSpecialization(s.getSpecialization());
+        oldStudent.setEmail(s.getEmail());
+        oldStudent.setFirstname(s.getFirstname());
+        oldStudent.setLastname(s.getLastname());
+        oldStudent.setIsUserAnonymous(s.getIsUserAnonymous());
+        oldStudent.setAnonymousName(s.getAnonymousName());
+    }
+
     @Override
     public Boolean checkIfEmailExists(String email) {
         Query q = em.createQuery("SELECT COUNT(s) FROM Student s WHERE p.email = :inEmail");
@@ -57,7 +100,7 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
         Long count = (Long) q.getSingleResult();
         return count > 0;
     }
-    
+
     @Override
     public Boolean checkIfContactExists(String contact) {
         Query q = em.createQuery("SELECT COUNT(s) FROM Student s WHERE s.contact = :inContact");
@@ -65,6 +108,5 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
         Long count = (Long) q.getSingleResult();
         return count > 0;
     }
-    
-    
+
 }

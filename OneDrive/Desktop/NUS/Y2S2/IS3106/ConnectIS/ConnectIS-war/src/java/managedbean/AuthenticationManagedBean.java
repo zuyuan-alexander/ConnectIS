@@ -19,13 +19,16 @@ import session.AuthenticationSessionBeanLocal;
  *
  * @author alvintjw
  */
-@Named(value = "authentificationManagedBean")
+@Named(value = "authenticationManagedBean")
 @SessionScoped
 public class AuthenticationManagedBean implements Serializable {
 
     @EJB
     private StudentSessionBeanLocal studentSessionBean;
+    
+    @EJB
     private AuthenticationSessionBeanLocal authentificationSessionBean;
+    
     private String email;
     private String contactnumber;
     private String firstname;

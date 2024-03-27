@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+    <body>
+        <ui:composition template="./layout/homePageTemplate.xhtml">
+            <ui:define name="title">
+                View Profile
+            </ui:define>
+
+            <ui:define name="content">
+                <!-- to load selected student -->
+                <f:metadata>
+                    <f:event type="preRenderView" listener="#{studentManagedBean.loadSelectedStudent()}" />
+                </f:metadata>
+
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0 text-dark">Profile Page</h1>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item">
+                                        <a href="#{request.contextPath}">Home</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        View Profile Page
+                                    </li>
+                                </ol>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+
+                <!-- Main content -->
+                <section class="content">
+                    <div>
+                        <div class="row">
+                            <h:outputText value="First Name:" />
+                            <h:outputText value="#{studentManagedBean.firstname}" /><br/>
+                        </div>
+
+                        <div class="row">
+                            <h:outputText value="Last Name:" />
+                            <h:outputText value="#{studentManagedBean.lastname}" /><br/>
+                        </div>
+                        
+                        <div class="row">
+                            <h:outputText value="Email:" />
+                            <h:outputText value="#{studentManagedBean.email}" /><br/>
+                        </div>
+                        
+                        <div class="row">
+                            <h:outputText value="Contact Number:" />
+                            <h:outputText value="#{studentManagedBean.contactnumber}" /><br/>
+                        </div>
+
+                        <h:outputText value="Degree:" />
+                        <h:outputText value="Undergraduate" rendered="#{studentManagedBean.degree == '1'}" />
+                        <h:outputText value="Master's" rendered="#{studentManagedBean.degree == '2'}" />
+                        <h:outputText value="PhD" rendered="#{studentManagedBean.degree == '3'}" /><br/>
+
+                        <h:outputText value="Year:" />
+                        <h:outputText value="#{studentManagedBean.academicYear}" /><br/>
+
+                        <h:outputText value="Specialization:" />
+                        <h:outputText value="#{studentManagedBean.specialization}" /><br/>
+
+                        <h:outputText value="Gender:" />
+                        <h:outputText value="Female" rendered="#{studentManagedBean.gender == '1'}" />
+                        <h:outputText value="Male" rendered="#{studentManagedBean.gender == '2'}" /><br/>
+
+                        <h:outputText value="Date of Birth:" />
+                        <h:outputText value="#{studentManagedBean.dob}">
+                            <f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+                        </h:outputText><br/>
+
+                        <h:outputText value="Email:" />
+                        <h:outputText value="#{studentManagedBean.email}" /><br/>
+                    </div>
+                    
+                    <h:form>
+                        <h:commandButton value="Edit Profile" class="btn btn-primary float-right" action="editProfile?faces-redirect=true" />
+                    </h:form>
+                </section>
+            </ui:define>
+
+            <ui:define name="script">
+                <script>
+                    //Date picker
+                    $('#dobpicker').datetimepicker({
+                        format: 'DD/MM/YYYY'
+                    });
+                </script>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
