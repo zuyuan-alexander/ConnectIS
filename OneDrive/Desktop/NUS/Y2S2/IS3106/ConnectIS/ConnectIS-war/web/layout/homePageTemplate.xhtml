@@ -74,7 +74,7 @@
                             <!-- Add icons to the links using the .nav-icon class
                             with font-awesome or any other icon font library -->
                             <li class="nav-item">
-                                <a href="#{request.contextPath}/manageCustomer.xhtml"
+                                <a href="#{request.contextPath}/homePage.xhtml"
                                    class="nav-link">
                                     <i class="nav-icon fa fa-home"></i>
                                     <p>
@@ -102,11 +102,6 @@
             <div class="content-wrapper">
                 <ui:insert name="content">Content</ui:insert>
             </div>
-            <!-- /.content-wrapper -->
-            <footer class="main-footer">
-                <strong>Copyright &copy; IS3106 Studios.</strong> All rights
-                reserved.
-            </footer>
 
 
         </div>
@@ -131,6 +126,7 @@
         <script src="#{request.contextPath}/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
         <script src="#{request.contextPath}/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
         <ui:insert name="script">Script</ui:insert>
+
     </h:body>
 
 </html>
