@@ -55,8 +55,8 @@ public class Post implements Serializable {
     @ManyToOne
     private Student student;
     
-//    @ManyToOne
-//    private Course course;
+    @ManyToOne
+    private Course course;
 
     public Long getId() {
         return id;
@@ -163,6 +163,14 @@ public class Post implements Serializable {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
     
     

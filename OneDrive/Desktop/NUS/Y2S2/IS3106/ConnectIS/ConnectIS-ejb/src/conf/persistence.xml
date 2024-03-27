@@ -5,7 +5,8 @@
     <class>entity.Comment</class>
     <class>entity.Post</class>
     <class>entity.Student</class>
-    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <class>entity.Course</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
     </properties>
