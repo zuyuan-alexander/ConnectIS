@@ -40,6 +40,9 @@ public class Student implements Serializable {
     private String specialization;
     private boolean isUserAnonymous;
     private String anonymousName;
+    
+    @OneToMany
+    private List<Course> pinnedCourses;
 
     public Student() {
     }
@@ -151,6 +154,14 @@ public class Student implements Serializable {
      */
     public void setAcademicYear(int academicYear) {
         this.academicYear = academicYear;
+    }
+
+    public List<Course> getPinnedCourses() {
+        return pinnedCourses;
+    }
+
+    public void setPinnedCourses(List<Course> pinnedCourses) {
+        this.pinnedCourses = pinnedCourses;
     }
 
     /**
