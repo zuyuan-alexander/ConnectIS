@@ -21,5 +21,11 @@ public interface StudentSessionBeanLocal {
     public void createStudent(Student s);
 
     public Student getStudent(Long cId) throws NoResultException;
+
+    public void updateStudent(Student s);
+    
+    public Boolean checkIfEmailExists(String email);
+    
+    public Boolean checkIfContactExists(String contact);
     
 }

@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                template="./layout/authentication.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+    <ui:define name="content">
+        <body>
+
+            <div class="limiter" style="background-image: url('resources/images/bg-01.jpg'); ">
+                <div class="container-signUp100">
+                    <div class="wrap-signUp100">
+                        <div class="signUp100-form-title" style="background-image: url('resources/images/bg-01.jpg');">
+                            <span class="signUp100-form-title-1">
+                                Sign Up
+                            </span>
+                        </div>
+
+                        <h:form id="signUpForm" class="signUp100-form validate-form">
+                            <p:growl id="growl" showDetail="true" sticky="true" />
+
+                            <!-- First Name -->
+                            <div class="wrap-input100 validate-input" data-validate="First name is required">
+                                <span class="label-input100">First Name</span>
+                                <h:inputText value="#{authenticationManagedBean.firstname}" class="input100" pt:placeholder="Enter first name"/>
+                                <span class="focus-input100"></span>
+                            </div>
+                            
+                            <!-- Last Name -->
+                            <div class="wrap-input100 validate-input" data-validate="Last name is required">
+                                <span class="label-input100">Last Name</span>
+                                <h:inputText value="#{authenticationManagedBean.lastname}" class="input100" pt:placeholder="Enter last name"/>
+                                <span class="focus-input100"></span>
+                            </div>
+
+
+                            <!-- Email -->
+                            <div class="wrap-input100 validate-input" data-validate="Email is required">
+                                <span class="label-input100">NUS Email</span>
+                                <h:inputText value="#{authenticationManagedBean.email}" class="input100" pt:placeholder="student@nus.edu.sg"/>
+                                <span class="focus-input100"></span>
+                            </div>
+                            
+                            <!-- Contact -->
+                            <div class="wrap-input100 validate-input" data-validate="Contact is required">
+                                <span class="label-input100">Contact</span>
+                                <h:inputText value="#{authenticationManagedBean.contactnumber}" class="input100" pt:placeholder="Enter contact number"/>
+                                <span class="focus-input100"></span>
+                            </div>
+
+   
+                            <!-- Password -->
+                            <div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
+                                <span class="label-input100">Password</span>
+<!--                                <h:inputSecret class="input100" value="#{authenticationManagedBean.password}" pt:placeholder="Enter password"/>-->
+                                <p:password class="input100" value="#{authenticationManagedBean.password}" placeholder="Enter password" feedback="true" />
+                                <span class="focus-input100"></span>
+                            </div>
+                            <div class="container-signUp100-form-btn" style="margin-top: 20px;">
+                                <h:commandButton value="Sign Up" action="#{authenticationManagedBean.signup}" style="margin-left: 70px;" class="signUp100-form-btn" />
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+
+            <!--===============================================================================================-->
+            <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/animsition/js/animsition.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/bootstrap/js/popper.js"></script>
+            <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/select2/select2.min.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/daterangepicker/moment.min.js"></script>
+            <script src="vendor/daterangepicker/daterangepicker.js"></script>
+            <!--===============================================================================================-->
+            <script src="vendor/countdowntime/countdowntime.js"></script>
+            <!--===============================================================================================-->
+            <script src="js/main.js"></script>
+        </body>
+
+    </ui:define>
+
+</ui:composition>

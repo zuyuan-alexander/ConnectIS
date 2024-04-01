@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+    <body>
+
+        <ui:composition template="./layout/homePageTemplate.xhtml">
+
+            <ui:define name="title">
+                Edit Profile
+            </ui:define>
+
+            <ui:define name="content">
+                <!-- for edit case -->
+                <f:metadata>
+                    <f:viewParam name="cId" value="#{studentManagedBean.id}" />
+                    <f:event type="preRenderView" listener="#{studentManagedBean.loadSelectedStudent()}" />
+                </f:metadata>
+
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0 text-dark">Edit Profile</h1>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item">
+                                        <a href="#{request.contextPath}">Home</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">
+                                        Edit Profile
+                                    </li>
+                                </ol>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <section class="content">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Your Profile
+                            </h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <h:form>
+                            <div class="card-body">
+                                <!-- email -->
+                                <div class="form-group">
+                                    <h:outputLabel for="email">Email</h:outputLabel><br/>
+                                    <h:outputText id="email" value="#{studentManagedBean.email}" />
+                                </div>
+                                
+                                <!-- first name -->
+                                <div class="form-group">
+                                    <h:outputLabel for="firstName">First Name</h:outputLabel><br/>
+                                    <h:inputText id="firstName" value="#{studentManagedBean.firstname}" required="true" requiredMessage="First Name is required" />
+                                    <h:message for="firstName" class="invalid-feedback" />
+                                </div>
+
+                                <!-- last name -->
+                                <div class="form-group">
+                                    <h:outputLabel for="lastName">Last Name</h:outputLabel><br/>
+                                    <h:inputText id="lastName" value="#{studentManagedBean.lastname}" required="true" requiredMessage="Last Name is required" />
+                                    <h:message for="lastName" class="invalid-feedback" />
+                                </div>
+
+                                <!-- year -->
+                                <div class="form-group">
+                                    <h:outputLabel for="year">Year</h:outputLabel><br/>
+                                    <h:inputText id="year" value="#{studentManagedBean.academicYear}" required="true" requiredMessage="Year is required" />
+                                    <h:message for="year" class="invalid-feedback" />
+                                </div>
+                                
+                                <!-- degree -->
+                                <div class="form-group">
+                                    <h:outputLabel for="degree">Degree</h:outputLabel>
+                                    <h:selectOneMenu value="#{studentManagedBean.degree}" class="form-control">
+                                        <f:selectItem itemValue="1" itemLabel="Undergraduate" />
+                                        <f:selectItem itemValue="2" itemLabel="Master's" />
+                                        <f:selectItem itemValue="3" itemLabel="PhD" />
+                                    </h:selectOneMenu>
+                                </div>
+
+                                <!-- specialization -->
+                                <div class="form-group">
+                                    <h:outputLabel for="specialization">Specialization</h:outputLabel><br/>
+                                    <h:inputText id="specialization" value="#{studentManagedBean.specialization}" required="true" requiredMessage="Specialization is required" />
+                                    <h:message for="specialization" class="invalid-feedback" />
+                                </div>
+
+                                <!-- gender -->
+                                <div class="form-group">
+                                    <h:outputLabel for="gender">Gender</h:outputLabel>
+                                    <h:selectOneMenu value="#{studentManagedBean.gender}" class="form-control">
+                                        <f:selectItem itemValue="1" itemLabel="Female" />
+                                        <f:selectItem itemValue="2" itemLabel="Male" />
+                                    </h:selectOneMenu>
+                                </div>
+
+                                <!-- DOB -->
+                                <div class="form-group">
+                                    <h:outputLabel for="inputDOB">Date of Birth (dd/mm/yyyy)</h:outputLabel>
+                                    <div class="input-group date" id="dobpicker" data-target-input="nearest">
+                                        <div class="input-group-prepend" data-target="#dobpicker" data-toggle="datetimepicker">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                        <h:inputText id="dob" value="#{studentManagedBean.dob}" required="true" requiredMessage="DOB is required"
+                                                     converterMessage="Format should be dd/mm/yyy" a:data-target="#dobpicker" a:data-toggle="datetimepicker">
+                                            <f:convertDateTime pattern="dd/MM/yyy" />
+                                        </h:inputText>
+                                        <h:message for="dob" class="invalid-feedback" />
+                                    </div>
+                                </div>
+                                
+                                <!-- contact -->
+                                <div class="form-group">
+                                    <h:outputLabel for="contact">Contact Number</h:outputLabel><br/>
+                                    <h:inputText id="contact" value="#{studentManagedBean.contactnumber}" required="true" requiredMessage="Contact Number is required" />
+                                    <h:message for="contact" class="invalid-feedback" />
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+
+                            <div class="card-footer">
+                                <h:button value="Cancel" class="btn btn-default" outcome="viewProfile" />
+                                <h:commandButton value="Submit" class="btn btn-primary float-right" actionListener="#{studentManagedBean.updateStudent(evt)}"
+                                                 action="viewProfile?faces-redirect=true" />
+                            </div>
+                        </h:form>
+                    </div>
+                    <!-- /.card -->
+                </section>
+                <!-- /.content -->
+            </ui:define>
+
+            <ui:define name="script">
+                <script>
+                    //Date picker
+                    $('#dobpicker').datetimepicker({
+                        format: 'DD/MM/YYYY'
+                    });
+                </script>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

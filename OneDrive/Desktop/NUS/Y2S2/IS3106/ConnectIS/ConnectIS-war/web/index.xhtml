@@ -1,11 +1,84 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./layout/default.xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <body>
+        <ui:composition template="./layout/homePageTemplate.xhtml">
+            <ui:define name="title">
+                Welcome to Simple CRM
+            </ui:define>
 
-    <ui:define name="content">
-        
-    </ui:define>
+            <ui:define name="content">
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1>Home</h1>
+                            </div>
+                        </div>
+                    </div><!-- /.container-fluid -->
+                </div>
 
-</ui:composition>
+                <!-- Content Header (Page header) -->
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-header p-2">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>
+                            </ul>
+                        </div><!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="active tab-pane" id="activity">
+                                    <!-- Post -->
+                                    <div class="post">
+                                        <c:forEach items="#{courseManagedBean.allCourses}" var="course">
+
+                                            <div class="user-block">
+                                                <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image"/>
+                                                <span class="username">
+                                                    <a href="#">Jonathan Burke Jr.</a>
+                                                </span>
+                                                <span class="description">Shared publicly - 7:30 PM today</span>
+                                            </div>
+                                            <!-- /.user-block -->
+                                            <p>
+                                                Lorem ipsum represents a long-held tradition for designers,
+                                                typographers and the like. Some people hate it and argue for
+                                                its demise, but others ignore the hate as they create awesome
+                                                tools to help create filler text for everyone from bacon lovers
+                                                to Charlie Sheen fans.
+                                            </p>
+
+                                            <p>
+                                                <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
+                                                <a href="#" class="link-black text-sm"><i class="far fa-thumbs-up mr-1"></i> Like</a>
+                                                <span class="float-right">
+                                                    <a href="#" class="link-black text-sm">
+                                                        <i class="far fa-comments mr-1"></i> View Comments
+                                                    </a>
+                                                </span>
+                                            </p>
+
+                                            <hr></hr>
+
+                                        </c:forEach>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <section class="content">
+                </section>
+                <!-- /.content -->
+            </ui:define>
+            <ui:define name="script">
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
