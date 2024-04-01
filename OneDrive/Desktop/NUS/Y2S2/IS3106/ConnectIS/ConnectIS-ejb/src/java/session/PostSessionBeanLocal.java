@@ -29,5 +29,7 @@ public interface PostSessionBeanLocal {
     public void deletePost(Long id);
 
     public Post retrievePostByTitle(String title) throws NoResultException;
+
+    public void createPost(Post post);
     
 }

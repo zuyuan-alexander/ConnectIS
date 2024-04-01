@@ -69,6 +69,30 @@
                     box-shadow: 0 0 0 1px #fff, 0 0 0 3px rgba(13, 110, 253, .25);
                 }
 
+                .custom-radio-button-group .ui-selectone-radio {
+                    display: none; /* Hide the default radio input */
+                }
+
+                .custom-radio-button-group label {
+                    display: inline-block;
+                    background-color: #f8f9fa; /* Light gray background */
+                    color: #495057; /* Dark gray text */
+                    padding: 0.5rem 1rem;
+                    margin: 2px;
+                    border: 1px solid #ced4da; /* Light gray border */
+                    border-radius: 0.25rem; /* Rounded corners */
+                    cursor: pointer;
+                    transition: background-color 0.15s ease-in-out;
+                }
+
+                .custom-radio-button-group label:hover,
+                .custom-radio-button-group label.ui-state-active { /* Styling for hover and selected state */
+                    background-color: #007bff; /* Bootstrap primary color */
+                    color: white;
+                    border-color: #007bff;
+                }
+
+
             </style>
             <!-- Additional styles and scripts -->
         </h:head>
@@ -81,31 +105,24 @@
                         <p:inputText id="title" styleClass="input-field" value="#{postManagedBean.title}" required="true" label="Title"/>
                     </div>
 
+
                     <div class="form-group">
-                        <p:outputLabel value="Type:"/>
-                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn-secondary">
-                                <input type="radio" name="type" value="lecture" autocomplete="off"/> Lecture
-                            </label>
-                            <label class="btn btn-secondary">
-                                <input type="radio" name="type" value="labs" autocomplete="off"/> Labs
-                            </label>
-                            <label class="btn btn-secondary">
-                                <input type="radio" name="type" value="tutorials" autocomplete="off"/> Tutorials
-                            </label>
-                            <label class="btn btn-secondary">
-                                <input type="radio" name="type" value="project" autocomplete="off"/> Project
-                            </label>
-                            <label class="btn btn-secondary">
-                                <input type="radio" name="type" value="others" autocomplete="off"/> Others
-                            </label>
-                        </div>
-                        <h:inputHidden id="selectedType" value="#{postManagedBean.postType}" />
+                        <p:outputLabel value="Type:" for="postType" />
+                        <h:selectOneRadio id="postType" value="#{postManagedBean.postType}" layout="pageDirection" styleClass="custom-radio-button-group">
+                            <f:selectItem itemValue="lecture" itemLabel="Lecture" />
+                            <f:selectItem itemValue="labs" itemLabel="Labs" />
+                            <f:selectItem itemValue="tutorials" itemLabel="Tutorials" />
+                            <f:selectItem itemValue="project" itemLabel="Project" />
+                            <f:selectItem itemValue="others" itemLabel="Others" />
+                            <f:ajax render="@this" />
+                        </h:selectOneRadio>
                     </div>
+
+
 
                     <div class="form-group">
                         <p:outputLabel for="text" value="Text (optional):"/>
-                        <textarea id="summernote" name="text" class="input-textarea form-control" rows="10"/>
+                        <textarea id="summernote" name="summernote" class="input-textarea form-control" rows="10"></textarea>
                         <h:inputHidden id="text" value="#{postManagedBean.content}"/>
                     </div>
 
@@ -118,46 +135,34 @@
                     </div>
 
                     <div class="clear-fix">
-                        <p:commandButton styleClass="command-button" value="Submit" action="#{postManagedBean.submit}" onclick="submitPost();" ajax="false"/>
+                        <h:commandButton value="Submit" styleClass="command-button" onclick="submitPost();" action="#{postManagedBean.addPost}" />
+                    </div>
+
+                    <div id="postContentDisplay"></div>
+                    <div>
+                        <!-- Display the post content -->
+                        <h:outputText value="#{postManagedBean.content}" escape="false" />
                     </div>
                 </h:form>
             </div>
 
-            <ui:define name="script">
-
-                <script>
-                    $(document).ready(function () {
-                        $('#summernote').summernote({
-                            placeholder: 'Compose your post here...',
-                            tabsize: 2,
-                            height: 200
-                        });
+            <script>
+                $(document).ready(function () {
+                    $('#summernote').summernote({
+                        placeholder: 'Compose your post here...',
+                        tabsize: 2,
+                        height: 200
                     });
+                });
 
-                    function submitPost() {
-                        var content = $('#summernote').summernote('code');
-                        document.getElementById('text').value = content;
-                    }
-                </script>
+                function submitPost() {
+                    var content = $('#summernote').summernote('code');
+                    console.log(content);
+                    document.getElementById('j_idt19:text').value = content;
+                    document.getElementById('postContentDisplay').innerHTML = content;
 
-                <script>
-                    // Toggle button active state and update hidden input
-                    $('.btn-group .btn').on('click', function (e) {
-                        var buttons = $(this).parent().children('.btn');
-                        buttons.removeClass('active');
-                        buttons.each(function () {
-                            $(this).find('input').prop('checked', false);
-                        });
-
-                        $(this).addClass('active');
-                        $(this).find('input').prop('checked', true);
-                        $('#postForm\\:selectedType').val($(this).find('input').val());
-                    });
-
-                    // Your existing scripts...
-                </script>
-
-            </ui:define>
+                }
+            </script>
 
         </h:body>
     </ui:define>

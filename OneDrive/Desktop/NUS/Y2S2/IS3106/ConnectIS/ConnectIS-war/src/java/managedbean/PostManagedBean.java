@@ -31,63 +31,76 @@ public class PostManagedBean implements Serializable {
 
     @EJB
     private StudentSessionBeanLocal studentSessionBean;
-    
+
     @EJB
     private PostSessionBeanLocal postSessionBean;
-    
-    
+
     private String title;
     private String content;
-    private PostTypeEnum postType;
+    private String postType;
     private boolean anonymous;
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
     private List<Comment> comments;
     private Student student;
     private Post selectedPost;
+    private List<Post> posts;
 
     /**
      * Creates a new instance of PostManagedBean
      */
     public PostManagedBean() {
     }
-    
+
     @PostConstruct
     public void testInit() {
+        posts = postSessionBean.getAllPosts();
         //Initialise the post
-        Post temp = new Post();
-        title = "Should I SU IS3106 :(";
-        content = "Yes you definitely should";
-        postType = PostTypeEnum.LECTURE;
-        creationDate = new Date();
-        anonymous = true;
-       
-        temp.setAnonymous(anonymous);
-        temp.setContent(content);
-        temp.setTitle(title);
-        temp.setCreationDate(creationDate);
-        temp.setPostType(postType);
-        
-        selectedPost = temp;
-        student = studentSessionBean.retrieveStudentByEmail("Alvin");
-        
-       
-//        postSessionBean.createPost(selectedPost, student);
-        loadSelectedPost();
-        
-        //Initialise the comments
+//        Post temp = new Post();
+//        title = "Should I SU IS3106 :(";
+//        content = "Yes you definitely should";
+//        postType = PostTypeEnum.LECTURE;
+//        creationDate = new Date();
+//        anonymous = true;
+//       
+//        temp.setAnonymous(anonymous);
+//        temp.setContent(content);
+//        temp.setTitle(title);
+//        temp.setCreationDate(creationDate);
+//        temp.setPostType(postType);
+//        
+//        selectedPost = temp;
+//        student = studentSessionBean.retrieveStudentByEmail("Alvin");
+//        
+//       
+////        postSessionBean.createPost(selectedPost, student);
+//        loadSelectedPost();
 
+        //Initialise the comments
     }
-    
-    public void addPost(ActionEvent evt) {
+
+    public void addPost() {
+        System.out.println("Triggering add post");
         Post p = new Post();
         p.setTitle(title);
         p.setContent(content);
-        p.setCreationDate(creationDate);
-        p.setPostType(postType);
+        p.setCreationDate(new Date());
         p.setAnonymous(anonymous);
+
+        if (postType.equalsIgnoreCase("lecture")) {
+            p.setPostType(PostTypeEnum.LECTURE);
+        } else if (postType.equalsIgnoreCase("lab")) {
+            p.setPostType(PostTypeEnum.LAB);
+        } else if (postType.equalsIgnoreCase("tutorial")) {
+            p.setPostType(PostTypeEnum.TUTORIAL);
+        } else if (postType.equalsIgnoreCase("project")) {
+            p.setPostType(PostTypeEnum.PROJECT);
+        } else if (postType.equalsIgnoreCase("others")) {
+            p.setPostType(PostTypeEnum.OTHERS);
+        }
+        postSessionBean.createPost(p);
     } //end addCustomer
-    
+
     public void loadSelectedPost() {
         selectedPost = postSessionBean.retrievePostByTitle("Should I SU IS3106 :(");
     }
@@ -95,55 +108,55 @@ public class PostManagedBean implements Serializable {
     public String getTitle() {
         return title;
     }
-    
+
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
     public String getContent() {
         return content;
     }
-    
+
     public void setContent(String content) {
         this.content = content;
     }
-    
-    public PostTypeEnum getPostType() {
+
+    public String getPostType() {
         return postType;
     }
-    
-    public void setPostType(PostTypeEnum postType) {
+
+    public void setPostType(String postType) {
         this.postType = postType;
     }
-    
+
     public boolean isAnonymous() {
         return anonymous;
     }
-    
+
     public void setAnonymous(boolean anonymous) {
         this.anonymous = anonymous;
     }
-    
+
     public Date getCreationDate() {
         return creationDate;
     }
-    
+
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
-    
+
     public List<Comment> getComments() {
         return comments;
     }
-    
+
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
-    
+
     public Student getStudent() {
         return student;
     }
-    
+
     public void setStudent(Student student) {
         this.student = student;
     }
@@ -155,5 +168,13 @@ public class PostManagedBean implements Serializable {
     public void setSelectedPost(Post selectedPost) {
         this.selectedPost = selectedPost;
     }
-    
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
 }
