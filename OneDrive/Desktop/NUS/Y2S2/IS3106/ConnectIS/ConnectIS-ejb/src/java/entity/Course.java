@@ -29,6 +29,7 @@ public class Course implements Serializable {
     private String courseName;
     @Lob
     private String description;
+    private String semester = "Semester 1 / Semester 2";
     
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
@@ -97,6 +98,14 @@ public class Course implements Serializable {
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
+    }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester;
     }
     
     

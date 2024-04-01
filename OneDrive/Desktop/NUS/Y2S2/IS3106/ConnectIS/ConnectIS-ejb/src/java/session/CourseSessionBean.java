@@ -24,12 +24,12 @@ public class CourseSessionBean implements CourseSessionBeanLocal {
     private EntityManager em;
 
     @Override
-    public List<Course> searchCourses(String courseName) {
+    public List<Course> searchCourses(String courseCode) {
         Query q;
-        if (courseName != null) {
+        if (courseCode != null) {
             q = em.createQuery("SELECT c FROM Course c WHERE "
-                    + "LOWER(c.courseName) LIKE :courseName");
-            q.setParameter("courseName", "%" + courseName.toLowerCase() + "%");
+                    + "LOWER(c.courseCode) LIKE :courseCode");
+            q.setParameter("courseCode", "%" + courseCode.toLowerCase() + "%");
         } else {
             q = em.createQuery("SELECT c FROM Course c");
         }

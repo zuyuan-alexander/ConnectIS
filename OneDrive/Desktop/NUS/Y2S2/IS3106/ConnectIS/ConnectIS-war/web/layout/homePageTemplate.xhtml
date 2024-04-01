@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -71,10 +72,9 @@
                     <!-- Sidebar Menu -->
                     <nav class="mt-2">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                            <!-- Add icons to the links using the .nav-icon class
-                            with font-awesome or any other icon font library -->
+
                             <li class="nav-item">
-                                <a href="#{request.contextPath}/homePage.xhtml"
+                                <a href="#{request.contextPath}/index.xhtml"
                                    class="nav-link">
                                     <i class="nav-icon fa fa-home"></i>
                                     <p>
@@ -87,9 +87,26 @@
                                    class="nav-link">
                                     <i class="nav-icon fa fa-users"></i>
                                     <p>
-                                        My Courses
+                                        My Saved Courses
                                     </p>
                                 </a>
+                            </li>
+
+                            <li class="nav-item" style="margin-top: 10px; "></li>
+                            <li class="nav-item">
+                                <span style="color: white; margin-left: 20px;">All Courses</span>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <c:forEach items="#{courseManagedBean.allCourses}" var="course">
+                                    <li class="nav-item">
+                                        <a href="#{request.contextPath}/courseHomePage.xhtml?courseId=#{course.courseId}" class="nav-link">
+                                            <i class="nav-icon fa fa-book"></i>
+                                            <p>#{course.courseCode}</p>
+                                        </a>
+                                    </li>
+                                </c:forEach>
                             </li>
                         </ul>
                     </nav>
