@@ -23,12 +23,17 @@ public class PostSessionBean implements PostSessionBeanLocal {
 
     @PersistenceContext(unitName = "ConnectIS-ejbPU")
     private EntityManager em;
-    
+
     @Override
     public void createPost(Post post, Student student) {
         Student s = em.find(Student.class, student.getId());
         post.setStudent(s);
         s.getPosts().add(post);
+        em.persist(post);
+    }
+
+    @Override
+    public void createPost(Post post) {
         em.persist(post);
     }
 //   
@@ -47,9 +52,9 @@ public class PostSessionBean implements PostSessionBeanLocal {
     public Post findPostById(Long id) {
         return em.find(Post.class, id);
     }
-    
-      @Override
-    public Post retrievePostByTitle(String title) throws NoResultException{
+
+    @Override
+    public Post retrievePostByTitle(String title) throws NoResultException {
         Query query = em.createQuery("SELECT p FROM Post p WHERE p.title = :inTitle");
         query.setParameter("inTitle", title);
 
@@ -64,15 +69,13 @@ public class PostSessionBean implements PostSessionBeanLocal {
     public List<Post> getAllPosts() {
         return em.createQuery("SELECT p FROM Post p", Post.class).getResultList();
     }
-    
+
 //    @Override
 //    public List<Post> getAllPosts(Long courseid) {
 //        return em.createQuery("SELECT p FROM Post p WHERE p.course.id = :courseID")
 //                .setParameter(":courseID", courseid)
 //                .getResultList();
 //    }
-    
-
     @Override
     public void updatePost(Post post) {
         em.merge(post);
@@ -85,12 +88,6 @@ public class PostSessionBean implements PostSessionBeanLocal {
             em.remove(post);
         }
     }
-    
-    
-    
-
-   
-    
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
