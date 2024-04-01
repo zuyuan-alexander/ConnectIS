@@ -96,17 +96,27 @@ public class PostSessionBean implements PostSessionBeanLocal {
         Post post = em.find(Post.class, postId);
 
         // Check if the student has already liked this post
-        if (!hasStudentLikedPost(student, post)) {
+        if (!hasStudentLikedPost(studentId, postId)) {
             PostLike like = new PostLike();
             like.setStudent(student);
             like.setPost(post);
 
             em.persist(like);
+        } else {
+            PostLike selectedPostlike = (PostLike) em.createQuery(
+                    "SELECT l FROM PostLike l WHERE l.student = :student AND l.post = :post")
+                    .setParameter("student", student)
+                    .setParameter("post", post)
+                    .getSingleResult();
+            em.remove(selectedPostlike);
         }
     }
 
     @Override
-    public boolean hasStudentLikedPost(Student student, Post post) {
+    public boolean hasStudentLikedPost(Long studentId, Long postId) {
+        Student student = em.find(Student.class, studentId);
+        Post post = em.find(Post.class, postId);
+
         Long likesCount = (Long) em.createQuery(
                 "SELECT COUNT(l) FROM PostLike l WHERE l.student = :student AND l.post = :post")
                 .setParameter("student", student)
@@ -118,7 +128,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
     @Override
     public Long getLikesCount(Long postId) {
         Long likesCount = (Long) em.createQuery(
-                "SELECT COUNT(l) FROM Like l WHERE l.post.id = :postId")
+                "SELECT COUNT(l) FROM PostLike l WHERE l.post.id = :postId")
                 .setParameter("postId", postId)
                 .getSingleResult();
         return likesCount;

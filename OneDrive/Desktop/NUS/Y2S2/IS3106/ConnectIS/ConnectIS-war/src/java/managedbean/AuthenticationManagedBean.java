@@ -140,5 +140,14 @@ public class AuthenticationManagedBean implements Serializable {
     public void setConfirmpassword(String confirmpassword) {
         this.confirmpassword = confirmpassword;
     }
+
+    public Student getLoggedinStudent() {
+        return loggedinStudent;
+    }
+
+    public void setLoggedinStudent(Student loggedinStudent) {
+        this.loggedinStudent = loggedinStudent;
+    }
+    
     
 }

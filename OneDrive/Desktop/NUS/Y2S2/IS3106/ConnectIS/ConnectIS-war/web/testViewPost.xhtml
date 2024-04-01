@@ -10,43 +10,46 @@
         <h:body>
 
             <ui:repeat value="#{postManagedBean.posts}" var="post" varStatus="status">
-                <div class="user-block">
-                    <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image"/>
-                    <span class="username">
-                        <a href="#">#{post.student.firstname} #{post.student.lastname}</a>
-                    </span>
-                    <span class="description">Shared publicly - #{post.creationDate}</span>
-                </div>
-                <!-- /.user-block -->
-                <!-- Post content -->
-                <div class="post-content">
-                    <div class="post-title">#{post.title}</div>
-                    <p><h:outputText value="#{post.content}" escape="false" /></p>
-                </div>
+                <h:form>
 
-                <!-- Like Count Displayed Above the Interaction Bar -->
-                <div class="like-count">
-                    <i class="far fa-thumbs-up"></i> <span>#{postSessionBean.getLikesCount(post.id)}0</span> Likes
-                </div>
 
-                <!-- Interaction Bar -->
-                <div class="interaction-bar">
-                    <h:commandLink styleClass="link-black text-sm mr-2" actionListener="#{postManagedBean.likePost(post.id)}">
-                        <i class="fas fa-share mr-1"></i> Share
-                    </h:commandLink>
-                    <h:commandLink styleClass="link-black text-sm" actionListener="#{postManagedBean.likePost(post.id)}">
-                        <i class="far fa-thumbs-up mr-1"></i> Like
-                        <!-- This hidden field is used to pass the post ID to the managed bean -->
-                        <f:param name="selectedPostId" value="#{post.id}" />
-                    </h:commandLink>
-                    <span class="float-right">
-                        <a href="#" class="link-black text-sm">
-                            <i class="far fa-comments mr-1"></i> View Comments (#{post.comments.size()})
-                        </a>
-                    </span>
-                </div>
+                    <div class="user-block">
+                        <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image"/>
+                        <span class="username">
+                            <a href="#">#{post.student.firstname} #{post.student.lastname}</a>
+                        </span>
+                        <span class="description">Shared publicly - #{post.creationDate}</span>
+                    </div>
+                    <!-- /.user-block -->
+                    <!-- Post content -->
+                    <div class="post-content">
+                        <div class="post-title">#{post.title}</div>
+                        <p><h:outputText value="#{post.content}" escape="false" /></p>
+                    </div>
 
-                <hr></hr>
+                    <!-- Like Count Displayed Above the Interaction Bar -->
+                    <div class="like-count">
+                        <i class="far fa-thumbs-up"></i> <span>#{postManagedBean.getLikesCount(post.id)}</span> Likes
+                    </div>
+
+                    <!-- Interaction Bar -->
+                    <div class="interaction-bar">
+                        <h:commandLink styleClass="link-black text-sm mr-2" actionListener="#{postManagedBean.likePost(post.id)}">
+                            <i class="fas fa-share mr-1"></i> Share
+                        </h:commandLink>
+                        <h:commandLink action="#{postManagedBean.likePost(post.id)}" styleClass="#{postManagedBean.isPostLikedByStudent(post.id) ? 'liked' : 'not-liked'}">
+                            <i class="#{postManagedBean.isPostLikedByStudent(post.id) ? 'fas' : 'far'} fa-thumbs-up mr-1"></i> Like
+                            <f:ajax render="@form" />
+                        </h:commandLink>
+                        <span class="float-right">
+                            <a href="#" class="link-black text-sm">
+                                <i class="far fa-comments mr-1"></i> View Comments (#{post.comments.size()})
+                            </a>
+                        </span>
+                    </div>
+
+                    <hr></hr>
+                </h:form>
             </ui:repeat>
 
         </h:body>
@@ -114,6 +117,26 @@
             .actions .action-link i {
                 margin-right: 5px;
             }
+
+            .not-liked {
+                color: white; /* Unliked state color */
+                background-color: transparent; /* Unliked state background */
+            }
+
+            .liked {
+                color: blue; /* Liked state color */
+                background-color: #000; /* Liked state background */
+            }
+
+            /* Icons */
+            .far.fa-thumbs-up { /* Regular (unfilled) thumbs-up icon */
+                /* Additional styling as needed */
+            }
+
+            .fas.fa-thumbs-up { /* Solid (filled) thumbs-up icon */
+                /* Additional styling as needed */
+            }
+
 
 
         </style>
