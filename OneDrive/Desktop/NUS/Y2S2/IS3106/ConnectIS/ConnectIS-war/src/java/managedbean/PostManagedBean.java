@@ -15,6 +15,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import session.PostSessionBeanLocal;
@@ -34,6 +35,10 @@ public class PostManagedBean implements Serializable {
 
     @EJB
     private PostSessionBeanLocal postSessionBean;
+    
+    @Inject
+    private AuthenticationManagedBean authenBean;
+
 
     private String title;
     private String content;

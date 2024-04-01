@@ -1,25 +1,54 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./layout/default.xhtml"
-
+                template="./layout/homePageTemplate.xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:define name="content">
         <h:body>
-            <ui:repeat value="#{postManagedBean.posts}" var="post">
-                <div class="post-container">
-                    <div class="post-title">#{post.title}</div>
-                    <div class="post-content">
-                        <!-- This will render the HTML content as HTML -->
-                        <h:outputText value="#{post.content}" escape="false" />
-                    </div>
-                    <!-- You can add voting buttons, comments, etc., here -->
+
+            <ui:repeat value="#{postManagedBean.posts}" var="post" varStatus="status">
+                <div class="user-block">
+                    <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image"/>
+                    <span class="username">
+                        <a href="#">#{post.student.firstname} #{post.student.lastname}</a>
+                    </span>
+                    <span class="description">Shared publicly - #{post.creationDate}</span>
                 </div>
+                <!-- /.user-block -->
+                <!-- Post content -->
+                <div class="post-content">
+                    <div class="post-title">#{post.title}</div>
+                    <p><h:outputText value="#{post.content}" escape="false" /></p>
+                </div>
+
+                <!-- Like Count Displayed Above the Interaction Bar -->
+                <div class="like-count">
+                    <i class="far fa-thumbs-up"></i> <span>#{postSessionBean.getLikesCount(post.id)}0</span> Likes
+                </div>
+
+                <!-- Interaction Bar -->
+                <div class="interaction-bar">
+                    <h:commandLink styleClass="link-black text-sm mr-2" actionListener="#{postManagedBean.likePost(post.id)}">
+                        <i class="fas fa-share mr-1"></i> Share
+                    </h:commandLink>
+                    <h:commandLink styleClass="link-black text-sm" actionListener="#{postManagedBean.likePost(post.id)}">
+                        <i class="far fa-thumbs-up mr-1"></i> Like
+                        <!-- This hidden field is used to pass the post ID to the managed bean -->
+                        <f:param name="selectedPostId" value="#{post.id}" />
+                    </h:commandLink>
+                    <span class="float-right">
+                        <a href="#" class="link-black text-sm">
+                            <i class="far fa-comments mr-1"></i> View Comments (#{post.comments.size()})
+                        </a>
+                    </span>
+                </div>
+
+                <hr></hr>
             </ui:repeat>
+
         </h:body>
     </ui:define>
 
@@ -29,22 +58,64 @@
 
     <ui:define name="style">
         <style>
-            /* Add your CSS styles here to mimic Reddit's layout */
             .post-container {
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                padding: 10px;
+                border-bottom: 1px solid #ccc;
+                padding-bottom: 10px;
                 margin-bottom: 10px;
             }
+
+            .user-block {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+
+            .profile-img {
+                border-radius: 50%;
+                margin-right: 10px;
+                width: 50px; /* Adjust as needed */
+                height: 50px; /* Adjust as needed */
+            }
+
+            .user-info {
+                flex-grow: 1;
+            }
+
+            .user-meta {
+                color: #777;
+                font-size: 0.85em;
+            }
+
             .post-title {
-                font-size: 18px;
-                color: #5f99cf;
+                font-size: 1.2em;
                 font-weight: bold;
             }
-            .post-content {
-                margin-top: 10px;
+
+            .post-content p {
+                margin: 5px 0;
             }
-            /* ... Additional styling */
+
+            .interaction-bar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .like-count {
+                font-size: 0.9em;
+            }
+
+            .actions .action-link {
+                margin-right: 15px;
+                text-decoration: none;
+                color: #007bff;
+            }
+
+            .actions .action-link i {
+                margin-right: 5px;
+            }
+
+
         </style>
     </ui:define>
 
