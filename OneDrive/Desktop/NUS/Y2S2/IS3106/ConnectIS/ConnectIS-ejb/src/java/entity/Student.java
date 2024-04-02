@@ -40,9 +40,15 @@ public class Student implements Serializable {
     private String specialization;
     private boolean isUserAnonymous;
     private String anonymousName;
-    
+
     @OneToMany
     private List<Course> pinnedCourses;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts;
+
+    @OneToMany(mappedBy = "student")
+    private List<PostLike> likes;
 
     public Student() {
     }
@@ -54,9 +60,6 @@ public class Student implements Serializable {
         this.lastname = lastname;
         this.password = password;
     }
-
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Post> posts;
 
     public Long getId() {
         return id;
@@ -244,5 +247,15 @@ public class Student implements Serializable {
     public String toString() {
         return "entity.Student[ id=" + id + " ]";
     }
+
+    public List<PostLike> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<PostLike> likes) {
+        this.likes = likes;
+    }
+    
+    
 
 }

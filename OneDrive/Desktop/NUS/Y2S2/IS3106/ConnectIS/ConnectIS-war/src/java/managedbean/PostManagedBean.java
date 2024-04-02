@@ -6,6 +6,7 @@ package managedbean;
 
 import entity.Comment;
 import entity.Post;
+import entity.PostLike;
 import entity.Student;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -15,6 +16,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import session.PostSessionBeanLocal;
@@ -35,6 +37,11 @@ public class PostManagedBean implements Serializable {
     @EJB
     private PostSessionBeanLocal postSessionBean;
 
+    
+    @Inject
+    private AuthenticationManagedBean authenBean;
+
+
     private String title;
     private String content;
     private String postType;
@@ -42,7 +49,7 @@ public class PostManagedBean implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
     private List<Comment> comments;
-    private Student student;
+    private Student loggedinStudent;
     private Post selectedPost;
     private List<Post> posts;
 
@@ -55,6 +62,8 @@ public class PostManagedBean implements Serializable {
     @PostConstruct
     public void testInit() {
         posts = postSessionBean.getAllPosts();
+        loggedinStudent = authenBean.getLoggedinStudent();
+
         //Initialise the post
 //        Post temp = new Post();
 //        title = "Should I SU IS3106 :(";
@@ -103,6 +112,19 @@ public class PostManagedBean implements Serializable {
 
     public void loadSelectedPost() {
         selectedPost = postSessionBean.retrievePostByTitle("Should I SU IS3106 :(");
+    }
+    
+    public Long getLikesCount(Long PostId) {
+        return postSessionBean.getLikesCount(PostId);
+    }
+    
+     public boolean isPostLikedByStudent(Long postId) {
+        // Check if the post is liked by the student.
+        return postSessionBean.hasStudentLikedPost(loggedinStudent.getId(), postId);
+    }
+    
+    public void likePost(Long postId) {
+       postSessionBean.likePost(loggedinStudent.getId(), postId);
     }
 
     public String getTitle() {
@@ -154,11 +176,11 @@ public class PostManagedBean implements Serializable {
     }
 
     public Student getStudent() {
-        return student;
+        return loggedinStudent;
     }
 
     public void setStudent(Student student) {
-        this.student = student;
+        this.loggedinStudent = student;
     }
 
     public Post getSelectedPost() {

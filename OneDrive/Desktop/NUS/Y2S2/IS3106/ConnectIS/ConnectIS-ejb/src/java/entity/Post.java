@@ -33,7 +33,7 @@ public class Post implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    
+
     @Lob
     private String content;
 
@@ -44,17 +44,17 @@ public class Post implements Serializable {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
-    
-    private int likes;
-    private int dislikes;
-    
+
     // Assuming a bidirectional relationship with Comment entity
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
-    
+
     @ManyToOne
     private Student student;
-    
+
+    @OneToMany(mappedBy = "post")
+    private List<PostLike> likes;
+
     @ManyToOne
     private Course course;
 
@@ -115,8 +115,6 @@ public class Post implements Serializable {
         this.postType = postType;
     }
 
-  
-
     public boolean isAnonymous() {
         return anonymous;
     }
@@ -131,22 +129,6 @@ public class Post implements Serializable {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-
-    public int getDislikes() {
-        return dislikes;
-    }
-
-    public void setDislikes(int dislikes) {
-        this.dislikes = dislikes;
     }
 
     public List<Comment> getComments() {
@@ -172,9 +154,14 @@ public class Post implements Serializable {
     public void setCourse(Course course) {
         this.course = course;
     }
+
+    public List<PostLike> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<PostLike> likes) {
+        this.likes = likes;
+    }
     
-    
-    
-    
-    
+
 }

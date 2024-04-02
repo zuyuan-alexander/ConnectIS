@@ -96,7 +96,7 @@
                                         <!-- Post -->
                                         <div class="post">
                                             <c:forEach items="#{courseManagedBean.allCourses}" var="course">
-                                                
+
                                                 <div class="user-block">
                                                     <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image"/>
                                                     <span class="username">
@@ -113,7 +113,13 @@
                                                     to Charlie Sheen fans.
                                                 </p>
 
-                                                <p>
+                                                <!-- Like Count Displayed Above the Interaction Bar -->
+                                                <div class="like-count">
+                                                    <i class="far fa-thumbs-up"></i> <span>0</span> Likes
+                                                </div>
+
+                                                <!-- Interaction Bar -->
+                                                <div class="interaction-bar">
                                                     <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
                                                     <a href="#" class="link-black text-sm"><i class="far fa-thumbs-up mr-1"></i> Like</a>
                                                     <span class="float-right">
@@ -121,10 +127,10 @@
                                                             <i class="far fa-comments mr-1"></i> View Comments
                                                         </a>
                                                     </span>
-                                                </p>
-                                                
+                                                </div>
+
                                                 <hr></hr>
-                                                
+
                                             </c:forEach>
                                         </div>
                                     </div>
@@ -157,5 +163,29 @@
     <ui:define name="script">
         script
     </ui:define>
+
+    <style>
+        .like-count {
+            font-size: 0.9rem; /* Adjust the size as needed */
+            color: #65676b; /* Grey text to mimic social media style */
+            padding-bottom: 0.5rem; /* Space between like count and post text */
+        }
+
+        .interaction-bar {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            padding-top: 0.5rem; /* Space between post text and interaction icons */
+        }
+
+        .interaction-bar a {
+            margin-right: 15px; /* Space between interaction buttons */
+        }
+
+        .interaction-bar .float-right {
+            margin-left: auto; /* Pushes the comments link to the right */
+        }
+
+    </style>
 
 </ui:composition>

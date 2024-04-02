@@ -31,5 +31,11 @@ public interface PostSessionBeanLocal {
     public Post retrievePostByTitle(String title) throws NoResultException;
 
     public void createPost(Post post);
-    
+
+    public Long getLikesCount(Long postId);
+
+    public void likePost(Long studentId, Long postId);
+
+    public boolean hasStudentLikedPost(Long studentId, Long postId);
+
 }
