@@ -144,7 +144,6 @@
                 </h:form>
             </div>
 
-
             <script>
                 $(document).ready(function () {
                     $('#summernote').summernote({
@@ -153,6 +152,18 @@
                         height: 200
                     });
                 });
+
+
+                function submitPost() {
+                    var content = $('#summernote').summernote('code');
+                    console.log(content);
+                    document.getElementById('j_idt19:text').value = content;
+                    document.getElementById('postContentDisplay').innerHTML = content;
+
+                }
+            </script>
+
+
 
                 function submitPost() {
                     var content = $('#summernote').summernote('code');

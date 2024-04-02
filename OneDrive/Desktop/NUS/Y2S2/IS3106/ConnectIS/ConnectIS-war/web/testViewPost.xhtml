@@ -1,9 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                template="./layout/homePageTemplate.xhtml"
+
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./layout/default.xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
+               
                 xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:define name="content">
@@ -52,6 +54,18 @@
                 </h:form>
             </ui:repeat>
 
+
+            <ui:repeat value="#{postManagedBean.posts}" var="post">
+                <div class="post-container">
+                    <div class="post-title">#{post.title}</div>
+                    <div class="post-content">
+                        <!-- This will render the HTML content as HTML -->
+                        <h:outputText value="#{post.content}" escape="false" />
+                    </div>
+                    <!-- You can add voting buttons, comments, etc., here -->
+                </div>
+            </ui:repeat>
+
         </h:body>
     </ui:define>
 
@@ -61,6 +75,7 @@
 
     <ui:define name="style">
         <style>
+
             .post-container {
                 border-bottom: 1px solid #ccc;
                 padding-bottom: 10px;
@@ -137,7 +152,22 @@
                 /* Additional styling as needed */
             }
 
-
+            /* Add your CSS styles here to mimic Reddit's layout */
+            .post-container {
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+            .post-title {
+                font-size: 18px;
+                color: #5f99cf;
+                font-weight: bold;
+            }
+            .post-content {
+                margin-top: 10px;
+            }
+            /* ... Additional styling */
 
         </style>
     </ui:define>

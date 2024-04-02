@@ -37,5 +37,5 @@ public interface PostSessionBeanLocal {
     public void likePost(Long studentId, Long postId);
 
     public boolean hasStudentLikedPost(Long studentId, Long postId);
-    
+
 }

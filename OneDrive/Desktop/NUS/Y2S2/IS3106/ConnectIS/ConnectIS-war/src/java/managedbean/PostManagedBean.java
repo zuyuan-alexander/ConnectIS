@@ -36,6 +36,7 @@ public class PostManagedBean implements Serializable {
 
     @EJB
     private PostSessionBeanLocal postSessionBean;
+
     
     @Inject
     private AuthenticationManagedBean authenBean;
@@ -62,6 +63,7 @@ public class PostManagedBean implements Serializable {
     public void testInit() {
         posts = postSessionBean.getAllPosts();
         loggedinStudent = authenBean.getLoggedinStudent();
+
         //Initialise the post
 //        Post temp = new Post();
 //        title = "Should I SU IS3106 :(";

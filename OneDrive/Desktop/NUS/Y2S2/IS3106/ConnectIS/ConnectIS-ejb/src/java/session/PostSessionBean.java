@@ -90,6 +90,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
         }
     }
 
+
     @Override
     public void likePost(Long studentId, Long postId) {
         Student student = em.find(Student.class, studentId);
