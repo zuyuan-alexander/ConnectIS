@@ -3,7 +3,9 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./layout/homePageTemplate.xhtml"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
 
     <ui:define name="title">
         Course Home Page
@@ -95,22 +97,25 @@
                                     <div class="active tab-pane" id="activity">
                                         <!-- Post -->
                                         <div class="post">
-                                            <c:forEach items="#{courseManagedBean.allCourses}" var="course">
+                                            <c:forEach items="#{postManagedBean.postsInSelectedCourse}" var="post">
 
                                                 <div class="user-block">
-                                                    <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image"/>
+                                                    <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image"/>
                                                     <span class="username">
-                                                        <a href="#">Jonathan Burke Jr.</a>
+                                                        <a href="#">#{post.student.firstname} #{post.student.lastname}</a>
                                                     </span>
-                                                    <span class="description">Shared publicly - 7:30 PM today</span>
+                                                    <span class="description">
+                                                        <h:outputText value="#{post.creationDate}" >
+                                                            <f:convertDateTime type="both" pattern="hh:mm a dd/MM/yyyy" />
+                                                        </h:outputText>
+                                                    </span>
                                                 </div>
                                                 <!-- /.user-block -->
+                                                <span class="username">
+                                                    <a href="#">#{post.title}</a>
+                                                </span>
                                                 <p>
-                                                    Lorem ipsum represents a long-held tradition for designers,
-                                                    typographers and the like. Some people hate it and argue for
-                                                    its demise, but others ignore the hate as they create awesome
-                                                    tools to help create filler text for everyone from bacon lovers
-                                                    to Charlie Sheen fans.
+                                                    #{post.content}
                                                 </p>
 
                                                 <!-- Like Count Displayed Above the Interaction Bar -->

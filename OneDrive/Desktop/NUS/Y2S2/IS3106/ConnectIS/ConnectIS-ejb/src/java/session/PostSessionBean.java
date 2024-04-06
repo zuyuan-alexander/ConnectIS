@@ -4,6 +4,7 @@
  */
 package session;
 
+import entity.Course;
 import entity.Post;
 import entity.PostLike;
 import entity.Student;
@@ -63,6 +64,18 @@ public class PostSessionBean implements PostSessionBeanLocal {
             return (Post) query.getSingleResult();
         } catch (javax.persistence.NoResultException | NonUniqueResultException ex) {
             throw new NoResultException("Post title " + title + " does not exist!");
+        }
+    }
+    
+    @Override
+    public List<Post> retrievePostByCourse(Course c) {
+        Query query = em.createQuery("SELECT p FROM Post p WHERE p.course.courseId =:courseId");
+        query.setParameter("courseId", c.getCourseId());
+        
+        try {
+            return (List<Post>) query.getResultList();
+        } catch (NoResultException ex) {
+            throw new NoResultException("Could not find Posts!");
         }
     }
 

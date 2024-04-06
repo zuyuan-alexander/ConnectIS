@@ -5,6 +5,7 @@
 package session;
 
 import entity.Comment;
+import entity.Course;
 import entity.Post;
 import entity.Student;
 import java.util.List;
@@ -37,5 +38,7 @@ public interface PostSessionBeanLocal {
     public void likePost(Long studentId, Long postId);
 
     public boolean hasStudentLikedPost(Long studentId, Long postId);
+
+    public List<Post> retrievePostByCourse(Course c);
 
 }
