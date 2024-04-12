@@ -3,7 +3,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./layout/default.xhtml"
+                template="./layout/homePageTemplate.xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                
                 xmlns:f="http://java.sun.com/jsf/core">
@@ -11,22 +11,21 @@
     <ui:define name="content">
         <h:body>
 
-            <ui:repeat value="#{postManagedBean.posts}" var="post" varStatus="status">
                 <h:form>
 
 
                     <div class="user-block">
                         <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image"/>
                         <span class="username">
-                            <a href="#">#{post.student.firstname} #{post.student.lastname}</a>
+                            <a href="#">#{postManagedBean.selectedPost.student.firstname} #{postManagedBean.selectedPost.student.lastname}</a>
                         </span>
-                        <span class="description">Shared publicly - #{post.creationDate}</span>
+                        <span class="description">Shared publicly - #{postManagedBean.selectedPost.creationDate}</span>
                     </div>
                     <!-- /.user-block -->
                     <!-- Post content -->
                     <div class="post-content">
-                        <div class="post-title">#{post.title}</div>
-                        <p><h:outputText value="#{post.content}" escape="false" /></p>
+                        <div class="post-title">#{postManagedBean.selectedPost.title}</div>
+                        <p><h:outputText value="#{postManagedBean.selectedPost.content}" escape="false" /></p>
                     </div>
 
                     <!-- Like Count Displayed Above the Interaction Bar -->
@@ -52,19 +51,9 @@
 
                     <hr></hr>
                 </h:form>
-            </ui:repeat>
+       
 
-
-            <ui:repeat value="#{postManagedBean.posts}" var="post">
-                <div class="post-container">
-                    <div class="post-title">#{post.title}</div>
-                    <div class="post-content">
-                        <!-- This will render the HTML content as HTML -->
-                        <h:outputText value="#{post.content}" escape="false" />
-                    </div>
-                    <!-- You can add voting buttons, comments, etc., here -->
-                </div>
-            </ui:repeat>
+         
 
         </h:body>
     </ui:define>

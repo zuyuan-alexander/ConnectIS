@@ -5,20 +5,25 @@
 package managedbean;
 
 import entity.Comment;
+import entity.Course;
 import entity.Post;
-import entity.PostLike;
 import entity.Student;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.event.ActionEvent;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import session.CourseSessionBeanLocal;
 import session.PostSessionBeanLocal;
 import session.StudentSessionBeanLocal;
 import util.enumeration.PostTypeEnum;
@@ -32,10 +37,16 @@ import util.enumeration.PostTypeEnum;
 public class PostManagedBean implements Serializable {
 
     @EJB
+    private CourseSessionBeanLocal courseSessionBean;
+
+    @EJB
     private StudentSessionBeanLocal studentSessionBean;
 
     @EJB
     private PostSessionBeanLocal postSessionBean;
+    
+   
+
 
     
     @Inject
@@ -52,6 +63,9 @@ public class PostManagedBean implements Serializable {
     private Student loggedinStudent;
     private Post selectedPost;
     private List<Post> posts;
+    
+      private Course selectedCourse;
+    private List<Post> postsInSelectedCourse;
 
     /**
      * Creates a new instance of PostManagedBean
@@ -63,6 +77,20 @@ public class PostManagedBean implements Serializable {
     public void testInit() {
         posts = postSessionBean.getAllPosts();
         loggedinStudent = authenBean.getLoggedinStudent();
+
+
+       loadSelectedPost();
+        Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        String courseIdParam = params.get("courseId");
+        if (courseIdParam != null) {
+            Long courseId = Long.valueOf(courseIdParam);
+            try {
+                selectedCourse = courseSessionBean.getCourse(courseId);
+                postsInSelectedCourse = postSessionBean.retrievePostByCourse(selectedCourse);
+            } catch (NoResultException ex) {
+                Logger.getLogger(PostManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
         //Initialise the post
 //        Post temp = new Post();
