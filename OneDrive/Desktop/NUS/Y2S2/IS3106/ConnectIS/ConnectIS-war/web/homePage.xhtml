@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+        <ui:composition template="./layout/homePageTemplate.xhtml">
+
+            <ui:define name="title">
+                ConnectIS Home
+            </ui:define>
+
+            <ui:define name="content">
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1>Home</h1>
+                            </div>
+                        </div>
+                    </div><!-- /.container-fluid -->
+                </div>
+
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card card-primary">
+                                    <div class="card-body box-profile">
+                                        <h3 class="card-title">Trending Posts</h3>
+                                    </div>
+                                    <hr></hr>
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
+                                        <c:forEach items="#{postManagedBean.posts}" var="post">
+                                            <span class="username">
+                                                <a href="#">#{post.course.courseCode}: #{post.title}</a>
+                                            </span>
+                                            <div>
+                                                <span class="description">
+                                                    <h:outputText value="#{post.creationDate}"  style="font-size: 12px;">
+                                                        <f:convertDateTime type="both" pattern="hh:mm a dd/MM/yyyy" />
+                                                    </h:outputText>
+                                                    <h6 style="font-size: 12px;">0 comments  ·  0 likes</h6>
+                                                </span>
+                                            </div>
+                                        </c:forEach>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                            </div>
+                            <!-- Content Header (Page header) -->
+                            <div class="col-md-9">
+                                <div class="card">
+                                    <div class="card-header p-2">
+                                        <div class="nav-link" data-toggle="tab">Activity</div>
+                                    </div><!-- /.card-header -->
+                                    <div class="card-body">
+                                        <div class="tab-content">
+                                            <div class="active tab-pane" id="activity">
+                                                <!-- Post -->
+                                                <div class="post">
+                                                    <c:forEach items="#{postManagedBean.posts}" var="post">
+
+                                                        <div class="user-block">
+                                                            <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image"/>
+                                                            <span class="username">
+                                                                <a href="#">#{post.student.firstname} #{post.student.lastname}</a>
+                                                            </span>
+                                                            <span class="description">Shared in Group #{post.course.courseCode}</span>
+                                                        </div>
+                                                        <!-- /.user-block -->
+                                                        <span class="username">
+                                                            <a href="#">#{post.title}</a>
+                                                        </span>
+                                                        <p>
+                                                            #{post.content}
+                                                        </p>
+
+                                                        <p>
+                                                            <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
+                                                            <a href="#" class="link-black text-sm"><i class="far fa-thumbs-up mr-1"></i> Like</a>
+                                                            <span class="float-right">
+                                                                <a href="#" class="link-black text-sm">
+                                                                    <i class="far fa-comments mr-1"></i> View Comments
+                                                                </a>
+                                                            </span>
+                                                        </p>
+
+                                                        <hr></hr>
+
+                                                    </c:forEach>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- /.content-header -->
+                <!-- Main content -->
+                <section class="content">
+                </section>
+                <!-- /.content -->
+            </ui:define>
+
+            <ui:define name="script">
+            </ui:define>
+
+        </ui:composition>
+    </body>
+</html>
