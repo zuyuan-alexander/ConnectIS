@@ -18,6 +18,7 @@
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1>#{courseManagedBean.selectedCourse.courseCode} Home Page</h1>
+                   
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -128,9 +129,11 @@
                                                     <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
                                                     <a href="#" class="link-black text-sm"><i class="far fa-thumbs-up mr-1"></i> Like</a>
                                                     <span class="float-right">
-                                                        <a href="#" class="link-black text-sm">
-                                                            <i class="far fa-comments mr-1"></i> View Comments
-                                                        </a>
+                                                        <h:link value="View Comments (#{post.comments.size()})" outcome="/testViewPost">
+                                                            <f:param name="postId" value="#{post.id}" />
+                                                            <i class="far fa-comments mr-1"></i>
+                                                        </h:link>
+
                                                     </span>
                                                 </div>
 

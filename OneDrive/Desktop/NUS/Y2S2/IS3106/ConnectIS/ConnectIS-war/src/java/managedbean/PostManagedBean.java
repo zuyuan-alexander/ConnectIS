@@ -56,6 +56,7 @@ public class PostManagedBean implements Serializable {
     private Date creationDate;
     private List<Comment> comments;
     private Student loggedinStudent;
+    private Long selectedPostId;
     private Post selectedPost;
     private List<Post> posts;
 
@@ -131,10 +132,13 @@ public class PostManagedBean implements Serializable {
     } //end addCustomer
 
     public void loadSelectedPost() {
-        selectedPost = postSessionBean.retrievePostByTitle("Should I SU IS3106 :(");
+        if(selectedPostId != null) {
+            selectedPost = postSessionBean.findPostById(selectedPostId);
+        }      
     }
 
     public Long getLikesCount(Long PostId) {
+        
         return postSessionBean.getLikesCount(PostId);
     }
 
@@ -144,6 +148,7 @@ public class PostManagedBean implements Serializable {
     }
 
     public void likePost(Long postId) {
+        
         postSessionBean.likePost(loggedinStudent.getId(), postId);
     }
 
@@ -203,6 +208,25 @@ public class PostManagedBean implements Serializable {
         this.loggedinStudent = student;
     }
 
+    public Student getLoggedinStudent() {
+        return loggedinStudent;
+    }
+
+    public void setLoggedinStudent(Student loggedinStudent) {
+        this.loggedinStudent = loggedinStudent;
+    }
+
+    public Long getSelectedPostId() {
+        return selectedPostId;
+    }
+
+    public void setSelectedPostId(Long selectedPostId) {
+        this.selectedPostId = selectedPostId;
+    }
+
+   
+    
+    
     public Post getSelectedPost() {
         return selectedPost;
     }
