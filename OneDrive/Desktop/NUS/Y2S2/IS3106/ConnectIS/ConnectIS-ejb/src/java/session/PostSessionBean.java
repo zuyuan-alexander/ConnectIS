@@ -92,7 +92,11 @@ public class PostSessionBean implements PostSessionBeanLocal {
 //    }
     @Override
     public void updatePost(Post post) {
-        em.merge(post);
+        Post oldPost = findPostById(post.getId());
+        oldPost.setTitle(post.getTitle());
+        oldPost.setPostType(post.getPostType());
+        oldPost.setContent(post.getContent());
+        oldPost.setAnonymous(post.isAnonymous());
     }
 
     @Override

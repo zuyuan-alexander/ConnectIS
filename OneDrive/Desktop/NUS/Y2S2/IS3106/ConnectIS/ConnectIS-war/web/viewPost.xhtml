@@ -1,282 +1,202 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./layout/default.xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                template="./layout/homePageTemplate.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-    <ui:define name="content">
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <ui:define name="title">
+        View Post
+    </ui:define>
 
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <ui:define name="content"> 
+        <h:head>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css"/>         
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-        <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet"/>
-        <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+        </h:head>
+        <h:body>
+            <f:metadata>
+                <f:viewParam name="postId" value="#{postManagedBean.selectedPostId}" />
+                <f:event type="preRenderView" listener="#{postManagedBean.loadSelectedPost}" />
+            </f:metadata>
 
-        <h:form id="commentsForm">
-            <div class="post-container">
-                <h2 class="post-title">#{postManagedBean.selectedPost.title}</h2>
-                <div class="post-meta">
-                    Posted by 
-                    <span class="post-author">#{postManagedBean.selectedPost.anonymous ? 'Anonymous' : postManagedBean.selectedPost.student.firstname}</span>
-                    on <h:outputText value="#{postManagedBean.selectedPost.creationDate}">
-                        <f:convertDateTime pattern="dd MMM yyyy HH:mm" timeZone="Asia/Singapore"/>
-                    </h:outputText>
-                </div>
-                <div class="post-content">
-                    #{postManagedBean.selectedPost.content}
-                </div>
+            <h:form>
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!-- Main post container -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <!-- Post -->
+                                        <div class="post">
+                                            <div class="user-block">
+                                                <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image"/>
+                                                <span class="username">
+                                                    <h:outputText value="#{postManagedBean.selectedPost.anonymous ? 'Anonymous' : postManagedBean.selectedPost.student.firstname.concat(' ').concat(postManagedBean.selectedPost.student.lastname)}" escape="false" />
+                                                </span>
 
+                                                <span class="description">Shared publicly - 
+                                                    <h:outputText value="#{postManagedBean.selectedPost.creationDate}">
+                                                        <f:convertDateTime pattern="hh:mm a dd/MM/yyyy" />
+                                                    </h:outputText>
+                                                </span>
+                                            </div>
 
-                <div class="comment-box">
-                    <h:inputTextarea id="commentContent" 
-                                     value="#{commentManagedBean.content}"
-                                     styleClass="form-control comment-textarea"
-                                     pt:placeholder="Add a comment...">
-                        <f:ajax />
-                    </h:inputTextarea>
+                                            <h:panelGroup styleClass="dropdown float-right" rendered="#{postManagedBean.selectedPost.student.id eq postManagedBean.loggedinStudent.id}">
+                                                <i class="bi bi-three-dots-vertical" style="cursor: pointer;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                                    <a class="dropdown-item" href="#{request.contextPath}/editPost.xhtml?postId=#{postManagedBean.selectedPost.id}&amp;courseId=#{postManagedBean.selectedCourse.courseId}">
+                                                        <i class="bi bi-pencil">&nbsp;</i>Edit Post
+                                                    </a>
 
-                    <h:commandButton value="Comment" action="#{commentManagedBean.addComment()}" styleClass="btn-comment" />
-                </div>
-
-                <!-- Anonymous switch -->
-                <div class="form-group">
-                    <div class="custom-control custom-switch">
-                        <h:selectBooleanCheckbox id="anonymousSwitch" value="#{commentManagedBean.anonymous}" class="custom-control-input">
-                            <f:ajax event="change" execute="@this" render="@form" />
-                        </h:selectBooleanCheckbox>
-                        <h:outputLabel for="anonymousSwitch" class="custom-control-label">Show my name</h:outputLabel>
-                    </div>
-                </div>
-
-                <!-- Comments Section -->
-                <div class="comments-section">
-
-                    <ui:repeat value="#{postManagedBean.selectedPost.comments}" var="comment" varStatus="status">
-                        <div class="comment-item">
-
-                            <!-- Comment content -->
-                            <p>#{comment.content}</p>
-
-                            <!-- Upvote/Downvote buttons -->
-
-                            <h:commandButton styleClass="vote-button" value="👍" action="#{commentManagedBean.likeComment(comment.id)}">
-                                <f:ajax execute="@this" render=":commentsForm:voteCount#{status.index}" />
-                            </h:commandButton>
-                            <h:outputText id="voteCount#{status.index}" value="#{comment.likes - comment.dislikes}" styleClass="vote-count"/>
-                            <h:commandButton styleClass="vote-button" value="👎" action="#{commentManagedBean.dislikeComment(comment.id)}">
-                                <f:ajax execute="@this" render=":commentsForm:voteCount#{status.index}" />
-                            </h:commandButton>
+                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#confirmDeleteModal">
+                                                        <i class="bi bi-trash3"></i>&nbsp;Delete Post
+                                                    </a>
+                                                </div>
+                                            </h:panelGroup>
 
 
-                            <!-- Comment metadata -->
-                            <small>
-                                Posted by #{comment.anonymous ? 'Anonymous' : comment.student.firstname} on
-                                <h:outputText value="#{comment.creationDate}">
-                                    <f:convertDateTime pattern="dd MMM yyyy HH:mm" timeZone="Asia/Singapore"/>
-                                </h:outputText>
-                            </small>
 
-                            <!-- Reply link -->
-                            <small class="comment-reply" onclick="replyToComment(#{status.index})">Reply</small>
+                                            <!-- Bootstrap Modal for Delete Confirmation -->
+                                            <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are you sure you want to delete this post?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                            <h:commandButton type="button" styleClass="btn btn-danger" action="#{postManagedBean.deletePost(postManagedBean.selectedPost.id)}" value="Delete">
+                                                                <f:ajax execute="@form" render="@form" />
+                                                            </h:commandButton>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <span class="username">
+                                                <a href="#">#{postManagedBean.selectedPost.title}</a>
+                                            </span>
+
+
+                                            <p>
+                                                <h:outputText value="#{postManagedBean.selectedPost.content}" escape="false" />
+                                            </p>
+
+
+                                            <!-- Like Count Displayed Above the Interaction Bar -->
+                                            <div class="like-count">
+                                                <i class="far fa-thumbs-up"></i> <span>#{postManagedBean.getLikesCount(postManagedBean.selectedPost.id)}</span> Likes
+                                            </div>
+                                            <!-- Interaction Bar -->
+                                            <div class="interaction-bar">
+                                                <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
+                                                <h:commandLink action="#{postManagedBean.likePost(postManagedBean.selectedPost.id)}" styleClass="#{postManagedBean.isPostLikedByStudent(postManagedBean.selectedPost.id) ? 'liked' : 'not-liked'}">
+                                                    <i class="#{postManagedBean.isPostLikedByStudent(postManagedBean.selectedPost.id) ? 'fas' : 'far'} fa-thumbs-up mr-1"></i> Like
+                                                    <f:ajax render="@form" />
+                                                </h:commandLink>
+
+                                                <span class="float-right">
+                                                    <a href="#" class="link-black text-sm">
+                                                        <i class="far fa-comments mr-1"></i> View Comments (#{postManagedBean.selectedPost.comments.size()})
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <!-- /.interaction-bar -->
+                                        </div>
+                                        <!-- /.post -->
+                                    </div>
+                                </div>
+                                <!-- /.card -->
+                            </div>
                         </div>
-                    </ui:repeat>
-                </div>
-            </div>
-        </h:form>
+                    </div>
+                </section>
+            </h:form>
+
+
+
+        </h:body>
     </ui:define>
 
-    <ui:define name="style">
-        <style>
-            body {
-                font-family: 'Arial', sans-serif;
-                line-height: 1.6;
-                color: #333;
-                background-color: #f4f4f4;
-                margin: 0;
-                padding: 20px;
-            }
-
-            .post-container {
-                background-color: #f4f4f4;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                padding: 20px;
-                margin-bottom: 30px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            }
-
-            .post-title {
-                font-size: 28px;
-                color: #333;
-                margin-bottom: 10px;
-            }
-
-            .post-meta {
-                font-size: 14px;
-                color: #888;
-                margin-bottom: 20px;
-            }
-
-            .post-author {
-                font-weight: bold;
-                color: #007bff;
-            }
-
-            .post-content {
-                font-size: 16px;
-                color: #555;
-                margin-bottom: 20px;
-                white-space:normal;
-                text-align: left; /* Align text to the left */
-                padding-top: 0; /* No padding at the top */
-                padding-left: 0; /* No padding on the left *//* respects new lines and spaces */
-            }
-
-            .comments-section {
-                background-color: #f9f9f9;
-                border-radius: 8px;
-                padding: 20px;
-                margin-top: 30px;
-            }
-
-            .comment {
-                padding: 10px;
-                border-bottom: 1px solid #eee;
-                background-color: #fff;
-                margin-bottom: 10px;
-                border-radius: 8px;
-                box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            }
-
-            .comment:last-child {
-                border-bottom: none;
-                margin-bottom: 0;
-            }
-
-            .comment-author {
-                font-weight: bold;
-                color: #333;
-                font-size: 16px;
-                margin-bottom: 5px;
-            }
-
-            .comment-content {
-                font-size: 14px;
-                color: #666;
-            }
-
-            .comment-meta {
-                font-size: 12px;
-                color: #aaa;
-                margin-top: 10px;
-            }
-
-            /* Responsive design adjustments */
-            @media (max-width: 768px) {
-                .post-container, .comments-section {
-                    padding: 15px;
-                }
-
-                .post-title {
-                    font-size: 24px;
-                }
-            }
-
-            .vote-buttons {
-                display: flex;
-                align-items: center;
-                font-size: 1.5em;
-                margin-right: 10px;
-            }
-            .vote-buttons button {
-                background: none;
-                border: none;
-                cursor: pointer;
-                padding: 0 5px;
-                color: #888;
-            }
-            .vote-buttons button:hover {
-                color: #333;
-            }
-            .vote-count {
-                margin: 0 10px;
-            }
-            .comment-box {
-                margin-top: 20px;
-                margin-bottom: 20px;
-            }
-            .comment-box textarea {
-                width: 100%;
-                padding: 10px;
-                margin-bottom: 10px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-            }
-            .comment-box button {
-                padding: 10px 20px;
-                background-color: #007bff;
-                color: white;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-            .comment-box button:hover {
-                background-color: #0056b3;
-            }
-            .comment-reply {
-                margin-left: 20px;
-                font-size: 0.9em;
-                text-decoration: underline;
-                cursor: pointer;
-            }
-            .comment-reply:hover {
-                color: #0056b3;
-            }
-            .comment-item {
-                border-bottom: 1px solid #eee;
-                padding-bottom: 10px;
-                margin-bottom: 10px;
-            }
-
-            .form-group {
-                display: flex;
-                align-items: center;
-                justify-content: flex-end;
-            }
-
-            .custom-control {
-                margin-top: 0.5rem;
-            }
-
-            .custom-control-label {
-                margin-bottom: 0;
-            }
-
-            /* Styles to make the 'Comment' button match Bootstrap's primary button */
-            .btn-comment {
-                background-color: #007bff;
-                border-color: #007bff;
-            }
-
-            .btn-comment:hover {
-                background-color: #0069d9;
-                border-color: #0062cc;
-            }
-
-
-        </style>
-    </ui:define>
-
-
-    <!-- Include any scripts if necessary -->
-    <ui:define name="scripts">
+    <ui:define name="script">
 
     </ui:define>
+
+    <style>
+        .post-container {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .user-block {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .profile-img {
+            border-radius: 50%;
+            margin-right: 10px;
+            width: 50px; /* Adjust as needed */
+            height: 50px; /* Adjust as needed */
+        }
+        .user-info {
+            flex-grow: 1;
+        }
+        .user-meta {
+            color: #777;
+            font-size: 0.85em;
+        }
+        .post-title {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .post-content p {
+            margin: 5px 0;
+        }
+        .interaction-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .like-count {
+            font-size: 0.9em;
+        }
+        .actions .action-link {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .actions .action-link i {
+            margin-right: 5px;
+        }
+        .not-liked {
+            color: white; /* Unliked state color */
+            background-color: transparent; /* Unliked state background */
+        }
+        .liked {
+            color: blue; /* Liked state color */
+            background-color: #000; /* Liked state background */
+        }
+        /* Icons */
+        .far.fa-thumbs-up { /* Regular (unfilled) thumbs-up icon */
+            /* Additional styling as needed */
+        }
+        .fas.fa-thumbs-up { /* Solid (filled) thumbs-up icon */
+            /* Additional styling as needed */
+        }
+    </style>
 
 </ui:composition>

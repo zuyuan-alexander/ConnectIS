@@ -139,8 +139,9 @@
                                                             <f:ajax render="@form" />
                                                         </h:commandLink>
                                                         <span class="float-right">
-                                                            <h:link value="View Comments (#{post.comments.size()})" outcome="/testViewPost">
+                                                            <h:link value="View Comments (#{post.comments.size()})" outcome="/viewPost">
                                                                 <f:param name="postId" value="#{post.id}" />
+                                                                <f:param name="courseId" value="#{courseManagedBean.selectedCourse.courseId}" />
                                                                 <i class="far fa-comments mr-1"></i>
                                                             </h:link>
 
@@ -180,7 +181,7 @@
     </ui:define>
 
     <ui:define name="script">
-        script
+        
     </ui:define>
 
     <style>

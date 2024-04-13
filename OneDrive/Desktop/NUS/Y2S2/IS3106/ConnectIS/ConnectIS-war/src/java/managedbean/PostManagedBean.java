@@ -8,6 +8,7 @@ import entity.Comment;
 import entity.Course;
 import entity.Post;
 import entity.Student;
+import java.io.IOException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
@@ -47,9 +48,6 @@ public class PostManagedBean implements Serializable {
 
     @Inject
     private AuthenticationManagedBean authenBean;
-    
-    
-   
 
     private String title;
     private String content;
@@ -120,31 +118,20 @@ public class PostManagedBean implements Serializable {
         p.setCreationDate(new Date());
         p.setAnonymous(anonymous);
 
-        if (postType.equalsIgnoreCase("lecture")) {
-            p.setPostType(PostTypeEnum.LECTURE);
-        } else if (postType.equalsIgnoreCase("lab")) {
-            p.setPostType(PostTypeEnum.LAB);
-        } else if (postType.equalsIgnoreCase("tutorial")) {
-            p.setPostType(PostTypeEnum.TUTORIAL);
-        } else if (postType.equalsIgnoreCase("project")) {
-            p.setPostType(PostTypeEnum.PROJECT);
-        } else if (postType.equalsIgnoreCase("others")) {
-            p.setPostType(PostTypeEnum.OTHERS);
-        }
-        
        
         postSessionBean.createPost(p, loggedinStudent.getId(), selectedCourse.getCourseId());
-        return "/courseHomePage.xhtml?courseId=" + selectedCourse.getCourseId();
+        return "/courseHomePage.xhtml?courseId=" + selectedCourse.getCourseId() + "&faces-redirect=true";
+
     }
 
     public void loadSelectedPost() {
-        if(selectedPostId != null) {
+        if (selectedPostId != null) {
             selectedPost = postSessionBean.findPostById(selectedPostId);
-        }      
+        }
     }
 
     public Long getLikesCount(Long PostId) {
-        
+
         return postSessionBean.getLikesCount(PostId);
     }
 
@@ -154,8 +141,35 @@ public class PostManagedBean implements Serializable {
     }
 
     public void likePost(Long postId) {
-        
+
         postSessionBean.likePost(loggedinStudent.getId(), postId);
+    }
+
+    public String deletePost(Long postId) {
+        Post p = postSessionBean.findPostById(postId);
+        postSessionBean.deletePost(postId);
+        return "/courseHomePage.xhtml?courseId=" + selectedCourse.getCourseId() + "&faces-redirect=true";
+    }
+    
+    public String updatePost() {
+        selectedPost.setTitle(this.getTitle());
+        selectedPost.setContent(this.getContent());
+        selectedPost.setAnonymous(this.isAnonymous());
+        
+         if (postType.equalsIgnoreCase("lecture")) {
+            selectedPost.setPostType(PostTypeEnum.LECTURE);
+        } else if (postType.equalsIgnoreCase("lab")) {
+            selectedPost.setPostType(PostTypeEnum.LAB);
+        } else if (postType.equalsIgnoreCase("tutorial")) {
+            selectedPost.setPostType(PostTypeEnum.TUTORIAL);
+        } else if (postType.equalsIgnoreCase("project")) {
+            selectedPost.setPostType(PostTypeEnum.PROJECT);
+        } else if (postType.equalsIgnoreCase("others")) {
+            selectedPost.setPostType(PostTypeEnum.OTHERS);
+        }
+
+        postSessionBean.updatePost(selectedPost);
+        return "/courseHomePage.xhtml?courseId=" + selectedCourse.getCourseId() + "&faces-redirect=true";
     }
 
     public String getTitle() {
@@ -230,9 +244,6 @@ public class PostManagedBean implements Serializable {
         this.selectedPostId = selectedPostId;
     }
 
-   
-    
-    
     public Post getSelectedPost() {
         return selectedPost;
     }
