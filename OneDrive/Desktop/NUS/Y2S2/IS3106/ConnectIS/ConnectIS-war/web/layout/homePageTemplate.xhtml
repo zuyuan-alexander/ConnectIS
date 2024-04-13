@@ -36,10 +36,15 @@
         <!-- Theme style (comes with Bootstrap) -->
         <link rel="stylesheet"
               href="#{request.contextPath}/dist/css/adminlte.min.css" />
+        <!-- BootStrap Switch -->
+        <link rel="stylesheet"
+              href="#{request.contextPath}/plugins/bootstrap-switch/bootstrap3/css/bootstrap-switch.min.css" />
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet"
               href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400
               i,700&amp;display=fallback"/>
+        <link rel ="stylesheet"
+              href="#{request.contextPath}/plugins/summernote/summernote-bs4.min.css"/>
     </h:head>
 
     <h:body class="hold-transition sidebar-mini layout-fixed">
@@ -144,6 +149,10 @@
         <script src="#{request.contextPath}/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
         <script src="#{request.contextPath}/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
         <script src="#{request.contextPath}/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+         <!-- Summernote -->
+        <script src="#{request.contextPath}/plugins/summernote/summernote-bs4.min.js"></script>
+          <!--Boostrap Switch -->
+        <script src="#{request.contextPath}//plugins/bootstrap-switch/bootstrap3/js/bootstrap-switch.min.js"></script>
         <ui:insert name="script">Script</ui:insert>
 
     </h:body>

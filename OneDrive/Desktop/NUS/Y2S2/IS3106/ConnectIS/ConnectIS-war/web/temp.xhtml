@@ -16,121 +16,153 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit t
     </head>
     <h:body>
 
-        <ui:repeat value="#{postManagedBean.posts}" var="post" varStatus="status">
-            <h:form>
-                <!-- /.user-block -->
-                <div class="user-block">
-                    <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image"/>
-                    <span class="username">
-                        <a href="#">#{post.student.firstname} #{post.student.lastname}</a>
-                    </span>
-                    <span class="description">Shared publicly - 
-                        <h:outputText value="#{post.creationDate}">
-                            <f:convertDateTime pattern="hh:mm a dd/MM/yyyy" />
-                        </h:outputText>
-                    </span>
-                </div>
+        <h:head>
+            <title>Create New Post</title>
+            <style>
+                /* Toggle Switch */
+                .custom-control {
+                    position: relative;
+                    padding-left: 2rem;
+                }
 
-                <!-- Post content -->
-                <div>
-                    <span class="username">
-                        <a href="#">#{post.title}</a>
-                    </span>
-                    <p>
-                        #{post.content}
-                    </p>
+                .custom-control-input {
+                    position: absolute;
+                    z-index: -1;
+                    opacity: 0;
+                }
 
-                </div>
+                .custom-control-label {
+                    position: relative;
+                    margin-bottom: 0;
+                    vertical-align: top;
+                    cursor: pointer;
+                    padding-left: 2.5rem;
+                }
 
+                .custom-control-label::before,
+                .custom-control-label::after {
+                    position: absolute;
+                    top: .25rem;
+                    left: 0;
+                    display: block;
+                    width: 1.75rem;
+                    height: 1rem;
+                    content: "";
+                    background-color: #adb5bd;
+                    border-radius: .5rem;
+                }
 
-                <!-- Like Count Displayed Above the Interaction Bar -->
-                <div class="like-count">
-                    <i class="far fa-thumbs-up"></i> <span>#{postManagedBean.getLikesCount(post.id)}</span> Likes
-                </div>
+                .custom-control-label::after {
+                    background-color: #fff;
+                    transition: background-color .15s ease-in-out, transform .15s ease-in-out;
+                }
 
-                <!-- Interaction Bar -->
-                <div class="interaction-bar">
-                    <h:commandLink styleClass="link-black text-sm mr-2" actionListener="#{postManagedBean.likePost(post.id)}">
-                        <i class="fas fa-share mr-1"></i> Share
-                    </h:commandLink>
-                    <h:commandLink action="#{postManagedBean.likePost(post.id)}" styleClass="#{postManagedBean.isPostLikedByStudent(post.id) ? 'liked' : 'not-liked'}">
-                        <i class="#{postManagedBean.isPostLikedByStudent(post.id) ? 'fas' : 'far'} fa-thumbs-up mr-1"></i> Like
-                        <f:ajax render="@form" />
-                    </h:commandLink>
-                    <span class="float-right">
-                        <a href="#" class="link-black text-sm">
-                            <i class="far fa-comments mr-1"></i> View Comments (#{post.comments.size()})
-                        </a>
-                    </span>
-                </div>
+                .custom-control-input:checked ~ .custom-control-label::before {
+                    background-color: #5cb85c;
+                }
 
-                <hr></hr>
-            </h:form>
-        </ui:repeat>
+                .custom-control-input:checked ~ .custom-control-label::after {
+                    transform: translateX(.75rem);
+                }
 
-        <div class="user-block">
-            <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image"/>
-            <span class="username">
-                <a href="#">#{post.student.firstname} #{post.student.lastname}</a>
-            </span>
-            <span class="description">
-                <h:outputText value="#{post.creationDate}" >
-                    <f:convertDateTime type="both" pattern="hh:mm a dd/MM/yyyy" />
-                </h:outputText>
-            </span>
-        </div>
-        <!-- /.user-block -->
-        <span class="username">
-            <a href="#">#{post.title}</a>
-        </span>
-        <p>
-            #{post.content}
-        </p>
+                .custom-control-input:focus ~ .custom-control-label::before {
+                    box-shadow: 0 0 0 1px #fff, 0 0 0 3px rgba(13, 110, 253, .25);
+                }
 
-        <!-- Like Count Displayed Above the Interaction Bar -->
-        <div class="like-count">
-            <i class="far fa-thumbs-up"></i> <span>0</span> Likes
-        </div>
+                .custom-radio-button-group .ui-selectone-radio {
+                    display: none; /* Hide the default radio input */
+                }
 
-        <!-- Interaction Bar -->
-        <div class="interaction-bar">
-            <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
-            <a href="#" class="link-black text-sm"><i class="far fa-thumbs-up mr-1"></i> Like</a>
-            <span class="float-right">
-                <a href="#" class="link-black text-sm">
-                    <i class="far fa-comments mr-1"></i> View Comments
-                </a>
-            </span>
-        </div>
+                .custom-radio-button-group label {
+                    display: inline-block;
+                    background-color: #f8f9fa; /* Light gray background */
+                    color: #495057; /* Dark gray text */
+                    padding: 0.5rem 1rem;
+                    margin: 2px;
+                    border: 1px solid #ced4da; /* Light gray border */
+                    border-radius: 0.25rem; /* Rounded corners */
+                    cursor: pointer;
+                    transition: background-color 0.15s ease-in-out;
+                }
 
-        <hr></hr>
+                .custom-radio-button-group label:hover,
+                .custom-radio-button-group label.ui-state-active { /* Styling for hover and selected state */
+                    background-color: #007bff; /* Bootstrap primary color */
+                    color: white;
+                    border-color: #007bff;
+                }
 
 
+            </style>
+            <!-- Additional styles and scripts -->
+        </h:head>
+
+        <h:body>
+            <div class="form-layout">
+                <h:form enctype="multipart/form-data">
+                    <div class="form-group">
+                        <p:outputLabel for="title" value="Title:"/>
+                        <p:inputText id="title" styleClass="input-field" value="#{postManagedBean.title}" required="true" label="Title"/>
+                    </div>
 
 
-        <style>
-            .like-count {
-                font-size: 0.9rem; /* Adjust the size as needed */
-                color: #65676b; /* Grey text to mimic social media style */
-                padding-bottom: 0.5rem; /* Space between like count and post text */
-            }
-
-            .interaction-bar {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding-top: 0.5rem; /* Space between post text and interaction icons */
-            }
-
-            .interaction-bar a {
-                margin-right: 15px; /* Space between interaction buttons */
-            }
-
-            .interaction-bar .float-right {
-                margin-left: auto; /* Pushes the comments link to the right */
-            }
-        </style>
+                    <div class="form-group">
+                        <p:outputLabel value="Type:" for="postType" />
+                        <h:selectOneRadio id="postType" value="#{postManagedBean.postType}" layout="pageDirection" styleClass="custom-radio-button-group">
+                            <f:selectItem itemValue="lecture" itemLabel="Lecture" />
+                            <f:selectItem itemValue="labs" itemLabel="Labs" />
+                            <f:selectItem itemValue="tutorials" itemLabel="Tutorials" />
+                            <f:selectItem itemValue="project" itemLabel="Project" />
+                            <f:selectItem itemValue="others" itemLabel="Others" />
+                            <f:ajax render="@this" />
+                        </h:selectOneRadio>
+                    </div>
 
 
-    </h:body>
+
+                    <div class="form-group">
+                        <p:outputLabel for="text" value="Text (optional):"/>
+                        <textarea id="summernote" name="summernote" class="input-textarea form-control" rows="10"></textarea>
+                        <h:inputHidden id="text" value="#{postManagedBean.content}"/>
+                    </div>
+
+                    <div class="form-group d-flex align-items-center justify-content-between">
+                        <p:outputLabel for="anonymity" value="Show my name:" class="mb-0"/>
+                        <div class="custom-control custom-switch">
+                            <h:selectBooleanCheckbox id="anonymity" value="#{postManagedBean.anonymous}" styleClass="custom-control-input" />
+                            <h:outputLabel for="anonymity" styleClass="custom-control-label"></h:outputLabel>
+                        </div>
+                    </div>
+
+                    <div class="clear-fix">
+                        <h:commandButton value="Submit" styleClass="command-button" onclick="submitPost();" action="#{postManagedBean.addPost}" />
+                    </div>
+
+                    <div id="postContentDisplay"></div>
+                    <div>
+                        <!-- Display the post content -->
+                        <h:outputText value="#{postManagedBean.content}" escape="false" />
+                    </div>
+                </h:form>
+            </div>
+
+            <script>
+                $(document).ready(function () {
+                    $('#summernote').summernote({
+                        placeholder: 'Compose your post here...',
+                        tabsize: 2,
+                        height: 200
+                    });
+                });
+
+
+                function submitPost() {
+                    var content = $('#summernote').summernote('code');
+                    console.log(content);
+                    document.getElementById('j_idt19:text').value = content;
+                    document.getElementById('postContentDisplay').innerHTML = content;
+
+                }
+            </script>
+        </h:body>
 </html>

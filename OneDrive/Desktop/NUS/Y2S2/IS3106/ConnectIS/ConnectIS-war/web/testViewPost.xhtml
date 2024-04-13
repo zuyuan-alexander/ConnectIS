@@ -31,8 +31,9 @@
                                             <div class="user-block">
                                                 <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image"/>
                                                 <span class="username">
-                                                    <a href="#">#{postManagedBean.selectedPost.student.firstname} #{postManagedBean.selectedPost.student.lastname}</a>
+                                                    <h:outputText value="#{post.anonymous ? 'Anonymous' : post.student.firstname.concat(' ').concat(post.student.lastname)}" escape="false" />
                                                 </span>
+
                                                 <span class="description">Shared publicly - 
                                                     <h:outputText value="#{postManagedBean.selectedPost.creationDate}">
                                                         <f:convertDateTime pattern="hh:mm a dd/MM/yyyy" />

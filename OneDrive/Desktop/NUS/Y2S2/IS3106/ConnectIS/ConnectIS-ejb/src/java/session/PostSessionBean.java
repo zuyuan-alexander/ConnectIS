@@ -38,17 +38,17 @@ public class PostSessionBean implements PostSessionBeanLocal {
     public void createPost(Post post) {
         em.persist(post);
     }
-//   
-//    @Override
-//    public void createPost(Post post, Long studentid, Long courseid) {
-//        Student s = em.find(Student.class, studentid);
-//        Course c = em.find(Course.class, courseid);
-//        post.setStudent(s);
-//        post.setCourse(c);
-//        c.getPost().add(post);
-//        s.getPosts().add(post);
-//        em.persist(post);
-//    }
+   
+    @Override
+    public void createPost(Post post, Long studentid, Long courseid) {
+        Student s = em.find(Student.class, studentid);
+        Course c = em.find(Course.class, courseid);
+        post.setStudent(s);
+        post.setCourse(c);
+        c.getPosts().add(post);
+        s.getPosts().add(post);
+        em.persist(post);
+    }
 
     @Override
     public Post findPostById(Long id) {

@@ -1,180 +1,156 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
-                template="./layout/default.xhtml">
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
-    <ui:define name="content">
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <h:body>
 
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <ui:composition template="./layout/homePageTemplate.xhtml">
 
-        <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet"/>
-        <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
-        <h:head>
-            <title>Create New Post</title>
-            <style>
-                /* Toggle Switch */
-                .custom-control {
-                    position: relative;
-                    padding-left: 2rem;
-                }
+            <ui:define name="title">
+                Create Post
+            </ui:define>
 
-                .custom-control-input {
-                    position: absolute;
-                    z-index: -1;
-                    opacity: 0;
-                }
+            <ui:define name="content">
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1>#{courseManagedBean.selectedCourse.courseCode} Page</h1>
 
-                .custom-control-label {
-                    position: relative;
-                    margin-bottom: 0;
-                    vertical-align: top;
-                    cursor: pointer;
-                    padding-left: 2.5rem;
-                }
-
-                .custom-control-label::before,
-                .custom-control-label::after {
-                    position: absolute;
-                    top: .25rem;
-                    left: 0;
-                    display: block;
-                    width: 1.75rem;
-                    height: 1rem;
-                    content: "";
-                    background-color: #adb5bd;
-                    border-radius: .5rem;
-                }
-
-                .custom-control-label::after {
-                    background-color: #fff;
-                    transition: background-color .15s ease-in-out, transform .15s ease-in-out;
-                }
-
-                .custom-control-input:checked ~ .custom-control-label::before {
-                    background-color: #5cb85c;
-                }
-
-                .custom-control-input:checked ~ .custom-control-label::after {
-                    transform: translateX(.75rem);
-                }
-
-                .custom-control-input:focus ~ .custom-control-label::before {
-                    box-shadow: 0 0 0 1px #fff, 0 0 0 3px rgba(13, 110, 253, .25);
-                }
-
-                .custom-radio-button-group .ui-selectone-radio {
-                    display: none; /* Hide the default radio input */
-                }
-
-                .custom-radio-button-group label {
-                    display: inline-block;
-                    background-color: #f8f9fa; /* Light gray background */
-                    color: #495057; /* Dark gray text */
-                    padding: 0.5rem 1rem;
-                    margin: 2px;
-                    border: 1px solid #ced4da; /* Light gray border */
-                    border-radius: 0.25rem; /* Rounded corners */
-                    cursor: pointer;
-                    transition: background-color 0.15s ease-in-out;
-                }
-
-                .custom-radio-button-group label:hover,
-                .custom-radio-button-group label.ui-state-active { /* Styling for hover and selected state */
-                    background-color: #007bff; /* Bootstrap primary color */
-                    color: white;
-                    border-color: #007bff;
-                }
-
-
-            </style>
-            <!-- Additional styles and scripts -->
-        </h:head>
-
-        <h:body>
-            <div class="form-layout">
-                <h:form enctype="multipart/form-data">
-                    <div class="form-group">
-                        <p:outputLabel for="title" value="Title:"/>
-                        <p:inputText id="title" styleClass="input-field" value="#{postManagedBean.title}" required="true" label="Title"/>
-                    </div>
-
-
-                    <div class="form-group">
-                        <p:outputLabel value="Type:" for="postType" />
-                        <h:selectOneRadio id="postType" value="#{postManagedBean.postType}" layout="pageDirection" styleClass="custom-radio-button-group">
-                            <f:selectItem itemValue="lecture" itemLabel="Lecture" />
-                            <f:selectItem itemValue="labs" itemLabel="Labs" />
-                            <f:selectItem itemValue="tutorials" itemLabel="Tutorials" />
-                            <f:selectItem itemValue="project" itemLabel="Project" />
-                            <f:selectItem itemValue="others" itemLabel="Others" />
-                            <f:ajax render="@this" />
-                        </h:selectOneRadio>
-                    </div>
-
-
-
-                    <div class="form-group">
-                        <p:outputLabel for="text" value="Text (optional):"/>
-                        <textarea id="summernote" name="summernote" class="input-textarea form-control" rows="10"></textarea>
-                        <h:inputHidden id="text" value="#{postManagedBean.content}"/>
-                    </div>
-
-                    <div class="form-group d-flex align-items-center justify-content-between">
-                        <p:outputLabel for="anonymity" value="Show my name:" class="mb-0"/>
-                        <div class="custom-control custom-switch">
-                            <h:selectBooleanCheckbox id="anonymity" value="#{postManagedBean.anonymous}" styleClass="custom-control-input" />
-                            <h:outputLabel for="anonymity" styleClass="custom-control-label"></h:outputLabel>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"><a href="homePage.xhtml">Home</a></li>
+                                    <li class="breadcrumb-item active">Create Post Home</li>
+                                </ol>
+                            </div>
                         </div>
+                    </div><!-- /.container-fluid -->
+                </div>
+                <section class="content">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Create Posts
+                            </h3>
+                        </div>
+                        <h:form>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <h:outputLabel for="postTitle">Title</h:outputLabel>
+                                    <h:inputText binding="#{postTitle}" id="postTitle" value="#{postManagedBean.title}" required="true" requiredMessage="Title is required"
+                                                 class="form-control #{postTitle.valid ? '' : 'is-invalid'}" />
+                                    <h:message for="postTitle" class="invalid-feedback" />
+                                </div>
+                                <div class="form-group">
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-outline-primary active" onclick="updatePostType('lecture')">
+                                            <input type="radio" name="postType" id="postType1" value="lecture" autocomplete="off"/> Lecture
+                                        </label>
+                                        <label class="btn btn-outline-primary" onclick="updatePostType('labs')">
+                                            <input type="radio" name="postType" id="postType2" value="labs" autocomplete="off"/> Labs
+                                        </label>
+                                        <label class="btn btn-outline-primary" onclick="updatePostType('tutorials')">
+                                            <input type="radio" name="postType" id="postType3" value="tutorials" autocomplete="off"/> Tutorials
+                                        </label>
+                                        <label class="btn btn-outline-primary" onclick="updatePostType('project')">
+                                            <input type="radio" name="postType" id="postType4" value="project" autocomplete="off"/> Project
+                                        </label>
+                                        <label class="btn btn-outline-primary" onclick="updatePostType('others')">
+                                            <input type="radio" name="postType" id="postType5" value="others" autocomplete="off"/> Others
+                                        </label>
+
+                                        <h:inputHidden id="hiddenPostType" value="#{postManagedBean.postType}" />
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <div id="summernote"></div>
+                                    <h:inputHidden id="text" value="#{postManagedBean.content}"/>
+                                </div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-switch">
+                                        <h:selectBooleanCheckbox id="anonymitySwitch" value="#{postManagedBean.anonymous}" styleClass="custom-control-input" />
+                                        <h:outputLabel for="anonymitySwitch" styleClass="custom-control-label">Post Anonymously</h:outputLabel>
+                                    </div>
+                                </div>                              
+                            </div>
+
+                            <div class="card-footer">
+                                <h:button value="Cancel" class="btn btn-default" outcome="courseHomePage.xhtml" />
+                                <h:commandButton value="Submit" class="btn btn-primary float-right" onclick="submitPost();" action="#{postManagedBean.addPost}" />
+                            </div>
+
+                            <div id="postContentDisplay"></div>
+                            <div>
+                                <!-- Display the post content -->
+                                <h:outputText value="#{postManagedBean.content}" escape="false" />
+                            </div>
+
+
+                        </h:form>
+
+
                     </div>
 
-                    <div class="clear-fix">
-                        <h:commandButton value="Submit" styleClass="command-button" onclick="submitPost();" action="#{postManagedBean.addPost}" />
-                    </div>
 
-                    <div id="postContentDisplay"></div>
-                    <div>
-                        <!-- Display the post content -->
-                        <h:outputText value="#{postManagedBean.content}" escape="false" />
-                    </div>
-                </h:form>
-            </div>
+                </section>
 
-            <script>
-                $(document).ready(function () {
-                    $('#summernote').summernote({
-                        placeholder: 'Compose your post here...',
-                        tabsize: 2,
-                        height: 200
+
+            </ui:define>
+
+            <ui:define name="script">
+                <script>
+                    $(document).ready(function () {
+                        $('#summernote').summernote({
+                            placeholder: 'Compose your post here...',
+                            tabsize: 2,
+                            height: 250
+                        });
                     });
-                });
 
 
-                function submitPost() {
-                    var content = $('#summernote').summernote('code');
-                    console.log(content);
-                    document.getElementById('j_idt19:text').value = content;
-                    document.getElementById('postContentDisplay').innerHTML = content;
+                    function submitPost() {
+                        var content = $('#summernote').summernote('code');
+                        console.log(content);
+                        document.getElementById('j_idt12:text').value = content;
+                        document.getElementById('postContentDisplay').innerHTML = content;
 
-                }
-            </script>
+                    }
+
+                </script>
+                <script>
+                    document.querySelectorAll('.btn-check').forEach((checkbox) => {
+                        checkbox.addEventListener('change', function () {
+                            if (this.checked) {
+                                // Uncheck all other checkboxes
+                                document.querySelectorAll('.btn-check').forEach((other) => {
+                                    if (other !== this) {
+                                        other.checked = false;
+                                    }
+                                });
+                            }
+                        });
+                    });
+
+                </script>
+                <script>
+                    function updatePostType(selectedType) {
+                        document.getElementById('j_idt12:hiddenPostType').value = selectedType;
+                    }
+                </script>
 
 
 
-                function submitPost() {
-                    var content = $('#summernote').summernote('code');
-                    console.log(content);
-                    document.getElementById('j_idt19:text').value = content;
-                    document.getElementById('postContentDisplay').innerHTML = content;
+            </ui:define>
 
-                }
-            </script>
+        </ui:composition>
 
-
-        </h:body>
-    </ui:define>
-</ui:composition>
+    </h:body>
+</html>
