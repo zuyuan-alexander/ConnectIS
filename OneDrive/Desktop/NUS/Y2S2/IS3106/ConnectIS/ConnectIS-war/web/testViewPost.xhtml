@@ -31,7 +31,7 @@
                                             <div class="user-block">
                                                 <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image"/>
                                                 <span class="username">
-                                                    <h:outputText value="#{post.anonymous ? 'Anonymous' : post.student.firstname.concat(' ').concat(post.student.lastname)}" escape="false" />
+                                                    <h:outputText value="#{postManagedBean.selectedPost.anonymous ? 'Anonymous' : postManagedBean.selectedPost.student.firstname.concat(' ').concat(postManagedBean.selectedPost.student.lastname)}" escape="false" />
                                                 </span>
 
                                                 <span class="description">Shared publicly - 

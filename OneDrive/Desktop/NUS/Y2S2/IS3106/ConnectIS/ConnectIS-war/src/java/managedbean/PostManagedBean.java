@@ -49,8 +49,7 @@ public class PostManagedBean implements Serializable {
     private AuthenticationManagedBean authenBean;
     
     
-    @Inject
-    private CourseManagedBean courseManagedBean;
+   
 
     private String title;
     private String content;
@@ -113,7 +112,7 @@ public class PostManagedBean implements Serializable {
         //Initialise the comments
     }
 
-    public void addPost() {
+    public String addPost() {
         System.out.println("Triggering add post");
         Post p = new Post();
         p.setTitle(title);
@@ -135,7 +134,8 @@ public class PostManagedBean implements Serializable {
         
        
         postSessionBean.createPost(p, loggedinStudent.getId(), selectedCourse.getCourseId());
-    } //end addCustomer
+        return "/courseHomePage.xhtml?courseId=" + selectedCourse.getCourseId();
+    }
 
     public void loadSelectedPost() {
         if(selectedPostId != null) {
