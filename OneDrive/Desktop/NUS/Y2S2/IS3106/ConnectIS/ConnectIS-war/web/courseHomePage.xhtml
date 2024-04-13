@@ -18,7 +18,7 @@
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1>#{courseManagedBean.selectedCourse.courseCode} Home Page</h1>
-                   
+
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -91,6 +91,12 @@
                                 <ul class="nav nav-pills">
                                     <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#courseDescription" data-toggle="tab"> Course Description</a></li>
+                                    <li class="nav-item">
+                                        <a href="#{request.contextPath}/createPost.xhtml?courseId=#{courseManagedBean.selectedCourse.courseId}" class="nav-link">
+                                            <i class="nav-icon fa fa-book"></i>
+                                            <p>Create Post</p>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div><!-- /.card-header -->
                             <div class="card-body">
@@ -103,7 +109,7 @@
                                                 <div class="user-block">
                                                     <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image"/>
                                                     <span class="username">
-                                                        <a href="#">#{post.student.firstname} #{post.student.lastname}</a>
+                                                        <h:outputText value="#{post.anonymous ? 'Anonymous' : post.student.firstname.concat(' ').concat(post.student.lastname)}" escape="false" />
                                                     </span>
                                                     <span class="description">
                                                         <h:outputText value="#{post.creationDate}" >
@@ -116,7 +122,7 @@
                                                     <a href="#">#{post.title}</a>
                                                 </span>
                                                 <p>
-                                                    #{post.content}
+                                                    <h:outputText value="#{post.content}" escape="false" />
                                                 </p>
 
                                                 <!-- Like Count Displayed Above the Interaction Bar -->

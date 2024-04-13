@@ -41,4 +41,6 @@ public interface PostSessionBeanLocal {
 
     public List<Post> retrievePostByCourse(Course c);
 
+    public void createPost(Post post, Long studentid, Long courseid);
+
 }

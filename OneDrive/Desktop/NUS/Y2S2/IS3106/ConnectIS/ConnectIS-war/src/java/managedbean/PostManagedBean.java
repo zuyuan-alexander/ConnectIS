@@ -47,6 +47,10 @@ public class PostManagedBean implements Serializable {
 
     @Inject
     private AuthenticationManagedBean authenBean;
+    
+    
+    @Inject
+    private CourseManagedBean courseManagedBean;
 
     private String title;
     private String content;
@@ -128,7 +132,9 @@ public class PostManagedBean implements Serializable {
         } else if (postType.equalsIgnoreCase("others")) {
             p.setPostType(PostTypeEnum.OTHERS);
         }
-        postSessionBean.createPost(p);
+        
+       
+        postSessionBean.createPost(p, loggedinStudent.getId(), selectedCourse.getCourseId());
     } //end addCustomer
 
     public void loadSelectedPost() {
