@@ -19,65 +19,49 @@
             </f:metadata>
 
             <h:form>
-                <section class="content">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <!-- Main post container -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <!-- Post -->
-                                        <div class="post">
-                                            <div class="user-block">
-                                                <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image"/>
-                                                <span class="username">
-                                                    <h:outputText value="#{postManagedBean.selectedPost.anonymous ? 'Anonymous' : postManagedBean.selectedPost.student.firstname.concat(' ').concat(postManagedBean.selectedPost.student.lastname)}" escape="false" />
-                                                </span>
-
-                                                <span class="description">Shared publicly - 
-                                                    <h:outputText value="#{postManagedBean.selectedPost.creationDate}">
-                                                        <f:convertDateTime pattern="hh:mm a dd/MM/yyyy" />
-                                                    </h:outputText>
-                                                </span>
-                                            </div>
-                                            <!-- /.user-block -->
-
-                                            <span class="username">
-                                                <a href="#">#{postManagedBean.selectedPost.title}</a>
-                                            </span>
-                                            <p>
-                                                #{postManagedBean.selectedPost.content}
-                                            </p>
-
-                                            <!-- Like Count Displayed Above the Interaction Bar -->
-                                            <div class="like-count">
-                                                <i class="far fa-thumbs-up"></i> <span>#{postManagedBean.getLikesCount(postManagedBean.selectedPost.id)}</span> Likes
-                                            </div>
-                                            <!-- Interaction Bar -->
-                                            <div class="interaction-bar">
-                                                <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
-                                                <h:commandLink action="#{postManagedBean.likePost(postManagedBean.selectedPost.id)}" styleClass="#{postManagedBean.isPostLikedByStudent(postManagedBean.selectedPost.id) ? 'liked' : 'not-liked'}">
-                                                    <i class="#{postManagedBean.isPostLikedByStudent(postManagedBean.selectedPost.id) ? 'fas' : 'far'} fa-thumbs-up mr-1"></i> Like
-                                                    <f:ajax render="@form" />
-                                                </h:commandLink>
-
-                                                <span class="float-right">
-                                                    <a href="#" class="link-black text-sm">
-                                                        <i class="far fa-comments mr-1"></i> View Comments (#{postManagedBean.selectedPost.comments.size()})
-                                                    </a>
-                                                </span>
-                                            </div>
-                                            <!-- /.interaction-bar -->
-                                        </div>
-                                        <!-- /.post -->
-                                    </div>
-                                </div>
-                                <!-- /.card -->
+                <h:panelGroup id="commentsSection" styleClass="comments-section">
+                    <ui:repeat value="#{postManagedBean.selectedPost.comments}" var="comment" varStatus="status">
+                        <!-- Comment Item -->
+                        <h:panelGroup styleClass="comment-item">
+                            <div class="user-block">
+                                <!-- User image and info here -->
+                                <span class="username">
+                                  <h:outputText value="#{comment.student.firstname} #{comment.student.lastname}" />
+                                </span>
+                                <span class="description">
+                                    <h:outputText value="#{comment.creationDate}">
+                                        <f:convertDateTime pattern="dd MMM yyyy hh:mm a" />
+                                    </h:outputText>
+                                </span>
                             </div>
-                        </div>
-                    </div>
-                </section>
+                            <p>
+                                <h:outputText value="#{comment.content}" escape="false"/>
+                            </p>
+                            <!-- Nested Comments (Replies) -->
+                            <h:panelGroup rendered="#{not empty comment.replies}">
+                                <ui:repeat value="#{comment.replies}" var="nestedComment" varStatus="nestedStatus">
+                                    <h:panelGroup styleClass="nested-comment" style="margin-left:#{nestedStatus.index * 40}px">
+                                        <!-- Render nested comment here -->
+                                        <!-- Recursive rendering of further nested comments would continue here -->
+                                    </h:panelGroup>
+                                </ui:repeat>
+                            </h:panelGroup>
+                            <!-- Reply Button -->
+                            <h:commandLink value="Reply" actionListener="#{commentManagedBean.prepareReply(comment.id)}">
+                                <f:ajax render="replyForm#{comment.id}" />
+                            </h:commandLink>
+                        </h:panelGroup> <!-- This is where the closing tag was missing -->
+                        <!-- Reply Form, initially hidden -->
+                        <h:panelGroup id="replyForm#{comment.id}" styleClass="reply-form" style="display:none;">
+                            <h:inputTextarea id="replyMessage#{comment.id}" value="#{commentManagedBean.newReply.content}" />
+                            <h:commandButton value="Submit Reply" action="#{commentManagedBean.replyToComment(comment.id)}">
+                                <f:ajax execute="@form" render="commentsSection" />
+                            </h:commandButton>
+                        </h:panelGroup>
+                    </ui:repeat>
+                </h:panelGroup>
             </h:form>
+
         </h:body>
     </ui:define>
 

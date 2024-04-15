@@ -86,6 +86,16 @@ public class PostManagedBean implements Serializable {
                 Logger.getLogger(PostManagedBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+      
+        String postIdParam = params.get("postId");
+        if (postIdParam != null) {
+            Long postId = Long.valueOf(postIdParam);
+            try {
+                selectedPost = postSessionBean.findPostById(postId);
+            } catch (NoResultException ex) {
+                Logger.getLogger(PostManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
         //Initialise the post
 //        Post temp = new Post();

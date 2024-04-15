@@ -5,7 +5,10 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -28,13 +32,13 @@ public class Comment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-     @Column(length = 1000)
+
+    @Column(length = 1000)
     private String content;
-    
+
     private boolean anonymous;
-    
-     private int likes;
+
+    private int likes;
     private int dislikes;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -43,7 +47,14 @@ public class Comment implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+
     
+    @ManyToOne
+    @JoinColumn(name = "parent_comment_id")
+    private Comment parentComment;
+
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> replies = new ArrayList<>();
     
     @ManyToOne
     private Student student;
@@ -55,12 +66,9 @@ public class Comment implements Serializable {
     }
 
     public Comment() {
+        this.creationDate = new Date();
     }
-    
-    
-    
 
-    
     public Long getId() {
         return id;
     }
@@ -125,8 +133,6 @@ public class Comment implements Serializable {
     public void setDislikes(int dislikes) {
         this.dislikes = dislikes;
     }
-    
-    
 
     public Date getCreationDate() {
         return creationDate;
@@ -151,7 +157,21 @@ public class Comment implements Serializable {
     public void setStudent(Student student) {
         this.student = student;
     }
-    
-    
-    
+
+    public Comment getParentComment() {
+        return parentComment;
+    }
+
+    public void setParentComment(Comment parentComment) {
+        this.parentComment = parentComment;
+    }
+
+    public List<Comment> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(List<Comment> replies) {
+        this.replies = replies;
+    }
+
 }

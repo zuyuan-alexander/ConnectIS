@@ -118,6 +118,73 @@
                                         </div>
                                         <!-- /.post -->
                                     </div>
+
+                                    <!-- Comments Section -->
+                                    <div class="card">
+                                        <div class="card-body p-4">
+                                            <h4 class="text-center mb-4 pb-2">Comments section</h4>
+
+                                            <ui:repeat value="#{postManagedBean.selectedPost.comments}" var="comment" varStatus="status">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="d-flex flex-start">
+                                                            <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image"/>
+                                                            <div class="flex-grow-1 flex-shrink-1">
+                                                                <div>
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <p class="mb-1">
+                                                                            #{comment.anonymous ? 'Anonymous' : comment.student.firstname.concat(' ').concat(comment.student.lastname)}
+                                                                            <span class="small">- <h:outputText value="#{comment.creationDate}">
+                                                                                    <f:convertDateTime pattern="dd MMM yyyy hh:mm a" />
+                                                                                </h:outputText></span>
+                                                                        </p>
+
+                                                                        <h:commandLink>
+                                                                            <i class="fas fa-reply fa-xs"></i><span class="small"> reply</span>
+                                                                            <f:ajax execute="@form" render="replyForm#{comment.id}" />
+                                                                        </h:commandLink>
+                                                                    </div>
+                                                                    <p class="small mb-0">
+                                                                        #{comment.content}
+                                                                    </p>
+                                                                </div>
+                                                                <!-- Nested Comments -->
+                                                                <h:panelGroup rendered="#{not empty comment.replies}">
+                                                                    <ui:repeat value="#{comment.replies}" var="nestedComment">
+                                                                        <div>
+                                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                                <p class="mb-1">
+                                                                                    #{comment.anonymous ? 'Anonymous' : comment.student.firstname.concat(' ').concat(comment.student.lastname)}
+                                                                                    <span class="small">- <h:outputText value="#{comment.creationDate}">
+                                                                                            <f:convertDateTime pattern="dd MMM yyyy hh:mm a" />
+                                                                                        </h:outputText></span>
+                                                                                </p>
+
+                                                                                <h:commandLink>
+                                                                                    <i class="fas fa-reply fa-xs"></i><span class="small"> reply</span>
+                                                                                    <f:ajax execute="@form" render="replyForm#{comment.id}" />
+                                                                                </h:commandLink>
+                                                                            </div>
+                                                                            <p class="small mb-0">
+                                                                                #{comment.content}
+                                                                            </p>
+                                                                        </div>
+                                                                    </ui:repeat>
+                                                                </h:panelGroup>
+                                                                <!-- Reply Form, initially hidden -->
+                                                                <h:panelGroup id="replyForm#{comment.id}" styleClass="reply-form" style="display:none;">
+                                                                    <h:inputTextarea id="replyMessage#{comment.id}" value="#{commentManagedBean.newReply.content}" />
+                                                                    <h:commandButton value="Submit Reply" action="#{commentManagedBean.replyToComment(comment.id)}">
+                                                                        <f:ajax execute="@form" render="commentsSection" />
+                                                                    </h:commandButton>
+                                                                </h:panelGroup>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ui:repeat>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /.card -->
                             </div>
