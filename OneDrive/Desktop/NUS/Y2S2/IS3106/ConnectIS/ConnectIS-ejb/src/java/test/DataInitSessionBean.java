@@ -50,7 +50,7 @@ public class DataInitSessionBean {
     @PostConstruct
     public void postConstruct() {
         if (em.find(Student.class, 1L) == null) {
-            Student testStudent = new Student("student@nus.edu.sg", "12345", "Student", "One", "password");
+            Student testStudent = new Student("student@nus.edu.sg", "12345", "Student", "One", "123");
             studentSessionBean.createStudent(testStudent);
             Student s = new Student();
             s.setFirstname("Alvin");
@@ -96,12 +96,16 @@ public class DataInitSessionBean {
             Comment comment3 = new Comment("Comment 3", true);
             Comment comment4 = new Comment("I want to SU A-", false);
             Comment comment5 = new Comment("Prof Lek Please help me", true);
+            Comment comment6 = new Comment("Nested Comment Test", true);
+            comment6.setParentComment(comment5);
 
             commentSessionBean.createComment(comment1, pp.getId(), ss.getId());
             commentSessionBean.createComment(comment2, pp.getId(), ss.getId());
             commentSessionBean.createComment(comment3, pp.getId(), ss.getId());
             commentSessionBean.createComment(comment4, pp.getId(), ss.getId());
             commentSessionBean.createComment(comment5, pp.getId(), ss.getId());
+              commentSessionBean.createComment(comment6, pp.getId(), ss.getId());
+            
         }
 
     }

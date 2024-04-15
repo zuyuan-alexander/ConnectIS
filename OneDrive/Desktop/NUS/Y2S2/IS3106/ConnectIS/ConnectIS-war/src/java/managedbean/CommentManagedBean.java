@@ -44,7 +44,7 @@ public class CommentManagedBean implements Serializable {
     private Student loggedinStudent;
     private String content;
     private boolean anonymous;
-    
+
     private Comment newReply; // This should be initialized when a new comment is prepared
     private Comment selectedComment;
 
@@ -53,23 +53,39 @@ public class CommentManagedBean implements Serializable {
      */
     public CommentManagedBean() {
     }
-    
+
     @PostConstruct
     public void init() {
         selectedPost = postBean.getSelectedPost();
-        loggedinStudent =  authenBean.getLoggedinStudent();
-        
+        loggedinStudent = authenBean.getLoggedinStudent();
+
         newReply = new Comment(); // Initialize the new reply comment
     }
-    
+
     public void prepareReply(Long commentId) {
         // Here, you would find the comment by id and set it as the selectedComment
         selectedComment = commentSessionBean.getComment(commentId);
         newReply.setParentComment(selectedComment); // Set the parent comment for the reply
     }
-    
-    public void replyToComment(Long commentId) {    
-        commentSessionBean.createComment(newReply, selectedPost.getId(), loggedinStudent.getId());
+
+    public void replyToComment(Long commentId) {
+        if (newReply.getContent() != null || !newReply.getContent().isEmpty()) {
+            commentSessionBean.createComment(newReply, selectedPost.getId(), loggedinStudent.getId());
+            newReply = new Comment();
+        }
+    }
+
+    public String addComment() {
+        newReply.setContent(this.content);
+        newReply.setAnonymous(this.anonymous);
+        if (newReply.getContent() != null || !newReply.getContent().isEmpty()) {
+            commentSessionBean.createComment(newReply, selectedPost.getId(), loggedinStudent.getId());
+            newReply = new Comment();
+        }
+        
+        setContent(null);
+        setAnonymous(false);
+        return null;
     }
 
     public void likeComment(Long commentId) {
@@ -80,15 +96,15 @@ public class CommentManagedBean implements Serializable {
     }
 
     public void dislikeComment(Long commentId) {
-         System.out.println("Dislike Comment is called");
+        System.out.println("Dislike Comment is called");
         Comment comment = commentSessionBean.getComment(commentId); // Implement this method to retrieve the comment by ID
-        comment.setDislikes(comment.getDislikes()+ 1);
+        comment.setDislikes(comment.getDislikes() + 1);
         commentSessionBean.updateComment(comment); // Implement this method to update the comment in the database
     }
-    
-     public void test() {
+
+    public void test() {
         System.out.println("Test Comment is called");
-     }
+    }
 
     public String getContent() {
         return content;
@@ -121,7 +137,5 @@ public class CommentManagedBean implements Serializable {
     public void setSelectedComment(Comment selectedComment) {
         this.selectedComment = selectedComment;
     }
-    
-    
 
 }
