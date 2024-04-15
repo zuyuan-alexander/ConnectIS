@@ -47,6 +47,8 @@ public class PostSessionBean implements PostSessionBeanLocal {
         post.setCourse(c);
         c.getPosts().add(post);
         s.getPosts().add(post);
+        em.merge(s);
+        em.merge(c);
         em.persist(post);
     }
 

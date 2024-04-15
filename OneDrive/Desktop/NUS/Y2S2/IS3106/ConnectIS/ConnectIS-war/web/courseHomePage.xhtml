@@ -1,17 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./layout/homePageTemplate.xhtml"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:h="http://xmlns.jcp.org/jsf/html">
+<!DOCTYPE composition
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    template="./layout/homePageTemplate.xhtml" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="title">
         Course Home Page
     </ui:define>
 
     <ui:define name="content">
+
         <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
@@ -40,26 +39,23 @@
                             <div class="card-body box-profile">
 
                                 <div class="text-center">
-                                    <i class="fas fa-book" style="font-size: 24px; margin-bottom: 10px; margin-top: 10px;"></i>
+                                    <i class="fas fa-book"
+                                        style="font-size: 24px; margin-bottom: 10px; margin-top: 10px;"></i>
                                 </div>
 
                                 <h3 class="profile-username text-center">#{courseManagedBean.courseCode}</h3>
 
                                 <p class="text-muted text-center">#{courseManagedBean.courseName}</p>
-                                <!--
-                                                                <ul class="list-group list-group-unbordered mb-3">
-                                                                    <li class="list-group-item">
-                                                                        <b>Followers</b> <span class="float-right">1,322</span>
-                                                                    </li>
-                                                                    <li class="list-group-item">
-                                                                        <b>Following</b> <span class="float-right">543</span>
-                                                                    </li>
-                                                                    <li class="list-group-item">
-                                                                        <b>Friends</b> <span class="float-right">13,287</span>
-                                                                    </li>
-                                                                </ul>-->
 
-                                <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+                                <p:commandButton value="Pin"
+                                    action="#{studentManagedBean.followCourse(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
+                                    styleClass="pin-button"
+                                    rendered="#{!studentManagedBean.isCoursePinned(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}" />
+                                <p:commandButton value="Pinned"
+                                    action="#{studentManagedBean.followCourse(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
+                                    styleClass="pin-button"
+                                    rendered="#{studentManagedBean.isCoursePinned(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}" />
+
                             </div>
                         </div>
 
@@ -89,10 +85,13 @@
                         <div class="card">
                             <div class="card-header p-2">
                                 <ul class="nav nav-pills">
-                                    <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#courseDescription" data-toggle="tab"> Course Description</a></li>
+                                    <li class="nav-item"><a class="nav-link active" href="#activity"
+                                            data-toggle="tab">Activity</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#courseDescription"
+                                            data-toggle="tab"> Course Description</a></li>
                                     <li class="nav-item">
-                                        <a href="#{request.contextPath}/createPost.xhtml?courseId=#{courseManagedBean.selectedCourse.courseId}" class="nav-link">
+                                        <a href="#{request.contextPath}/createPost.xhtml?courseId=#{courseManagedBean.selectedCourse.courseId}"
+                                            class="nav-link">
                                             <i class="nav-icon fa fa-book"></i>
                                             <p>Create Post</p>
                                         </a>
@@ -105,77 +104,105 @@
                                         <div class="active tab-pane" id="activity">
                                             <!-- Post -->
                                             <div class="post">
-                                                <c:forEach items="#{postManagedBean.postsInSelectedCourse}" var="post">
+                                                <h:panelGroup id="postsPanel">
+                                                    <c:forEach items="#{postManagedBean.postsInSelectedCourse}"
+                                                        var="post">
 
-                                                    <div class="user-block">
-                                                        <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image"/>
+                                                        <div class="user-block">
+                                                            <img class="img-circle img-bordered-sm"
+                                                                src="dist/img/user1-128x128.jpg" alt="user image" />
+                                                            <span class="username">
+                                                                <h:outputText
+                                                                    value="#{post.anonymous ? 'Anonymous' : post.student.firstname.concat(' ').concat(post.student.lastname)}"
+                                                                    escape="false" />
+                                                            </span>
+                                                            <span class="description">
+                                                                <h:outputText value="#{post.creationDate}">
+                                                                    <f:convertDateTime type="both"
+                                                                        pattern="hh:mm a dd/MM/yyyy" />
+                                                                </h:outputText>
+                                                            </span>
+                                                        </div>
+                                                        <!-- /.user-block -->
                                                         <span class="username">
-                                                            <h:outputText value="#{post.anonymous ? 'Anonymous' : post.student.firstname.concat(' ').concat(post.student.lastname)}" escape="false" />
+                                                            <a href="#">#{post.title}</a>
                                                         </span>
+
                                                         <span class="description">
-                                                            <h:outputText value="#{post.creationDate}" >
-                                                                <f:convertDateTime type="both" pattern="hh:mm a dd/MM/yyyy" />
+                                                            <h:outputText value="#{post.creationDate}">
+                                                                <f:convertDateTime type="both"
+                                                                    pattern="hh:mm a dd/MM/yyyy" />
                                                             </h:outputText>
                                                         </span>
-                                                    </div>
-                                                    <!-- /.user-block -->
-                                                    <span class="username">
-                                                        <a href="#">#{post.title}</a>
-                                                    </span>
-                                                    
-                                                    
-                                                    <p>
-                                                        <h:outputText value="#{post.content}" escape="false" />
-                                                    </p>
-
-                                                    <!-- Like Count Displayed Above the Interaction Bar -->
-                                                    <div class="like-count">
-                                                        <i class="far fa-thumbs-up"></i> <span>#{postManagedBean.getLikesCount(post.id)}</span> Likes
-                                                    </div>
-
-                                                    <!-- Interaction Bar -->
-                                                    <div class="interaction-bar">
-                                                        <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
-                                                        <h:commandLink action="#{postManagedBean.likePost(post.id)}" styleClass="#{postManagedBean.isPostLikedByStudent(post.id) ? 'liked' : 'not-liked'}">
-                                                            <i class="#{postManagedBean.isPostLikedByStudent(post.id ) ? 'fas' : 'far'} fa-thumbs-up mr-1"></i> Like
-                                                            <f:ajax render="@form" />
-                                                        </h:commandLink>
-                                                        <span class="float-right">
-                                                            <h:link value="View Comments (#{post.comments.size()})" outcome="/viewPost">
-                                                                <f:param name="postId" value="#{post.id}" />
-                                                                <f:param name="courseId" value="#{courseManagedBean.selectedCourse.courseId}" />
-                                                                <i class="far fa-comments mr-1"></i>
-                                                            </h:link>
-
-                                                        </span>
-                                                    </div>
-
-                                                    <hr></hr>
-
-                                                </c:forEach>
                                             </div>
-                                        </div>
-                                        <div class="tab-pane" id="courseDescription">
-                                            <!-- Post -->
-                                            <div class="post">
-                                                <div class="user-block">
-                                                    <span>
-                                                        <a href="#">#{courseManagedBean.courseCode} Course Description</a>
-                                                    </span>
-                                                </div>
-                                                <!-- /.user-block -->
-                                                <p>
-                                                    #{courseManagedBean.description}
-                                                </p>
+                                            <!-- /.user-block -->
+                                            <span class="username">
+                                                <a href="#">#{post.title}</a>
+                                            </span>
 
+
+                                            <p>
+                                                <h:outputText value="#{post.content}" escape="false" />
+                                            </p>
+
+
+                                            <!-- Like Count Displayed Above the Interaction Bar -->
+                                            <div class="like-count">
+                                                <i class="far fa-thumbs-up"></i>
+                                                <span>#{postManagedBean.getLikesCount(post.id)}</span> Likes
                                             </div>
+
+                                            <!-- Interaction Bar -->
+                                            <div class="interaction-bar">
+                                                <a href="#" class="link-black text-sm mr-2"><i
+                                                        class="fas fa-share mr-1"></i> Share</a>
+                                                <h:commandLink action="#{postManagedBean.likePost(post.id)}"
+                                                    styleClass="#{postManagedBean.isPostLikedByStudent(post.id) ? 'liked' : 'not-liked'}">
+                                                    <i
+                                                        class="#{postManagedBean.isPostLikedByStudent(post.id ) ? 'fas' : 'far'} fa-thumbs-up mr-1"></i>
+                                                    Like
+                                                    <f:ajax render="@form" />
+                                                </h:commandLink>
+                                                <span class="float-right">
+                                                    <h:link value="View Comments (#{post.comments.size()})"
+                                                        outcome="/viewPost">
+                                                        <f:param name="postId" value="#{post.id}" />
+                                                        <f:param name="courseId"
+                                                            value="#{courseManagedBean.selectedCourse.courseId}" />
+                                                        <i class="far fa-comments mr-1"></i>
+                                                    </h:link>
+
+                                                </span>
+                                            </div>
+
+                                            <hr>
+                                            </hr>
+
+                                            </c:forEach>
+                                            </h:panelGroup>
                                         </div>
                                     </div>
-                                </h:form>
+                                    <div class="tab-pane" id="courseDescription">
+                                        <!-- Post -->
+                                        <div class="post">
+                                            <div class="user-block">
+                                                <span>
+                                                    <a href="#">#{courseManagedBean.courseCode} Course Description</a>
+                                                </span>
+                                            </div>
+                                            <!-- /.user-block -->
+                                            <p>
+                                                #{courseManagedBean.description}
+                                            </p>
+
+                                        </div>
+                                    </div>
                             </div>
+                            </h:form>
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         </section>
 
@@ -183,31 +210,49 @@
     </ui:define>
 
     <ui:define name="script">
-        
+        <script>
+            function handlePinButton(xhr, status, args, buttonElement) {
+                if (status === 'success') {
+                    if (args.coursePinned) {
+                        buttonElement.value = 'Pinned';  // Change the button text
+                        buttonElement.disabled = true;   // Optionally disable the button
+                        buttonElement.style.backgroundColor = '#00C853';  // Change the button color
+                    } else {
+                        // Handle the case where the course could not be pinned
+                        console.error('Failed to pin course');
+                    }
+                }
+            }
+        </script>
     </ui:define>
 
     <style>
         .like-count {
-            font-size: 0.9rem; /* Adjust the size as needed */
-            color: #65676b; /* Grey text to mimic social media style */
-            padding-bottom: 0.5rem; /* Space between like count and post text */
+            font-size: 0.9rem;
+            /* Adjust the size as needed */
+            color: #65676b;
+            /* Grey text to mimic social media style */
+            padding-bottom: 0.5rem;
+            /* Space between like count and post text */
         }
 
         .interaction-bar {
             display: flex;
             align-items: center;
             justify-content: start;
-            padding-top: 0.5rem; /* Space between post text and interaction icons */
+            padding-top: 0.5rem;
+            /* Space between post text and interaction icons */
         }
 
         .interaction-bar a {
-            margin-right: 15px; /* Space between interaction buttons */
+            margin-right: 15px;
+            /* Space between interaction buttons */
         }
 
         .interaction-bar .float-right {
-            margin-left: auto; /* Pushes the comments link to the right */
+            margin-left: auto;
+            /* Pushes the comments link to the right */
         }
-
     </style>
 
 </ui:composition>

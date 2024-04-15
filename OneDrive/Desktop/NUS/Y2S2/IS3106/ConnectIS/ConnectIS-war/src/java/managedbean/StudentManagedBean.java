@@ -4,21 +4,15 @@
  */
 package managedbean;
 
+import entity.Course;
 import entity.Student;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import session.CourseSessionBeanLocal;
 import session.StudentSessionBeanLocal;
 
 /**
@@ -30,16 +24,19 @@ import session.StudentSessionBeanLocal;
 public class StudentManagedBean implements Serializable {
 
     @EJB
-    private StudentSessionBeanLocal studentSessionBeanLocal;
-    
+    private StudentSessionBeanLocal studentSessionBean;
+
+    @EJB
+    private CourseSessionBeanLocal courseSessionBean;
+
     private Long id;
-    
+
     private String email;
     private String contactnumber;
     private String firstname;
     private String lastname;
     private String password;
-    
+
     private byte degree;
     private byte gender;
     private int academicYear;
@@ -47,12 +44,12 @@ public class StudentManagedBean implements Serializable {
     private String specialization;
     private boolean isUserAnonymous;
     private String anonymousName;
-    
+
     private Student selectedStudent;
-    
+
     public StudentManagedBean() {
     }
-    
+
     public void createStudent(ActionEvent evt) {
         Student newStudent = new Student();
         newStudent.setEmail(email);
@@ -66,19 +63,19 @@ public class StudentManagedBean implements Serializable {
         newStudent.setSpecialization(specialization);
         newStudent.setIsUserAnonymous(false);
         newStudent.setAnonymousName("");
-        studentSessionBeanLocal.createStudent(newStudent);
+        studentSessionBean.createStudent(newStudent);
     }
-    
+
     public void loadSelectedStudent() {
         /*
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         HttpSession session = request.getSession();
 
         Long studentId = (Long) session.getAttribute("studentId");
-        */
-        Student temp = studentSessionBeanLocal.retrieveStudentByEmail("user1@u.nus.edu");
-        selectedStudent = studentSessionBeanLocal.getStudent(temp.getId());
-        
+         */
+        Student temp = studentSessionBean.retrieveStudentByEmail("user1@u.nus.edu");
+        selectedStudent = studentSessionBean.getStudent(temp.getId());
+
         setId(selectedStudent.getId());
         setEmail(selectedStudent.getEmail());
         setContactnumber(selectedStudent.getContactnumber());
@@ -93,7 +90,7 @@ public class StudentManagedBean implements Serializable {
         setIsUserAnonymous(selectedStudent.getIsUserAnonymous());
         setAnonymousName(selectedStudent.getAnonymousName());
     }
-    
+
     public void updateStudent(ActionEvent evt) {
         selectedStudent.setContactnumber(getContactnumber());
         selectedStudent.setFirstname(getFirstname());
@@ -105,13 +102,34 @@ public class StudentManagedBean implements Serializable {
         selectedStudent.setSpecialization(getSpecialization());
         selectedStudent.setIsUserAnonymous(getIsUserAnonymous());
         selectedStudent.setAnonymousName(getAnonymousName());
-        studentSessionBeanLocal.updateStudent(selectedStudent);
+        studentSessionBean.updateStudent(selectedStudent);
+    }
+
+    public void followCourse(Course c, Student s) {
+        Course course = courseSessionBean.getCourse(c.getCourseId());
+        Student student = studentSessionBean.getStudent(s.getId());
+        if (course != null && student != null) {
+            studentSessionBean.addPinnedCourse(course, student);
+        }
     }
     
+    public boolean isCoursePinned(Course c, Student s) {
+        Course course = courseSessionBean.getCourse(c.getCourseId());
+        Student student = studentSessionBean.getStudent(s.getId());
+        if (course != null && student != null && student.getPinnedCourses() != null) {
+            for (Course cc : student.getPinnedCourses()) {
+                if (cc.getCourseId().equals(course.getCourseId())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public String cancelAction(ActionEvent evt) {
         return "viewProfile.xhtml?faces-redirect=true";
     }
-    
+
     // getter and setter
     public Long getId() {
         return id;
@@ -224,5 +242,5 @@ public class StudentManagedBean implements Serializable {
     public void setSelectedStudent(Student selectedStudent) {
         this.selectedStudent = selectedStudent;
     }
-    
+
 }
