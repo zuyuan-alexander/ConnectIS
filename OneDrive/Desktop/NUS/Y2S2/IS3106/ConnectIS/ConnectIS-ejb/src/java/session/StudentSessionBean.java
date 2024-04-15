@@ -4,6 +4,7 @@
  */
 package session;
 
+import entity.Course;
 import entity.Student;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -91,6 +92,7 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
         oldStudent.setLastname(s.getLastname());
         oldStudent.setIsUserAnonymous(s.getIsUserAnonymous());
         oldStudent.setAnonymousName(s.getAnonymousName());
+        em.merge(oldStudent);
     }
 
     @Override
@@ -99,6 +101,16 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
         q.setParameter("inEmail", email);
         Long count = (Long) q.getSingleResult();
         return count > 0;
+    }
+    
+    @Override
+    public void addPinnedCourse(Course course, Student student) {
+        Course c = em.find(Course.class, course);
+        Student s = em.find(Student.class, student);
+        if (c != null && s != null) {
+            s.getPinnedCourses().add(c);
+            em.merge(s);
+        }
     }
 
     @Override

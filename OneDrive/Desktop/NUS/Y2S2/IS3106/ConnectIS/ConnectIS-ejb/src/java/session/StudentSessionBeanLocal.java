@@ -4,6 +4,7 @@
  */
 package session;
 
+import entity.Course;
 import entity.Student;
 import javax.ejb.Local;
 import javax.persistence.NoResultException;
@@ -27,5 +28,7 @@ public interface StudentSessionBeanLocal {
     public Boolean checkIfEmailExists(String email);
     
     public Boolean checkIfContactExists(String contact);
+
+    public void addPinnedCourse(Course course, Student student);
     
 }
