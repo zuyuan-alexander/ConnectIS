@@ -105,8 +105,8 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
     
     @Override
     public void addPinnedCourse(Course course, Student student) {
-        Course c = em.find(Course.class, course);
-        Student s = em.find(Student.class, student);
+        Course c = em.find(Course.class, course.getCourseId());
+        Student s = em.find(Student.class, student.getId());
         if (c != null && s != null) {
             s.getPinnedCourses().add(c);
             em.merge(s);
