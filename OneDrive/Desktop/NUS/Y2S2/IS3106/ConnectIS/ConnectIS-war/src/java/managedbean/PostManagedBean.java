@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import session.CommentSessionBeanLocal;
 import session.CourseSessionBeanLocal;
 import session.PostSessionBeanLocal;
 import session.StudentSessionBeanLocal;
@@ -38,6 +39,9 @@ import util.enumeration.PostTypeEnum;
 public class PostManagedBean implements Serializable {
 
     @EJB
+    private CommentSessionBeanLocal commentSessionBean;
+
+    @EJB
     private StudentSessionBeanLocal studentSessionBean;
 
     @EJB
@@ -48,6 +52,8 @@ public class PostManagedBean implements Serializable {
 
     @Inject
     private AuthenticationManagedBean authenBean;
+    
+    
 
     private String title;
     private String content;
@@ -63,6 +69,7 @@ public class PostManagedBean implements Serializable {
 
     private Course selectedCourse;
     private List<Post> postsInSelectedCourse;
+    private List<Comment> filteredComment;
 
     /**
      * Creates a new instance of PostManagedBean
@@ -159,6 +166,10 @@ public class PostManagedBean implements Serializable {
         Post p = postSessionBean.findPostById(postId);
         postSessionBean.deletePost(postId);
         return "/courseHomePage.xhtml?courseId=" + selectedCourse.getCourseId() + "&faces-redirect=true";
+    }
+    
+    public int countComments(Long postId) {
+        return commentSessionBean.findAllCommentsByPost(postId).size();
     }
     
     public String updatePost() {

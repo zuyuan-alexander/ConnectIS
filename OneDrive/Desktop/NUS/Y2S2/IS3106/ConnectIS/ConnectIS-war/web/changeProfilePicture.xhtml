@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./layout/homePageTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Change Profile Picture
+    </ui:define>
+
+    <ui:define name="content">
+        <!-- to load selected student -->
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{studentManagedBean.loadSelectedStudent()}" />
+        </f:metadata>
+
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">User's Profile</h1>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="#{request.contextPath}/homePage.xhtml">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="#{request.contextPath}/viewProfile.xhtml">View Profile</a>
+                            </li>
+                            <li class="breadcrumb-item active">
+                                Change Profile Picture
+                            </li>
+                        </ol>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <div class="ui-fluid">
+            <h:messages style="display:block; text-transform: none; color: red;" />
+            <h:form id="profilePicture" enctype="multipart/form-data">
+                <h:inputFile value="#{studentManagedBean.uploadedFile}" />
+                <h:commandButton action="#{studentManagedBean.upload()}" value="Upload" styleClass="btn btn-primary" />
+                <br/>
+                <img src="/ConnectIS-war/upload/#{studentManagedBean.tempPicture}" width="300pt;" height="300pt;" />
+                <br /><br/>
+            </h:form>
+            <h:form id="profilePictureForm">
+                <h:commandButton value="Update Profile Picture" styleClass="btn btn-primary"
+                                 action="#{studentManagedBean.changeProfilePicture(evt)}" />
+                <h:message for="profilePicture" style="display:block; text-transform: none; color: red;" />
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>

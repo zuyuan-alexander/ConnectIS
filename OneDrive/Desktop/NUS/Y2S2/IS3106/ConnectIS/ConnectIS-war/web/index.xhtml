@@ -2,21 +2,74 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <body>
-        <ui:composition template="./layout/homePageTemplate.xhtml">
-            <ui:define name="title">
-                Welcome to ConnectIS
-            </ui:define>
+    <h:head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>ISConnect</title>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway" />
+        <style>
+            body,h1 {
+                font-family: "Raleway", sans-serif;
+                font-weight: bold;
+            }
+            body, html {
+                height: 100%
+            }
+            .bgimg {
+                background-image: url('/ConnectIS-war/upload/index-background-image.jpg');
+                min-height: 100%;
+                background-position: center;
+                background-size: cover;
+            }
 
-            <ui:define name="content">
-            </ui:define>
-            
-            <ui:define name="script">
-            </ui:define>
-        </ui:composition>
-    </body>
+            @keyframes pulseAnimation {
+                0% {
+                    transform: scale(1);
+                    opacity: 0.5;
+                }
+                50% {
+                    transform: scale(1.05);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(1);
+                    opacity: 0.5;
+                }
+            }
+
+            .pulse {
+                margin-top: 20pt;
+                animation: pulseAnimation 2s infinite;
+                text-decoration: none;
+                color: white; /* Adjust the color as needed */
+                font-size: 2em; /* Adjust size as needed */
+            }
+
+        </style>
+    </h:head>
+    <h:body>
+        <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+            <div class="w3-display-topleft w3-padding-large w3-xlarge">
+                <h1>
+                    <img src="dist/img/logo.png" alt="ISConnect Logo" class="brand-image img-circle elevation-3" style="opacity: .9; width: 60pt;" />
+                    <strong>ISConnect</strong>
+                </h1>
+            </div>
+            <div class="w3-display-topright w3-padding-large w3-xlarge">
+                <a href="login.xhtml" style="padding-right: 30pt;">Login</a>
+                <a href="signup.xhtml">Sign up</a>
+            </div>
+            <div class="w3-display-middle">
+                <h1 class="w3-jumbo w3-animate-top">Enhancing Collaboration for IS Students!</h1>
+                <p class="w3-large w3-left">
+                    A resource hub for Information Systems students to connect, collaborate and share academic resources easily through forums and chats anonymously.
+                </p>
+                <a href="login.xhtml" class="pulse w3-right">Connect Now -></a>
+            </div>
+            <div class="w3-display-bottomleft w3-padding-large">
+                IS3106 Project @ NUS DISA
+            </div>
+        </div>
+    </h:body>
 </html>

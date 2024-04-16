@@ -61,6 +61,41 @@
                 background-color: #0056b3;
                 color: white;
             }
+
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f1f1f1;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 1;
+            }
+
+            /* Links inside the dropdown */
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+            /* Change color of dropdown links on hover */
+            .dropdown-content a:hover {
+                background-color: #86B7FF;
+            }
+
+            /* Show the dropdown menu on hover */
+            .dropdown:hover .dropdown-content {
+                display: block;
+            }
+
+            /* Change the background color of the dropdown button when the dropdown content is shown */
+            .dropdown:hover .dropbtn {
+                background-color: #A6A6A6;
+                moz-border-radius: 50px;
+                webkit-border-radius: 50px;
+                border-radius: 50px;
+            }
         </style>
 
 
@@ -78,6 +113,34 @@
                            role="button">
                             <i class="fa fa-bars"></i>
                         </a>
+                    </li>
+                </ul>
+
+                <!-- Right navbar links -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <h:form>
+                            <h:commandLink class="btn btn-primary" action="createPost.xhtml?faces-redirect=true" 
+                                           style="moz-border-radius: 25px; webkit-border-radius: 25px; border-radius: 25px;">
+                                <i class="fa fa-plus"></i> Create
+                            </h:commandLink>
+                        </h:form>
+                    </li>
+                    <li class="nav-item">
+                        <h:form>
+                            <div class="dropdown">
+                                <button class="dropbtn btn">
+                                    <img class="dropdown" src="/ConnectIS-war/upload/#{studentManagedBean.profilePicture}" 
+                                         style="width: 40pt; height: 40pt; border-radius: 50%;" alt="Profile Picture"/>
+                                    <span>#{studentManagedBean.firstname} #{studentManagedBean.lastname}</span>
+                                </button>
+                                <div class="dropdown-content">
+                                    <a href="#{request.contextPath}/viewProfile.xhtml"><i class="nav-icon fa fa-user"></i> View Profile</a>
+                                    <a href="#{request.contextPath}/editProfile.xhtml"><i class="nav-icon fa fa-cog"></i> Edit Profile</a>
+                                    <h:commandLink action="#{authenticationManagedBean.logout()}"><i class="fa fa-sign-out-alt"></i> Logout</h:commandLink>
+                                </div>
+                            </div>
+                        </h:form>
                     </li>
                 </ul>
             </nav>
@@ -101,7 +164,7 @@
 
                             <li class="nav-item">
                                 <a href="#{request.contextPath}/homePage.xhtml"
-                                   class="nav-link">
+                                   class="nav-link #{request.requestURI == '/ConnectIS-war/homePage.xhtml' ? 'active' : ''}">
                                     <i class="nav-icon fa fa-home"></i>
                                     <p>
                                         Home
@@ -109,11 +172,22 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#{request.contextPath}/searchCustomers2.xhtml"
-                                   class="nav-link">
+                                <a href="#{request.contextPath}/courseHomePage.xhtml"
+                                   class="nav-link #{request.requestURI == '/ConnectIS-war/courseHomePage.xhtml' ? 'active' : ''}">
+                                    <i class="nav-icon fa fa-bookmark"></i>
                                     <i class="nav-icon fa fa-users"></i>
                                     <p>
                                         My Saved Courses
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#{request.contextPath}/viewProfile.xhtml"
+                                   class="nav-link #{request.requestURI == '/ConnectIS-war/viewProfile.xhtml' ? 'active' : ''}">
+                                    <i class="nav-icon fa fa-user"></i>
+                                    <p>
+                                        View Profile
                                     </p>
                                 </a>
                             </li>
@@ -132,7 +206,20 @@
                                             <p>#{course.courseCode}</p>
                                         </a>
                                     </li>
-                                </c:forEach>
+                                </c:forEach><br/>
+                            </li>
+
+                            <li class="nav-item">
+                                <h:form>
+                                    <h:commandLink class="btn btn-primary" action="createPost.xhtml?faces-redirect=true" 
+                                                   style="moz-border-radius: 25px; webkit-border-radius: 25px; border-radius: 25px; color: white; width: 100%;">
+                                        <i class="fa fa-plus"></i> Create
+                                    </h:commandLink>
+                                </h:form>
+                                <br/>
+                                <h:form id="logoutForm">
+                                    <h:commandButton value="Logout" action="#{authenticationManagedBean.logout()}" class="btn btn-primary" style="width: 100%;"/>
+                                </h:form>
                             </li>
                         </ul>
                     </nav>

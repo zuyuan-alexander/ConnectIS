@@ -27,6 +27,7 @@ public class Student implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+   private String profilePicture;
     private String email;
     private String contactnumber;
     private String firstname;
@@ -40,7 +41,6 @@ public class Student implements Serializable {
     private String specialization;
     private boolean isUserAnonymous;
     private String anonymousName;
-
     @OneToMany
     private List<Course> pinnedCourses;
 
@@ -222,6 +222,16 @@ public class Student implements Serializable {
     public void setAnonymousName(String anonymousName) {
         this.anonymousName = anonymousName;
     }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+    
+    
 
     @Override
     public int hashCode() {

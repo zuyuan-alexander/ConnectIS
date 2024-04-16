@@ -12,6 +12,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.persistence.NoResultException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import session.StudentSessionBeanLocal;
 import session.AuthenticationSessionBeanLocal;
 
@@ -25,73 +27,66 @@ public class AuthenticationManagedBean implements Serializable {
 
     @EJB
     private StudentSessionBeanLocal studentSessionBean;
-    
+
     @EJB
     private AuthenticationSessionBeanLocal authentificationSessionBean;
-    
+
     private String email;
-    private String contactnumber;
-    private String firstname;
-    private String lastname;
     private String password;
-    private String confirmpassword;
+    private Long userId = -1l;
     private Student loggedinStudent;
-    
+
     public AuthenticationManagedBean() {
     }
-    
-     public String signup() {
-         
-        FacesContext context = FacesContext.getCurrentInstance();
-        try {
-            System.out.print("entering boolean success");
-            System.out.print(email + " " + firstname + " " + lastname  + " " + contactnumber + " " + password);
-            boolean success = authentificationSessionBean.registerStudent(email, firstname, lastname, contactnumber, password);
-            System.out.print("teehee NOT SUCCESSFUL" + success);
-            if (success) {
-                context.addMessage(null, new FacesMessage("Successful sign-up!"));
-                return "/login.xhtml?faces-redirect=true"; // Navigate to login page on success
-            } else {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Authentification Error", "Sign-up failed!"));
-                return "signup.xhtml";
-            }
-        } catch (Exception e) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Exception Error", "Sign-up failed!"));
-            e.printStackTrace();
-            return "signup.xhtml";
-        }
-//        if (!password.equals(confirmpassword)) {
-//            System.out.println("password is: " + password);
-//            System.out.println("confirmpassword is: " + confirmpassword);
-//            
-//            // Add error message about passwords not matching
-//            return "signup";
-//        }
+
+    //method to simulate using the logged in userId to generate user profile
+    public String generateUserProfileData() {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        HttpSession session = request.getSession();
+
+        setUserId((Long) session.getAttribute("userId"));
+        //normally we will then use the userId to grab the user object from the session bean
+        //but here we will simulate as if we did it
+
+        String userProfile = "UserId: " + getUserId();
+        return userProfile;
     }
 
     public String login() {
-        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        HttpSession session = request.getSession();
+
         try {
-            loggedinStudent = studentSessionBean.retrieveStudentByEmail(email);
-        } catch (NoResultException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        
-        if (loggedinStudent != null && loggedinStudent.getEmail().equals(this.getEmail())) {
-            return "index.xhtml?faces-redirect=true";
-            //return "/secret/secret.xhtml?faces-redirect=true";
-        } else {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Exception Error", "Login unsuccessful!"));
-            return "login.xhtml";
+            Student student = studentSessionBean.retrieveStudentByEmail(email);
+
+            if (password.equals(student.getPassword())) {
+                setUserId(student.getId());
+                session.setAttribute("userId", getUserId());
+                setLoggedinStudent(student);
+                return "/homePage.xhtml?faces-redirect=true";
+            } else {
+                FacesContext.getCurrentInstance().addMessage("loginForm:password",
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Incorrect Login", "Incorrect Password! Please check your password."));
+                return null;
+            }
+        } catch (exception.NoResultException ex) {
+            FacesContext.getCurrentInstance().addMessage("loginForm:email",
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Incorrect Login", "Email not found in our database! Please check your email."));
+            setUserId(-1l);
+            session.setAttribute("userId", getUserId());
+            email = null;
+            password = null;
+            return null;
         }
     }
 
     public String logout() {
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        HttpSession session = request.getSession();
+        setUserId(-1l);
+        session.setAttribute("userId", getUserId());
         return "/login.xhtml?faces-redirect=true";
     }
-     
 
     public String getEmail() {
         return email;
@@ -99,30 +94,6 @@ public class AuthenticationManagedBean implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getContactnumber() {
-        return contactnumber;
-    }
-
-    public void setContactnumber(String contactnumber) {
-        this.contactnumber = contactnumber;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
     }
 
     public String getPassword() {
@@ -133,14 +104,6 @@ public class AuthenticationManagedBean implements Serializable {
         this.password = password;
     }
 
-    public String getConfirmpassword() {
-        return confirmpassword;
-    }
-
-    public void setConfirmpassword(String confirmpassword) {
-        this.confirmpassword = confirmpassword;
-    }
-
     public Student getLoggedinStudent() {
         return loggedinStudent;
     }
@@ -148,6 +111,13 @@ public class AuthenticationManagedBean implements Serializable {
     public void setLoggedinStudent(Student loggedinStudent) {
         this.loggedinStudent = loggedinStudent;
     }
-    
-    
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
 }

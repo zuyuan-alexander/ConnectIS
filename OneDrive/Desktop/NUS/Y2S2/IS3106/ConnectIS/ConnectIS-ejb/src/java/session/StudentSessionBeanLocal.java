@@ -17,13 +17,13 @@ import javax.persistence.NoResultException;
 public interface StudentSessionBeanLocal {
     
 
-    public Student retrieveStudentByEmail(String email) throws NoResultException;
+    public Student retrieveStudentByEmail(String email) throws exception.NoResultException;
 
     public void createStudent(Student s);
 
-    public Student getStudent(Long cId) throws NoResultException;
+    public Student getStudent(Long cId) throws exception.NoResultException;
 
-    public void updateStudent(Student s);
+    public void updateStudent(Student s)throws exception.NoResultException ;
     
     public Boolean checkIfEmailExists(String email);
     
