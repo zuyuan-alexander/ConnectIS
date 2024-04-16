@@ -48,6 +48,8 @@ public class CommentManagedBean implements Serializable {
     private Comment newReply; // This should be initialized when a new comment is prepared
     private Comment selectedComment;
 
+    private Long activeCommentId;
+
     /**
      * Creates a new instance of CommentManagedBean
      */
@@ -62,12 +64,17 @@ public class CommentManagedBean implements Serializable {
         newReply = new Comment(); // Initialize the new reply comment
     }
 
-
-    public void replyToComment(Long commentId) {
+    public String replyToComment(Long commentId) {
         if (newReply.getContent() != null || !newReply.getContent().isEmpty()) {
             commentSessionBean.createComment(newReply, commentId, selectedPost.getId(), loggedinStudent.getId());
             newReply = new Comment();
         }
+        
+        return null;
+    }
+    
+    public void cancelReply() {
+        this.activeCommentId = null;
     }
 
     public String testComment(Long commentId) {
@@ -98,7 +105,6 @@ public class CommentManagedBean implements Serializable {
         setAnonymous(false);
         return null;
     }
-
 
     public String getContent() {
         return content;
@@ -131,5 +137,31 @@ public class CommentManagedBean implements Serializable {
     public void setSelectedComment(Comment selectedComment) {
         this.selectedComment = selectedComment;
     }
+
+    public Post getSelectedPost() {
+        return selectedPost;
+    }
+
+    public void setSelectedPost(Post selectedPost) {
+        this.selectedPost = selectedPost;
+    }
+
+    public Student getLoggedinStudent() {
+        return loggedinStudent;
+    }
+
+    public void setLoggedinStudent(Student loggedinStudent) {
+        this.loggedinStudent = loggedinStudent;
+    }
+
+    public Long getActiveCommentId() {
+        return activeCommentId;
+    }
+
+    public void setActiveCommentId(Long activeCommentId) {
+        this.activeCommentId = activeCommentId;
+    }
+    
+    
 
 }
