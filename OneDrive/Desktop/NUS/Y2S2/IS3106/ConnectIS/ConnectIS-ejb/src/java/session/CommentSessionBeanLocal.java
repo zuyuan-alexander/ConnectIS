@@ -7,6 +7,7 @@ package session;
 import entity.Comment;
 import java.util.List;
 import javax.ejb.Local;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -24,5 +25,13 @@ public interface CommentSessionBeanLocal {
     public void deleteComment(Long id);
 
     public List<Comment> findAllCommentsByPost(Long postId);
+
+    public void createComment(Comment comment, Long parentcommentid, Long postid, Long studentid);
+
+    public List<Comment> findCommentsWithoutReplies(Long postId);
+
+  
+
+    public Comment retrieveAnyComment() throws NoResultException;
     
 }

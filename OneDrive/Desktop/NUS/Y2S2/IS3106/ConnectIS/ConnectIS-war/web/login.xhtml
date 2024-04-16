@@ -1,86 +1,121 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-                template="/layout/authentication.xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      template="./layout/default.xhtml">
+    <h:head>
+        <title>Login Page</title>
+        <style>
+            body {
+                background-image: url(/ConnectIS-war/upload/index-background-image.jpg);
+                min-height: 100%;
+                background-position: center;
+                background-size: cover;
+            }
+            h1 {
+                letter-spacing: 1.5vw;
+                font-family: 'system-ui';
+                text-transform: uppercase;
+                text-align: center;
+            }
+            main {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                width: 100%;
+            }
+            .form_class {
+                width: 500px;
+                padding: 60px;
+                border-radius: 8px;
+                background-color: white;
+                font-family: 'system-ui';
+                box-shadow: 5px 5px 10px rgb(0,0,0,0.3);
+            }
+            .form_div {
+                text-transform: uppercase;
+            }
+            .form_div > label {
+                letter-spacing: 3px;
+                font-size: 1rem;
+            }
+            .info_div {
+                text-align: center;
+                margin-top: 40px;
+                letter-spacing: 1px;
+                font-size: 20px;
+                font-style: italic;
+            }
+            .field_class {
+                width: 100%;
+                border-radius: 6px;
+                border-style: solid;
+                border-width: 1px;
+                padding: 5px 0px;
+                text-indent: 6px;
+                margin-top: 10px;
+                margin-bottom: 20px;
+                font-family: 'system-ui';
+                font-size: 0.9rem;
+                letter-spacing: 2px;
+            }
+            .submit_class {
+                border-style: none;
+                border-radius: 5px;
+                background-color: #FFE6D4;
+                padding: 8px 20px;
+                font-family: 'system-ui';
+                text-transform: uppercase;
+                letter-spacing: .8px;
+                display: block;
+                margin: auto;
+                margin-top: 10px;
+                box-shadow: 2px 2px 5px rgb(0,0,0,0.2);
+                cursor: pointer;
+                width: 70%;
+            }
 
-    <ui:define name="content">
-
-        <body>
-            <div class="limiter" style="background-image: url('cbg-01.jpg'); ">
-                <div class="container-login100">
-                    <div class="wrap-login100">
-                        <div class="login100-form-title" style="background-image: url('resources/images/bg-01.jpg');">
-                            <span class="login100-form-title-1">
-                                Login
-                            </span>
-                        </div>
-
-                        <h:form id="loginForm" class="login100-form validate-form">
-                            <p:growl id="growl" showDetail="true" sticky="true" />
-                            <div class="wrap-input100 validate-input m-b-26" data-validate="Email is required">
-                                <span class="label-input100">Email</span>
-                                <h:inputText class="input100" value="#{authenticationManagedBean.email}" pt:placeholder="Enter email"/>
-                                <span class="focus-input100"></span>
-                            </div>
-
-                            <div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
-                                <span class="label-input100">Password</span>
-                                <h:inputSecret class="input100" value="#{authenticationManagedBean.password}" pt:placeholder="Enter password"/>
-                                <span class="focus-input100"></span>
-                            </div>
-
-                            <div class="flex-sb-m w-full p-b-30">
-                                <div class="contact100-form-checkbox">
-                                    <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me"/>
-                                    <label class="label-checkbox100" for="ckb1">
-                                        Remember me
-                                    </label>
-                                </div>
-
-                                <div>
-                                    <a href="#" class="txt1">
-                                        Forgot Password?
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="container-login100-form-btn">
-                                <h:commandButton value="Login" 
-                                                 action="#{authenticationManagedBean.login}" 
-                                                 styleClass="login100-form-btn"/>
-                            </div>
-
-                            <div class="next-text" style="text-align: right; margin-top: 20px;">
-                                Don't have an account? <a href="signup.xhtml" style="font-family: Poppins-Regular;">Sign up with us now!</a>
-                            </div>
-
-                        </h:form>
+            .brand-logo {
+                width: 30%;
+                height: auto;
+                background-color: black;
+                border-radius: 50%;
+                opacity: .8;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <main>
+            <h:form id="loginForm" class="form_class">                
+                <div class="form_div">
+                    <div class="form-group">
+                        <h1>&lt;/&gt; ISConnect</h1><br/>
+                        <h:outputLabel>Email: </h:outputLabel>
+                        <h:inputText binding="#{email}" id="email" value="#{authenticationManagedBean.email}" required="true" requiredMessage="Email is required"
+                                     class="field_class form-control #{email.valid ? '' :'is-invalid'}" />
+                        <h:message for="email" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
                     </div>
-
+                    <br/>
+                    <div class="form-group">
+                        <h:outputLabel>Password: </h:outputLabel>
+                        <h:inputSecret binding="#{password}" id="password" value="#{authenticationManagedBean.password}" required="true" requiredMessage="Password is required"
+                                       class="field_class form-control #{password.valid ? '' :'is-invalid'}" />
+                        <h:message for="password" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                    </div>
+                    <h:commandButton class="submit_class" type="submit" action="#{authenticationManagedBean.login}" value="Login"/>
                 </div>
-            </div>
 
-            <!--===============================================================================================-->
-            <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-            <!--===============================================================================================-->
-            <script src="vendor/animsition/js/animsition.min.js"></script>
-            <!--===============================================================================================-->
-            <script src="vendor/bootstrap/js/popper.js"></script>
-            <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-            <!--===============================================================================================-->
-            <script src="vendor/select2/select2.min.js"></script>
-            <!--===============================================================================================-->
-            <script src="vendor/daterangepicker/moment.min.js"></script>
-            <script src="vendor/daterangepicker/daterangepicker.js"></script>
-            <!--===============================================================================================-->
-            <script src="vendor/countdowntime/countdowntime.js"></script>
-            <!--===============================================================================================-->
-            <script src="js/main.js"></script>
-        </body>
-    </ui:define>
+                <div class="info_div">
+                    <p>Don't have an account? <a href="signup.xhtml" style="font-style: normal;">Sign up</a></p>
+                </div>
+            </h:form>
+        </main>
+    </h:body>
 
-</ui:composition>
+
+</html>

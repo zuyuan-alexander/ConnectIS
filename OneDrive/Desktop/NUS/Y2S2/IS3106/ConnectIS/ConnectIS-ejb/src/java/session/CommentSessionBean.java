@@ -10,7 +10,10 @@ import entity.Student;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -22,7 +25,7 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
 
     @PersistenceContext(unitName = "ConnectIS-ejbPU")
     private EntityManager em;
-    
+
     @Override
     public void createComment(Comment comment, Long postid, Long studentid) {
         Post p = em.find(Post.class, postid);
@@ -32,7 +35,33 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
         p.getComments().add(comment);
         em.persist(comment);
     }
-    
+
+    @Override
+    public void createComment(Comment comment, Long parentcommentid, Long postid, Long studentid) {
+
+        Comment parentComment = em.find(Comment.class, parentcommentid);
+        System.out.println("Parent comment is: " + parentComment.getContent());
+        System.out.println("Nested comment is: " + comment.getContent());
+        parentComment.getReplies().add(comment);
+        comment.setParentComment(parentComment);
+        Post p = em.find(Post.class, postid);
+        Student s = em.find(Student.class, studentid);
+        comment.setPost(p);
+        comment.setStudent(s);
+       
+        em.persist(comment);
+    }
+
+    @Override
+    public Comment retrieveAnyComment() throws NoResultException {
+        try {
+            return em.createQuery("SELECT c FROM Comment c", Comment.class).getResultList().get(1);
+
+        } catch (NoResultException ex) {
+            throw new NoResultException("No comments exist in the database.");
+        }
+    }
+
     @Override
     public Comment getComment(Long id) {
         return em.find(Comment.class, id);
@@ -44,7 +73,7 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
         oldC.setContent(newComment.getContent());
         oldC.setLikes(newComment.getLikes());
         oldC.setDislikes(newComment.getDislikes());
-       
+
     }
 
     @Override
@@ -54,18 +83,23 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
             em.remove(comment);
         }
     }
-    
-    
-      @Override
+
+    @Override
     public List<Comment> findAllCommentsByPost(Long postId) {
         TypedQuery<Comment> query = em.createQuery(
-            "SELECT c FROM Comment c WHERE c.post.id = :postId", Comment.class);
+                "SELECT c FROM Comment c WHERE c.post.id = :postId", Comment.class);
         query.setParameter("postId", postId);
         return query.getResultList();
     }
 
+    @Override
+    public List<Comment> findCommentsWithoutReplies(Long postId) {
+        return em.createQuery(
+                "SELECT c FROM Comment c WHERE c.post.id = :postId AND c.parentComment IS NULL AND c.replies IS EMPTY", Comment.class)
+                .setParameter("postId", postId)
+                .getResultList();
+    }
+
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-
-   
 }

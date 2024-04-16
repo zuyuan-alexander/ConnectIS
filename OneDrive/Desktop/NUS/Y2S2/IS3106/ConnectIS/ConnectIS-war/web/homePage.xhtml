@@ -14,6 +14,11 @@
             </ui:define>
 
             <ui:define name="content">
+                
+                <!-- to load selected student -->
+                <f:metadata>
+                    <f:event type="preRenderView" listener="#{studentManagedBean.loadSelectedStudent()}" />
+                </f:metadata>
                 <div class="content-header">
                     <div class="container-fluid">
                         <div class="row mb-2">

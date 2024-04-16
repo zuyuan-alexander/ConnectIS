@@ -83,7 +83,7 @@
                             </div>
 
                             <div class="card-footer">
-                                <h:button value="Cancel" class="btn btn-default" outcome="courseHomePage.xhtml" />
+                                <h:button value="Cancel" class="btn btn-default" outcome="courseHomePage.xhtml?courseId=#{courseManagedBean.selectedCourse.courseId}" />
                                 <h:commandButton value="Submit" class="btn btn-primary float-right" onclick="submitPost();" action="#{postManagedBean.addPost}" />
                             </div>
 

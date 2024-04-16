@@ -1,4 +1,4 @@
-/*
+ /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/J2EE/EJB30/StatelessEjbClass.java to edit this template
  */
@@ -28,36 +28,16 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
     @PersistenceContext(unitName = "ConnectIS-ejbPU")
     private EntityManager em;
 
-    @PostConstruct
-    public void tempCreateNewStudent() {
-        Student newStudent = new Student();
-        newStudent.setEmail("user1@u.nus.edu");
-        newStudent.setContactnumber("123456789");
-        newStudent.setFirstname("User");
-        newStudent.setLastname("One");
-        byte tempByte = 1;
-        newStudent.setDegree(tempByte);
-        newStudent.setGender(tempByte);
-        newStudent.setAcademicYear(1);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        try {
-            newStudent.setDob(dateFormat.parse("03/01/2004"));
-        } catch (ParseException ex) {
-            Logger.getLogger(StudentSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        newStudent.setSpecialization("Financial Technology");
-        newStudent.setIsUserAnonymous(false);
-        newStudent.setAnonymousName("");
-        createStudent(newStudent);
-    }
+   
 
     @Override
     public void createStudent(Student s) {
+          s.setProfilePicture("dummy.jpeg");
         em.persist(s);
     }
 
     @Override
-    public Student getStudent(Long cId) throws NoResultException {
+    public Student getStudent(Long cId) throws exception.NoResultException{
         Student stu = em.find(Student.class, cId);
 
         if (stu != null) {
@@ -68,7 +48,7 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
     }
 
     @Override
-    public Student retrieveStudentByEmail(String email) throws NoResultException {
+    public Student retrieveStudentByEmail(String email) throws exception.NoResultException {
         Query query = em.createQuery("SELECT s FROM Student s WHERE s.email = :inEmail");
         query.setParameter("inEmail", email);
 
@@ -79,20 +59,22 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
         }
     }
 
-    @Override
-    public void updateStudent(Student s) {
+     @Override
+    public void updateStudent(Student s) throws exception.NoResultException {
         Student oldStudent = getStudent(s.getId());
-        oldStudent.setDegree(s.getDegree());
-        oldStudent.setGender(s.getGender());
-        oldStudent.setAcademicYear(s.getAcademicYear());
-        oldStudent.setDob(s.getDob());
-        oldStudent.setSpecialization(s.getSpecialization());
-        oldStudent.setEmail(s.getEmail());
+        oldStudent.setProfilePicture(s.getProfilePicture());
         oldStudent.setFirstname(s.getFirstname());
         oldStudent.setLastname(s.getLastname());
+        oldStudent.setGender(s.getGender());
+        oldStudent.setDob(s.getDob());
+        oldStudent.setContactnumber(s.getContactnumber());
+        oldStudent.setEmail(s.getEmail());
+        oldStudent.setPassword(s.getPassword());
+        oldStudent.setAcademicYear(s.getAcademicYear());
+        oldStudent.setDegree(s.getDegree());
+        oldStudent.setSpecialization(s.getSpecialization());
         oldStudent.setIsUserAnonymous(s.getIsUserAnonymous());
         oldStudent.setAnonymousName(s.getAnonymousName());
-        em.merge(oldStudent);
     }
 
     @Override

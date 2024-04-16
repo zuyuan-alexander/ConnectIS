@@ -111,7 +111,7 @@
 
                                                 <span class="float-right">
                                                     <a href="#" class="link-black text-sm">
-                                                        <i class="far fa-comments mr-1"></i> View Comments (#{postManagedBean.selectedPost.comments.size()})
+                                                        <i class="far fa-comments mr-1"></i> View Comments (#{postManagedBean.countComments(postManagedBean.selectedPost.id)})
                                                     </a>
                                                 </span>
                                             </div>
@@ -165,10 +165,11 @@
                                                                                     </h:outputText></span>
                                                                             </p>
 
-                                                                            <h:commandLink>
-                                                                                <i class="bi bi-reply"></i><span class="small"> reply</span>
-                                                                                <f:ajax execute="@form" render="replyForm#{comment.id}" />
-                                                                            </h:commandLink>
+                                                                            <h:commandButton value="Reply" action="#{commentManagedBean.testComment(comment.id)}"
+                                                                                             styleClass="btn btn-reply">
+                                                                                <!-- You can optionally use f:ajax if needed for any partial processing -->
+                                                                            </h:commandButton>
+
                                                                         </div>
                                                                         <p class="small mb-0">
                                                                             #{comment.content}
@@ -177,23 +178,24 @@
                                                                     <!-- Nested Comments -->
                                                                     <h:panelGroup rendered="#{not empty comment.replies}">
                                                                         <ui:repeat value="#{comment.replies}" var="nestedComment">
-                                                                            <div>
-                                                                                <div class="d-flex justify-content-between align-items-center">
-                                                                                    <p class="mb-1">
-                                                                                        #{comment.anonymous ? 'Anonymous' : comment.student.firstname.concat(' ').concat(comment.student.lastname)}
-                                                                                        <span class="small">- <h:outputText value="#{comment.creationDate}">
-                                                                                                <f:convertDateTime pattern="dd MMM yyyy hh:mm a" />
-                                                                                            </h:outputText></span>
-                                                                                    </p>
-
-                                                                                    <h:commandLink>
-                                                                                        <i class="fas fa-reply fa-xs"></i><span class="small"> reply</span>
-                                                                                        <f:ajax execute="@form" render="replyForm#{comment.id}" />
-                                                                                    </h:commandLink>
+                                                                            <div style="margin-left: 20px;"> <!-- Indent nested comments -->
+                                                                                <div class="d-flex flex-start">
+                                                                                    <h:graphicImage value="dist/img/user1-128x128.jpg" alt="user image" 
+                                                                                                    styleClass="img-circle img-bordered-sm" 
+                                                                                                    style="width: 40px; height: 40px; margin-right: 10px;"/>
+                                                                                    <div class="flex-grow-1 flex-shrink-1">
+                                                                                        <!-- Nested Comment Content -->
+                                                                                        <p class="mb-1">
+                                                                                            #{nestedComment.anonymous ? 'Anonymous' : nestedComment.student.firstname.concat(' ').concat(nestedComment.student.lastname)}
+                                                                                            <span class="small">- <h:outputText value="#{nestedComment.creationDate}">
+                                                                                                    <f:convertDateTime pattern="dd MMM yyyy hh:mm a" />
+                                                                                                </h:outputText></span>
+                                                                                        </p>
+                                                                                        <p class="small mb-0">
+                                                                                            #{nestedComment.content}
+                                                                                        </p>
+                                                                                    </div>
                                                                                 </div>
-                                                                                <p class="small mb-0">
-                                                                                    #{comment.content}
-                                                                                </p>
                                                                             </div>
                                                                         </ui:repeat>
                                                                     </h:panelGroup>
@@ -294,3 +296,4 @@
     </style>
 
 </ui:composition>
+

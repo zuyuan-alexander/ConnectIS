@@ -126,8 +126,8 @@
                                                         <span class="username">
                                                             <a href="#">#{post.title}</a>
                                                         </span>
-                                                       
-                                                        
+
+
                                                         <p>
                                                             <h:outputText value="#{post.content}" escape="false" />
                                                         </p>
@@ -151,7 +151,7 @@
                                                                 <f:ajax render="@form" />
                                                             </h:commandLink>
                                                             <span class="float-right">
-                                                                <h:link value="View Comments (#{post.comments.size()})"
+                                                                <h:link value="View Comments (#{postManagedBean.countComments(post.id)})"
                                                                         outcome="/viewPost">
                                                                     <f:param name="postId" value="#{post.id}" />
                                                                     <f:param name="courseId"
@@ -164,8 +164,8 @@
 
                                                         <hr>
                                                         </hr>
-                                                        
-                                                        
+
+
 
                                                     </c:forEach>
                                                 </h:panelGroup>
