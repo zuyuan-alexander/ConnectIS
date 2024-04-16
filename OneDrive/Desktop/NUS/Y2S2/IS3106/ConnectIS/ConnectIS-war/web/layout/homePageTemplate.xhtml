@@ -201,7 +201,8 @@
                             <li class="nav-item">
                                 <c:forEach items="#{courseManagedBean.allCourses}" var="course">
                                     <li class="nav-item">
-                                        <a href="#{request.contextPath}/courseHomePage.xhtml?courseId=#{course.courseId}" class="nav-link">
+                                        <a href="#{request.contextPath}/courseHomePage.xhtml?courseId=#{course.courseId}" 
+                                           class="nav-link #{courseManagedBean.getCourseLinkClass(course.courseId)}">
                                             <i class="nav-icon fa fa-book"></i>
                                             <p>#{course.courseCode}</p>
                                         </a>

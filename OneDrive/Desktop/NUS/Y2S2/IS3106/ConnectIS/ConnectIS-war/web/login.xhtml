@@ -100,7 +100,7 @@
             <h:form id="loginForm" class="form_class">                
                 <div class="form_div" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     <img src="dist/img/logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: 0.8; height: 200px; width: 200px;" />
-                    <div class="form-group">
+                    <div class="form-group" style="width: 100%;">
 
 
                         <h:outputLabel>Email: </h:outputLabel>
@@ -109,12 +109,13 @@
                         <h:message for="email" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
                     </div>
                     <br/>
-                    <div class="form-group">
+                    <div class="form-group" style="width: 100%;">
                         <h:outputLabel>Password: </h:outputLabel>
                         <h:inputSecret binding="#{password}" id="password" value="#{authenticationManagedBean.password}" required="true" requiredMessage="Password is required"
                                        class="field_class form-control #{password.valid ? '' :'is-invalid'}" />
                         <h:message for="password" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
                     </div>
+                    <br/>
                     <h:commandButton class="submit_class" type="submit" action="#{authenticationManagedBean.login}" value="Login"/>
                 </div>
 

@@ -18,6 +18,8 @@ import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.persistence.Lob;
 import javax.persistence.NoResultException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import session.CourseSessionBeanLocal;
 
 /**
@@ -85,6 +87,24 @@ public class CourseManagedBean implements Serializable {
         this.courseName = selectedCourse.getCourseName();
         this.description = selectedCourse.getDescription();
         this.semester = selectedCourse.getSemester();
+    }
+
+    public String getCourseLinkClass(Long courseId) {
+        // Obtain the current instance of FacesContext
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        // Get the HttpServletRequest from the FacesContext
+        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
+
+        // Retrieve the request URI and the query string
+        String requestURI = request.getRequestURI();
+        String queryString = request.getQueryString();  // Correct method to get the query string
+
+        // Construct the full request URL with the query string
+        String fullRequestURI = requestURI + (queryString != null ? "?" + queryString : "");
+        
+        // Check if the constructed URI matches the expected URI for an active course
+        return fullRequestURI.equals("/ConnectIS-war/courseHomePage.xhtml?courseId=" + courseId) ? "active" : "";
     }
 
     public Long getCourseId() {
