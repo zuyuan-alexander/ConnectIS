@@ -47,7 +47,8 @@ public class CommentManagedBean implements Serializable {
     private boolean anonymous;
 
     private int commentIndex;
-
+    private Long selectedCommentId;
+    
 // Getter and Setter methods for commentIndex
     public int getCommentIndex() {
         return commentIndex;
@@ -57,7 +58,6 @@ public class CommentManagedBean implements Serializable {
         this.commentIndex = commentIndex;
     }
 
-    
     private Comment newReply; // This should be initialized when a new comment is prepared
     private Comment selectedComment;
 
@@ -103,6 +103,14 @@ public class CommentManagedBean implements Serializable {
         setContent(null);
         setAnonymous(false);
         return null;
+    }
+
+    public String deleteComment(Long commentId) {
+        System.out.println("Delete comment is called with commentId: " + commentId);
+        Course selectedCourse = postBean.getSelectedCourse();
+        commentSessionBean.getComment(commentId);
+        commentSessionBean.deleteComment(commentId);
+        return "viewPost?faces-redirect=true&includeViewParams=true&postId=" + selectedPost.getId() + "&courseId=" + selectedCourse.getCourseId();
     }
 
     public String getContent() {
@@ -160,5 +168,15 @@ public class CommentManagedBean implements Serializable {
     public void setActiveCommentId(Long activeCommentId) {
         this.activeCommentId = activeCommentId;
     }
+
+    public Long getSelectedCommentId() {
+        return selectedCommentId;
+    }
+
+    public void setSelectedCommentId(Long selectedCommentId) {
+        this.selectedCommentId = selectedCommentId;
+    }
+    
+    
 
 }

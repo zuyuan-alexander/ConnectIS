@@ -48,7 +48,7 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
         Student s = em.find(Student.class, studentid);
         comment.setPost(p);
         comment.setStudent(s);
-       
+
         em.persist(comment);
     }
 
@@ -78,10 +78,26 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
 
     @Override
     public void deleteComment(Long id) {
+        //System.out.println("Delete session bean is called with id: " + id);
         Comment comment = getComment(id);
         if (comment != null) {
+            //System.out.println("Comment is not null");
+          
+            Post p = comment.getPost();
+            if(p != null) {
+                p.getComments().remove(comment);
+            }
+            // Remove the comment from its parent's list of replies
+            Comment parentComment = comment.getParentComment();
+            if (parentComment != null) {
+                parentComment.getReplies().remove(comment);       
+            }
+
             em.remove(comment);
+        } else {
+            //System.out.println("Comment is null");
         }
+
     }
 
     @Override

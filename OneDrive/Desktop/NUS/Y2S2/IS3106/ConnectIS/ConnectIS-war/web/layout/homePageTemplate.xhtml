@@ -143,20 +143,13 @@
 
                 <!-- Right navbar links -->
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <h:form>
-                            <h:commandLink class="btn btn-primary" action="createPost.xhtml?faces-redirect=true" 
-                                           style="moz-border-radius: 25px; webkit-border-radius: 25px; border-radius: 25px;">
-                                <i class="fa fa-plus"></i> Create
-                            </h:commandLink>
-                        </h:form>
-                    </li>
+
                     <li class="nav-item">
                         <h:form>
                             <div class="dropdown">
                                 <button class="dropbtn btn">
                                     <img class="dropdown" src="/ConnectIS-war/upload/#{studentManagedBean.profilePicture}" 
-                                         style="width: 40pt; height: 40pt; border-radius: 50%;" alt="Profile Picture"/>
+                                         style="width: 40px; height: 40px; border-radius: 50%;" alt="Profile Picture"/>
                                     <span>#{studentManagedBean.firstname} #{studentManagedBean.lastname}</span>
                                 </button>
                                 <div class="dropdown-content">
@@ -199,7 +192,7 @@
                             <li class="nav-item">
                                 <a href="#{request.contextPath}/allCourses.xhtml"
                                    class="nav-link #{request.requestURI == '/ConnectIS-war/allCourses.xhtml' ? 'active' : ''}">
-                                    <i class="nav-icon fa fa-book"></i>
+                                    <i class="nav-icon fa fa-university"></i>
                                     <p>
                                         All Courses
                                     </p>
@@ -216,36 +209,30 @@
                                 </a>
                             </li>
 
-                            <li class="nav-item" style="margin-top: 10px; "></li>
-                            <li class="nav-item">
-                                <span style="color: white; margin-left: 20px;">My Saved Courses</span>
-                            </li>
+<!--                            <li class="nav-item" style="margin-top: 10px; "></li>-->
 
 
-                            <li class="nav-item">
-                                <c:forEach items="#{courseManagedBean.pinnedCourses}" var="course">
-                                    <li class="nav-item">
-                                        <a href="#{request.contextPath}/courseHomePage.xhtml?courseId=#{course.courseId}" 
-                                           class="nav-link #{courseManagedBean.getCourseLinkClass(course.courseId)}">
-                                            <i class="nav-icon fa fa-book"></i>
-                                            <p>#{course.courseCode}</p>
-                                        </a>
-                                    </li>
-                                </c:forEach><br/>
+                            <li class="nav-item #{request.requestURI == '/ConnectIS-war/courseHomePage.xhtml' ? 'menu-open' : ''}">
+                                <a href="#" class="nav-link #{request.requestURI == '/ConnectIS-war/courseHomePage.xhtml' ? 'active' : ''}">
+                                    <i class="nav-icon fas fa-bookmark"></i> 
+                                    <p>
+                                        My Saved Courses
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <c:forEach items="#{courseManagedBean.pinnedCourses}" var="course">
+                                        <li class="nav-item">
+                                            <a href="#{request.contextPath}/courseHomePage.xhtml?courseId=#{course.courseId}" 
+                                               class="nav-link #{courseManagedBean.getCourseLinkClass(course.courseId)}">
+                                                <i class="nav-icon fa fa-book"></i>
+                                                <p>#{course.courseCode}</p>
+                                            </a>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
                             </li>
 
-                            <li class="nav-item">
-                                <h:form>
-                                    <h:commandLink class="btn btn-primary" action="createPost.xhtml?faces-redirect=true" 
-                                                   style="moz-border-radius: 25px; webkit-border-radius: 25px; border-radius: 25px; color: white; width: 100%;">
-                                        <i class="fa fa-plus"></i> Create
-                                    </h:commandLink>
-                                </h:form>
-                                <br/>
-                                <h:form id="logoutForm">
-                                    <h:commandButton value="Logout" action="#{authenticationManagedBean.logout()}" class="btn btn-primary" style="width: 100%;"/>
-                                </h:form>
-                            </li>
                         </ul>
                     </nav>
                     <!-- /.sidebar-menu -->

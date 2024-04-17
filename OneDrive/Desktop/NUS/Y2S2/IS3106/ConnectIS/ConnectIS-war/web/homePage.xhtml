@@ -1,10 +1,12 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:f="http://xmlns.jcp.org/jsf/core" 
+      xmlns:h="http://xmlns.jcp.org/jsf/html" 
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
 
     <body>
         <ui:composition template="./layout/homePageTemplate.xhtml">
@@ -42,14 +44,15 @@
                                     <div class="card-body">
                                         <c:forEach items="#{postManagedBean.posts}" var="post">
                                             <span class="username">
-                                                <a href="#">#{post.course.courseCode}: #{post.title}</a>
+                                                <h:outputText value="#{post.course.courseCode}: " />
+                                                <strong><h:outputText value="#{post.title}" style="font-size:17px;" /></strong>
                                             </span>
                                             <div>
                                                 <span class="description">
                                                     <h:outputText value="#{post.creationDate}"  style="font-size: 12px;">
                                                         <f:convertDateTime type="both" pattern="hh:mm a dd/MM/yyyy" />
                                                     </h:outputText>
-                                                    <h6 style="font-size: 12px;">0 comments  ·  0 likes</h6>
+                                                    <h6 style="font-size: 12px;">#{postManagedBean.countComments(post.id)} comments  ·  #{postManagedBean.getLikesCount(post.id)} likes</h6>
                                                 </span>
                                             </div>
                                         </c:forEach>
@@ -64,48 +67,89 @@
                                         <div class="nav-link" data-toggle="tab">Activity</div>
                                     </div><!-- /.card-header -->
                                     <div class="card-body">
-                                        <div class="tab-content">
-                                            <div class="active tab-pane" id="activity">
-                                                <!-- Post -->
-                                                <div class="post">
-                                                    <c:forEach items="#{postManagedBean.posts}" var="post">
+                                        <h:form>
+                                            <div class="tab-content">
+                                                <div class="active tab-pane" id="activity">
+                                                    <!-- Post -->
+                                                    <div class="post">
+                                                        <c:forEach items="#{postManagedBean.posts}" var="post">
 
-                                                        <div class="user-block">
-                                                            <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image"/>
-                                                            <span class="username">
-                                                                <h:form>
-                                                                    <h:commandLink actionListener="#{otherManagedBean.viewOtherUserProfile(post.student.id)}"
-                                                                                   action="viewOtherUserProfile.xhtml?faces-redirect=true">
-                                                                        #{post.student.firstname} #{post.student.lastname}
-                                                                    </h:commandLink>
-                                                                </h:form>
-                                                            </span>
-                                                            <span class="description">Shared in Group #{post.course.courseCode}</span>
-                                                        </div>
-                                                        <!-- /.user-block -->
-                                                        <span class="username">
-                                                            <a href="#">#{post.title}</a>
-                                                        </span>
-                                                        <p>
-                                                            #{post.content}
-                                                        </p>
+                                                            <div class="user-block">
+                                                                <h:panelGroup rendered="#{post.anonymous}">
+                                                                    <img class="img-circle img-bordered-sm" src="/ConnectIS-war/upload/anonymous.png" alt="user image" />
+                                                                </h:panelGroup>
+                                                                <h:panelGroup rendered="#{not post.anonymous}">
+                                                                    <img class="img-circle img-bordered-sm" src="/ConnectIS-war/upload/#{post.student.profilePicture}" alt="user image" />
+                                                                </h:panelGroup>
+                                                                <span class="username">
+                                                                    <h:panelGroup rendered="#{not post.anonymous}">
+                                                                        <h:commandLink action="#{otherManagedBean.viewOtherUserProfile(post.student.id)}">
+                                                                            #{post.student.firstname} #{post.student.lastname}
+                                                                        </h:commandLink>
+                                                                    </h:panelGroup>
+                                                                    <h:outputText rendered="#{post.anonymous}"
+                                                                                  value="Anonymous" />
+                                                                </span>
 
-                                                        <p>
-                                                            <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
-                                                            <a href="#" class="link-black text-sm"><i class="far fa-thumbs-up mr-1"></i> Like</a>
-                                                            <span class="float-right">
-                                                                <a href="#" class="link-black text-sm">
-                                                                    <i class="far fa-comments mr-1"></i> View Comments
-                                                                </a>
-                                                            </span>
-                                                        </p>
+                                                                <span class="description">
+                                                                    <h:outputText value="#{post.creationDate}">
+                                                                        <f:convertDateTime type="both"
+                                                                                           pattern="hh:mm a dd/MM/yyyy" />
+                                                                    </h:outputText>
+                                                                </span>
+                                                                <span class="description">Shared in Group #{post.course.courseCode}</span>
+                                                            </div>
+                                                            <!-- /.user-block -->
+                                                            <h:link outcome="/viewPost" style="text-decoration: none; color: black;">
+                                                                <h3 class="username" style="font-weight: bold;">
+                                                                    #{post.title}
+                                                                </h3>
+                                                                <f:param name="postId" value="#{post.id}" />
+                                                                <f:param name="courseId" value="#{post.course.courseId}" />
+                                                                <f:attribute name="hoverStyle" value="color: darkgray;" />
+                                                                <f:attribute name="normalStyle" value="color: black;" />
+                                                            </h:link>
 
-                                                        <hr></hr>
 
-                                                    </c:forEach>
+                                                            <p>
+                                                                <h:outputText value="#{post.content}" escape="false" />
+                                                            </p>
+
+                                                            <div class="like-count">
+                                                                <i class="far fa-thumbs-up"></i>
+                                                                <span>#{postManagedBean.getLikesCount(post.id)}</span> Likes
+                                                            </div>
+
+                                                            <div class="interaction-bar">
+
+                                                                <a href="#" class="link-black text-sm mr-2"><i
+                                                                        class="fas fa-share mr-1"></i> Share</a>
+                                                                <h:commandLink action="#{postManagedBean.likePost(post.id)}"
+                                                                               styleClass="#{postManagedBean.isPostLikedByStudent(post.id) ? 'liked' : 'not-liked'}">
+                                                                    <i class="#{postManagedBean.isPostLikedByStudent(post.id ) ? 'fas' : 'far'} fa-thumbs-up mr-1"></i>
+                                                                    Like
+                                                                    <f:ajax render="@form" />
+                                                                </h:commandLink>
+                                                                <span class="float-right">
+                                                                    <h:link value="View Comments (#{postManagedBean.countComments(post.id)})"
+                                                                            outcome="/viewPost">
+                                                                        <f:param name="postId" value="#{post.id}" />
+                                                                        <f:param name="courseId"
+                                                                                 value="#{post.course.courseId}" />
+                                                                        <i class="far fa-comments mr-1"></i>
+                                                                    </h:link>
+
+                                                                </span>
+
+                                                            </div>
+
+                                                            <hr></hr>
+
+                                                        </c:forEach>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </h:form>
                                     </div>
                                 </div>
                             </div>

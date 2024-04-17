@@ -38,7 +38,7 @@ public class PostSessionBean implements PostSessionBeanLocal {
     public void createPost(Post post) {
         em.persist(post);
     }
-   
+
     @Override
     public void createPost(Post post, Long studentid, Long courseid) {
         Student s = em.find(Student.class, studentid);
@@ -68,12 +68,20 @@ public class PostSessionBean implements PostSessionBeanLocal {
             throw new NoResultException("Post title " + title + " does not exist!");
         }
     }
-    
+
+    @Override
+    public List<Post> searchPostsByTitle(String title) {
+        Query query = em.createQuery("SELECT p FROM Post p WHERE p.title LIKE :inTitle");
+        query.setParameter("inTitle", "%" + title + "%");
+
+        return query.getResultList();
+    }
+
     @Override
     public List<Post> retrievePostByCourse(Course c) {
         Query query = em.createQuery("SELECT p FROM Post p WHERE p.course.courseId =:courseId");
         query.setParameter("courseId", c.getCourseId());
-        
+
         try {
             return (List<Post>) query.getResultList();
         } catch (NoResultException ex) {
@@ -105,10 +113,11 @@ public class PostSessionBean implements PostSessionBeanLocal {
     public void deletePost(Long id) {
         Post post = findPostById(id);
         if (post != null) {
+            Course c = post.getCourse();
+            c.getPosts().remove(post);
             em.remove(post);
         }
     }
-
 
     @Override
     public void likePost(Long studentId, Long postId) {

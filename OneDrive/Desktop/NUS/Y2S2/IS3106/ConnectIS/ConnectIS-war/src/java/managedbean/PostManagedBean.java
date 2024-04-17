@@ -102,32 +102,11 @@ public class PostManagedBean implements Serializable {
             Long postId = Long.valueOf(postIdParam);
             try {
                 selectedPost = postSessionBean.findPostById(postId);
+                loadSelectedPost();
             } catch (NoResultException ex) {
                 Logger.getLogger(PostManagedBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
-        //Initialise the post
-//        Post temp = new Post();
-//        title = "Should I SU IS3106 :(";
-//        content = "Yes you definitely should";
-//        postType = PostTypeEnum.LECTURE;
-//        creationDate = new Date();
-//        anonymous = true;
-//       
-//        temp.setAnonymous(anonymous);
-//        temp.setContent(content);
-//        temp.setTitle(title);
-//        temp.setCreationDate(creationDate);
-//        temp.setPostType(postType);
-//        
-//        selectedPost = temp;
-//        student = studentSessionBean.retrieveStudentByEmail("Alvin");
-//        
-//       
-////        postSessionBean.createPost(selectedPost, student);
-//        loadSelectedPost();
-        //Initialise the comments
     }
 
     public String addPost() {
@@ -137,7 +116,7 @@ public class PostManagedBean implements Serializable {
             p.setPostType(PostTypeEnum.LECTURE);
         } else if (postType.equalsIgnoreCase("labs")) {
             p.setPostType(PostTypeEnum.LAB);
-        } else if (postType.equalsIgnoreCase("tutorial")) {
+        } else if (postType.equalsIgnoreCase("tutorials")) {
             p.setPostType(PostTypeEnum.TUTORIAL);
         } else if (postType.equalsIgnoreCase("project")) {
             p.setPostType(PostTypeEnum.PROJECT);
@@ -156,8 +135,22 @@ public class PostManagedBean implements Serializable {
     }
 
     public void loadSelectedPost() {
-        if (selectedPostId != null) {
-            selectedPost = postSessionBean.findPostById(selectedPostId);
+        if (selectedPost != null) {
+            title = selectedPost.getTitle();
+            content = selectedPost.getContent();
+            anonymous = selectedPost.isAnonymous();
+
+            if (selectedPost.getPostType().equals(PostTypeEnum.LECTURE)) {
+                postType = "lecture";
+            } else if (selectedPost.getPostType().equals(PostTypeEnum.LAB)) {
+                postType = "labs";
+            } else if (selectedPost.getPostType().equals(PostTypeEnum.TUTORIAL)) {
+                postType = "tutorials";
+            } else if (selectedPost.getPostType().equals(PostTypeEnum.PROJECT)) {
+                postType = "project";
+            } else if (selectedPost.getPostType().equals(PostTypeEnum.OTHERS)) {
+                postType = "others";
+            }
         }
     }
 
@@ -193,9 +186,9 @@ public class PostManagedBean implements Serializable {
 
         if (postType.equalsIgnoreCase("lecture")) {
             selectedPost.setPostType(PostTypeEnum.LECTURE);
-        } else if (postType.equalsIgnoreCase("lab")) {
+        } else if (postType.equalsIgnoreCase("labs")) {
             selectedPost.setPostType(PostTypeEnum.LAB);
-        } else if (postType.equalsIgnoreCase("tutorial")) {
+        } else if (postType.equalsIgnoreCase("tutorials")) {
             selectedPost.setPostType(PostTypeEnum.TUTORIAL);
         } else if (postType.equalsIgnoreCase("project")) {
             selectedPost.setPostType(PostTypeEnum.PROJECT);
@@ -208,17 +201,25 @@ public class PostManagedBean implements Serializable {
     }
 
     // Method to search and filter posts
-    public String searchPosts() {
+    public void searchPosts() {
         System.out.println("Search String is: " + searchString);
         System.out.println("Search Type is: " + searchType);
 
         if (searchString.isEmpty() || searchString == null) {
-            return null;
+            filterPost = postsInSelectedCourse;
+            return;
         }
         List<Post> newfilterPost = new ArrayList<>();
-        newfilterPost.add(postSessionBean.retrievePostByTitle(searchString));
+        newfilterPost = postSessionBean.searchPostsByTitle(searchString);
+        for (Post p : newfilterPost) {
+            System.out.println("Post Title: " + p.getTitle());
+        }
+
+        if (newfilterPost.isEmpty()) {
+            System.out.println("FilterPost should be empty");
+        }
         filterPost = newfilterPost;
-        return "/courseHomePage.xhtml?courseId=" + selectedCourse.getCourseId();
+
     }
 
     public void searchPostByType() {
@@ -234,9 +235,9 @@ public class PostManagedBean implements Serializable {
         for (Post post : postsInSelectedCourse) {
             if (searchType.equalsIgnoreCase("lecture") && post.getPostType() == PostTypeEnum.LECTURE) {
                 newfilterPost.add(post);
-            } else if (searchType.equalsIgnoreCase("lab") && post.getPostType() == PostTypeEnum.LAB) {
+            } else if (searchType.equalsIgnoreCase("labs") && post.getPostType() == PostTypeEnum.LAB) {
                 newfilterPost.add(post);
-            } else if (searchType.equalsIgnoreCase("tutorial") && post.getPostType() == PostTypeEnum.TUTORIAL) {
+            } else if (searchType.equalsIgnoreCase("tutorials") && post.getPostType() == PostTypeEnum.TUTORIAL) {
                 newfilterPost.add(post);
             } else if (searchType.equalsIgnoreCase("project") && post.getPostType() == PostTypeEnum.PROJECT) {
                 newfilterPost.add(post);

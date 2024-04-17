@@ -20,6 +20,8 @@
             <f:event type="preRenderView" listener="#{studentManagedBean.loadSelectedStudent()}" />
         </f:metadata>
 
+
+
         <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
@@ -31,19 +33,20 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="homePage.xhtml">Home</a></li>
-                            <li class="breadcrumb-item active">Course Home</li>
+                            <li class="breadcrumb-item active">Course - #{courseManagedBean.selectedCourse.courseCode}</li>
                         </ol>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
         </div>
-        <h:form>
-            <section class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-3">
 
-                            <!-- Profile Image -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+
+                        <!-- Profile Image -->
+                        <h:form>
                             <div class="card card-primary card-outline">
                                 <div class="card-body box-profile">
 
@@ -67,22 +70,23 @@
 
                                 </div>
                             </div>
+                        </h:form>
 
-                            <!-- About Me Box -->
-                            <div class="card card-primary">
-                                <div class="card-header">
-                                    <h3 class="card-title">About this Course</h3>
-                                </div>
-                                <!-- /.card-header -->
-                                <div class="card-body">
-                                    <strong><i class="fas fa-book mr-1"></i> Semester</strong>
+                        <!-- About Me Box -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">About this Course</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <strong><i class="fas fa-book mr-1"></i> Semester</strong>
 
-                                    <p class="text-muted">
-                                        #{courseManagedBean.semester}
-                                    </p>
+                                <p class="text-muted">
+                                    #{courseManagedBean.semester}
+                                </p>
 
 
-                                    <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
+                                <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
 
                                 <h:form>
                                     <p:commandButton value="Pin"
@@ -103,156 +107,168 @@
                                 </h:form>
 
 
-                                    <p class="text-muted">NIL</p>
-                                </div>
-                                <!-- /.card-body -->
+                                <p class="text-muted">NIL</p>
                             </div>
-                            <!-- /.card -->
+                            <!-- /.card-body -->
                         </div>
-                        <!-- /.col -->
-                        <div class="col-md-9">
-                            <div class="card">
-                                <div class="card-header p-2">
-                                    <ul class="nav nav-pills">
-                                        <li class="nav-item"><a class="nav-link active" href="#activity"
-                                                                data-toggle="tab">Activity</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="#courseDescription"
-                                                                data-toggle="tab"> Course Description</a></li>
-                                        <li class="nav-item">
-                                            <a href="#{request.contextPath}/createPost.xhtml?courseId=#{courseManagedBean.selectedCourse.courseId}"
-                                               class="nav-link">
-                                                <i class="nav-icon fa fa-book"></i>
-                                                <p>Create Post</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-header p-2">
+                                <ul class="nav nav-pills">
+                                    <li class="nav-item"><a class="nav-link active" href="#activity"
+                                                            data-toggle="tab">Activity</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#courseDescription"
+                                                            data-toggle="tab"> Course Description</a></li>
+                                    <li class="nav-item">
+                                        <a href="#{request.contextPath}/createPost.xhtml?courseId=#{courseManagedBean.selectedCourse.courseId}"
+                                           class="nav-link">
 
-                                <div class="card-header p-2">
-                                    <h:form id="searchAndFilterForm">
-                                        <div class="form-group row">
-                                            <!-- Search Input -->
-                                            <div class="col">
-                                                <h:outputLabel for="searchInput" value="Search Posts:" />
-                                                <h:inputText id="searchInput" value="#{postManagedBean.searchString}" class="form-control"
-                                                             a:placeholder="Enter search term..."/>
-                                                <h:commandButton value="Search" action="#{postManagedBean.searchPosts}" class="btn btn-primary mt-2"/>
-                                            </div>
-                                            <!-- PostType Filter -->
-                                            <div class="col">
-                                                <h:outputLabel value="Filter by Post Type:" />
-                                                <h:selectOneMenu id="postType" value="#{postManagedBean.searchType}" class="form-control">
-                                                      <f:selectItem itemValue="lecture" itemLabel="All" />
-                                                    <f:selectItem itemValue="lecture" itemLabel="Lecture" />
-                                                    <f:selectItem itemValue="labs" itemLabel="Labs" />
-                                                    <f:selectItem itemValue="tutorials" itemLabel="Tutorials" />
-                                                    <f:selectItem itemValue="project" itemLabel="Project" />
-                                                    <f:selectItem itemValue="others" itemLabel="Others" />
-                                                    <f:ajax listener="#{postManagedBean.searchPostByType}" render="j_idt28:j_idt46"/>
-                                                </h:selectOneMenu>
-                                            </div>
+                                            <p>Create Post</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="card-header p-2">
+                                <h:form id="searchAndFilterForm">
+                                    <div class="form-group row">
+                                        <!-- Search Input -->
+                                        <div class="col">
+                                            <h:outputLabel for="searchInput" value="Search Posts:" />
+                                            <h:inputText id="searchInput" value="#{postManagedBean.searchString}" class="form-control"
+                                                         a:placeholder="Enter search title...">
+                                                <f:ajax event="keyup" execute="@this" render="j_idt19:j_idt40:postsPanel" listener="#{postManagedBean.searchPosts}" />
+                                            </h:inputText>
+                                            <!-- No need for a command button -->
                                         </div>
-                                    </h:form>
-                                </div>
 
-                                <!-- /.card-header -->
-                                <div class="card-body">
-                                    <h:form>
-                                        <div class="tab-content">
-                                            <div class="active tab-pane" id="activity">
-                                                <!-- Post -->
-                                                <div class="post">
-                                                    <h:panelGroup id="postsPanel">
-                                                        <c:forEach items="#{postManagedBean.filterPost}" var="post">
+                                        <!-- PostType Filter -->
+                                        <div class="col">
+                                            <h:outputLabel value="Filter by Post Type:" />
+                                            <h:selectOneMenu id="postType" value="#{postManagedBean.searchType}" class="form-control">
+                                                <f:selectItem itemValue="all" itemLabel="All" />
+                                                <f:selectItem itemValue="lecture" itemLabel="Lecture" />
+                                                <f:selectItem itemValue="labs" itemLabel="Labs" />
+                                                <f:selectItem itemValue="tutorials" itemLabel="Tutorials" />
+                                                <f:selectItem itemValue="project" itemLabel="Project" />
+                                                <f:selectItem itemValue="others" itemLabel="Others" />
+                                                <f:ajax listener="#{postManagedBean.searchPostByType}" render="j_idt19:j_idt40:postsPanel"/>
+                                            </h:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </h:form>
+                            </div>
 
-                                                            <div class="user-block">
-                                                                <img class="img-circle img-bordered-sm"
-                                                                     src="dist/img/user1-128x128.jpg" alt="user image" />
-                                                                <span class="username">
-                                                                    <h:outputText
-                                                                        value="#{post.anonymous ? 'Anonymous' : post.student.firstname.concat(' ').concat(post.student.lastname)}"
-                                                                        escape="false" />
-                                                                </span>
-                                                                <span class="description">
-                                                                    <h:outputText value="#{post.creationDate}">
-                                                                        <f:convertDateTime type="both"
-                                                                                           pattern="hh:mm a dd/MM/yyyy" />
-                                                                    </h:outputText>
-                                                                </span>
-                                                            </div>
-                                                            <!-- /.user-block -->
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <h:form>
+                                    <div class="tab-content">
+                                        <div class="active tab-pane" id="activity">
+                                            <!-- Post -->
+                                            <div class="post">
+                                                <h:panelGroup id="postsPanel">
+                                                    <c:forEach items="#{postManagedBean.filterPost}" var="post">
+
+                                                        <div class="user-block">
+                                                            <h:panelGroup rendered="#{post.anonymous}">
+                                                                <img class="img-circle img-bordered-sm" src="/ConnectIS-war/upload/anonymous.png" alt="user image" />
+                                                            </h:panelGroup>
+                                                            <h:panelGroup rendered="#{not post.anonymous}">
+                                                                <img class="img-circle img-bordered-sm" src="/ConnectIS-war/upload/#{post.student.profilePicture}" alt="user image" />
+                                                            </h:panelGroup>
                                                             <span class="username">
-                                                                <a href="#">#{post.title}</a>
+                                                                <h:panelGroup rendered="#{not post.anonymous}">
+                                                                    <h:commandLink action="#{otherManagedBean.viewOtherUserProfile(post.student.id)}">
+                                                                        #{post.student.firstname} #{post.student.lastname}
+                                                                    </h:commandLink>
+                                                                </h:panelGroup>
+                                                                <h:outputText rendered="#{post.anonymous}"
+                                                                              value="Anonymous" />
                                                             </span>
+                                                            <span class="description">
+                                                                <h:outputText value="#{post.creationDate}">
+                                                                    <f:convertDateTime type="both"
+                                                                                       pattern="hh:mm a dd/MM/yyyy" />
+                                                                </h:outputText>
+                                                            </span>
+                                                        </div>
+                                                        <!-- /.user-block -->
+                                                        <h:link outcome="/viewPost">
+                                                            <h3 class="username">
+                                                                #{post.title}
+                                                            </h3>
+                                                            <f:param name="postId" value="#{post.id}" />
+                                                            <f:param name="courseId" value="#{courseManagedBean.selectedCourse.courseId}" />
+                                                        </h:link>
+
+                                                        <p>
+                                                            <h:outputText value="#{post.content}" escape="false" />
+                                                        </p>
 
 
-                                                            <p>
-                                                                <h:outputText value="#{post.content}" escape="false" />
-                                                            </p>
+                                                        <!-- Like Count Displayed Above the Interaction Bar -->
+                                                        <div class="like-count">
+                                                            <i class="far fa-thumbs-up"></i>
+                                                            <span>#{postManagedBean.getLikesCount(post.id)}</span> Likes
+                                                        </div>
 
+                                                        <!-- Interaction Bar -->
+                                                        <div class="interaction-bar">
+                                                            <a href="#" class="link-black text-sm mr-2"><i
+                                                                    class="fas fa-share mr-1"></i> Share</a>
+                                                            <h:commandLink action="#{postManagedBean.likePost(post.id)}"
+                                                                           styleClass="#{postManagedBean.isPostLikedByStudent(post.id) ? 'liked' : 'not-liked'}">
+                                                                <i class="#{postManagedBean.isPostLikedByStudent(post.id ) ? 'fas' : 'far'} fa-thumbs-up mr-1"></i>
+                                                                Like
+                                                                <f:ajax render="@form" />
+                                                            </h:commandLink>
+                                                            <span class="float-right">
+                                                                <h:link value="View Comments (#{postManagedBean.countComments(post.id)})"
+                                                                        outcome="/viewPost">
+                                                                    <f:param name="postId" value="#{post.id}" />
+                                                                    <f:param name="courseId"
+                                                                             value="#{courseManagedBean.selectedCourse.courseId}" />
+                                                                    <i class="far fa-comments mr-1"></i>
+                                                                </h:link>
 
-                                                            <!-- Like Count Displayed Above the Interaction Bar -->
-                                                            <div class="like-count">
-                                                                <i class="far fa-thumbs-up"></i>
-                                                                <span>#{postManagedBean.getLikesCount(post.id)}</span> Likes
-                                                            </div>
+                                                            </span>
+                                                        </div>
 
-                                                            <!-- Interaction Bar -->
-                                                            <div class="interaction-bar">
-                                                                <a href="#" class="link-black text-sm mr-2"><i
-                                                                        class="fas fa-share mr-1"></i> Share</a>
-                                                                <h:commandLink action="#{postManagedBean.likePost(post.id)}"
-                                                                               styleClass="#{postManagedBean.isPostLikedByStudent(post.id) ? 'liked' : 'not-liked'}">
-                                                                    <i
-                                                                        class="#{postManagedBean.isPostLikedByStudent(post.id ) ? 'fas' : 'far'} fa-thumbs-up mr-1"></i>
-                                                                    Like
-                                                                    <f:ajax render="@form" />
-                                                                </h:commandLink>
-                                                                <span class="float-right">
-                                                                    <h:link value="View Comments (#{postManagedBean.countComments(post.id)})"
-                                                                            outcome="/viewPost">
-                                                                        <f:param name="postId" value="#{post.id}" />
-                                                                        <f:param name="courseId"
-                                                                                 value="#{courseManagedBean.selectedCourse.courseId}" />
-                                                                        <i class="far fa-comments mr-1"></i>
-                                                                    </h:link>
-
-                                                                </span>
-                                                            </div>
-
-                                                            <hr>
-                                                            </hr>
+                                                        <hr>
+                                                        </hr>
 
 
 
-                                                        </c:forEach>
-                                                    </h:panelGroup>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane" id="courseDescription">
-                                                <!-- Post -->
-                                                <div class="post">
-                                                    <div class="user-block">
-                                                        <span>
-                                                            <a href="#">#{courseManagedBean.courseCode} Course Description</a>
-                                                        </span>
-                                                    </div>
-                                                    <!-- /.user-block -->
-                                                    <p>
-                                                        #{courseManagedBean.description}
-                                                    </p>
-
-                                                </div>
+                                                    </c:forEach>
+                                                </h:panelGroup>
                                             </div>
                                         </div>
-                                    </h:form>
-                                </div>
+                                        <div class="tab-pane" id="courseDescription">
+                                            <!-- Post -->
+                                            <div class="post">
+                                                <div class="user-block">
+                                                    <span>
+                                                        <a href="#">#{courseManagedBean.courseCode} Course Description</a>
+                                                    </span>
+                                                </div>
+                                                <!-- /.user-block -->
+                                                <p>
+                                                    #{courseManagedBean.description}
+                                                </p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </h:form>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-        </h:form>
+            </div>
+        </section>
 
 
     </ui:define>

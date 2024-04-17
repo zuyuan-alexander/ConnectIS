@@ -167,7 +167,7 @@ public class StudentManagedBean implements Serializable {
         }
     }
 
-    public void upload() throws IOException {
+    public void upload(ActionEvent evt) throws IOException {
         ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
 
         //get the deployment path
@@ -185,6 +185,7 @@ public class StudentManagedBean implements Serializable {
         Files.copy(bytes, path, StandardCopyOption.REPLACE_EXISTING);
 
         setTempPicture(getProfilePicture());
+        changeProfilePicture(evt);
     }
 
     public String changeProfilePicture(ActionEvent evt) throws IOException {
