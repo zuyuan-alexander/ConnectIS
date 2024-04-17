@@ -258,6 +258,18 @@ public class StudentManagedBean implements Serializable {
         }
     }
 
+    public void unfollowCourse(Course c, Student s) {
+        try {
+            Course course = courseSessionBean.getCourse(c.getCourseId());
+            Student student = studentSessionBean.getStudent(s.getId());
+            if (course != null && student != null) {
+                studentSessionBean.removePinnedCourse(course, student);
+            }
+        } catch (NoResultException ex) {
+            Logger.getLogger(StudentManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public boolean isCoursePinned(Course c, Student s) {
         try {
             Course course = courseSessionBean.getCourse(c.getCourseId());
@@ -275,7 +287,6 @@ public class StudentManagedBean implements Serializable {
         }
         return true;
     }
-
 
     // getter and setter
     public Long getId() {

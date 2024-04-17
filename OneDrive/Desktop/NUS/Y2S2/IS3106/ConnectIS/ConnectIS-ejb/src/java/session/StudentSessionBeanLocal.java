@@ -30,5 +30,7 @@ public interface StudentSessionBeanLocal {
     public Boolean checkIfContactExists(String contact);
 
     public void addPinnedCourse(Course course, Student student);
+
+    public void removePinnedCourse(Course course, Student student);
     
 }

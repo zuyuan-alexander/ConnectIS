@@ -1,4 +1,4 @@
- /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/J2EE/EJB30/StatelessEjbClass.java to edit this template
  */
@@ -28,16 +28,14 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
     @PersistenceContext(unitName = "ConnectIS-ejbPU")
     private EntityManager em;
 
-   
-
     @Override
     public void createStudent(Student s) {
-          s.setProfilePicture("dummy.jpeg");
+        s.setProfilePicture("dummy.jpeg");
         em.persist(s);
     }
 
     @Override
-    public Student getStudent(Long cId) throws exception.NoResultException{
+    public Student getStudent(Long cId) throws exception.NoResultException {
         Student stu = em.find(Student.class, cId);
 
         if (stu != null) {
@@ -59,7 +57,7 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
         }
     }
 
-     @Override
+    @Override
     public void updateStudent(Student s) throws exception.NoResultException {
         Student oldStudent = getStudent(s.getId());
         oldStudent.setProfilePicture(s.getProfilePicture());
@@ -84,13 +82,23 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
         Long count = (Long) q.getSingleResult();
         return count > 0;
     }
-    
+
     @Override
     public void addPinnedCourse(Course course, Student student) {
         Course c = em.find(Course.class, course.getCourseId());
         Student s = em.find(Student.class, student.getId());
         if (c != null && s != null) {
             s.getPinnedCourses().add(c);
+            em.merge(s);
+        }
+    }
+
+    @Override
+    public void removePinnedCourse(Course course, Student student) {
+        Course c = em.find(Course.class, course.getCourseId());
+        Student s = em.find(Student.class, student.getId());
+        if (c != null && s != null) {
+            s.getPinnedCourses().remove(c);
             em.merge(s);
         }
     }

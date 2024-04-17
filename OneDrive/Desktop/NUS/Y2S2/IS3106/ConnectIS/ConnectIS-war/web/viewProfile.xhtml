@@ -73,12 +73,14 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="profile-div card-body d-flex flex-column align-items-center">
-                                            <img class="profile-picture" src="/ConnectIS-war/upload/#{studentManagedBean.profilePicture}" width="250pt;" height="250pt;" style="border-radius: 50%;" alt="Profile Picture"/><br/><br/>
+                                            <!-- Adjust the width and height values here -->
+                                            <img class="profile-picture" src="/ConnectIS-war/upload/#{studentManagedBean.profilePicture}" width="150pt" height="150pt" style="border-radius: 50%;" alt="Profile Picture"/><br/><br/>
                                             <h:commandLink action="changeProfilePicture.xhtml?faces-redirect=true" class="btn btn-warning">
                                                 <i class="fa fa-camera"></i> Change Profile Picture
                                             </h:commandLink>
                                         </div>
                                     </div>
+
 
                                     <div class="col-md-8">
                                         <div class="card-body">
