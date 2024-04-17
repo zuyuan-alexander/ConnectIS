@@ -59,7 +59,7 @@
 
             .pinned-button {
                 background-color: #007BFF;
-                background-image: none; 
+                background-image: none;
                 color: white;
                 border: none;
                 padding: 6px 12px;
@@ -122,6 +122,11 @@
     </h:head>
 
     <h:body class="hold-transition sidebar-mini layout-fixed">
+        <!-- to load selected student -->
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{studentManagedBean.loadSelectedStudent()}" />
+        </f:metadata>
+
         <div class="wrapper">
 
             <!-- Navbar -->
@@ -192,11 +197,11 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#{request.contextPath}/courseHomePage.xhtml"
-                                   class="nav-link #{request.requestURI == '/ConnectIS-war/courseHomePage.xhtml' ? 'active' : ''}">
-                                    <i class="nav-icon fa fa-bookmark"></i>
+                                <a href="#{request.contextPath}/allCourses.xhtml"
+                                   class="nav-link #{request.requestURI == '/ConnectIS-war/allCourses.xhtml' ? 'active' : ''}">
+                                    <i class="nav-icon fa fa-book"></i>
                                     <p>
-                                        My Saved Courses
+                                        All Courses
                                     </p>
                                 </a>
                             </li>
@@ -213,12 +218,12 @@
 
                             <li class="nav-item" style="margin-top: 10px; "></li>
                             <li class="nav-item">
-                                <span style="color: white; margin-left: 20px;">All Courses</span>
+                                <span style="color: white; margin-left: 20px;">My Saved Courses</span>
                             </li>
 
 
                             <li class="nav-item">
-                                <c:forEach items="#{courseManagedBean.allCourses}" var="course">
+                                <c:forEach items="#{courseManagedBean.pinnedCourses}" var="course">
                                     <li class="nav-item">
                                         <a href="#{request.contextPath}/courseHomePage.xhtml?courseId=#{course.courseId}" 
                                            class="nav-link #{courseManagedBean.getCourseLinkClass(course.courseId)}">
