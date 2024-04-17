@@ -20,9 +20,7 @@
             <f:event type="preRenderView" listener="#{studentManagedBean.loadSelectedStudent()}" />
         </f:metadata>
 
-        <f:metadata>
-            <f:event type="preRenderView" listener="#{studentManagedBean.loadSelectedStudent()}" />
-        </f:metadata>
+      
 
         <!-- Content Header (Page header) -->
         <div class="content-header">
@@ -125,7 +123,7 @@
                                         <li class="nav-item">
                                             <a href="#{request.contextPath}/createPost.xhtml?courseId=#{courseManagedBean.selectedCourse.courseId}"
                                                class="nav-link">
-                                                <i class="nav-icon fa fa-book"></i>
+                                                
                                                 <p>Create Post</p>
                                             </a>
                                         </li>
@@ -139,20 +137,23 @@
                                             <div class="col">
                                                 <h:outputLabel for="searchInput" value="Search Posts:" />
                                                 <h:inputText id="searchInput" value="#{postManagedBean.searchString}" class="form-control"
-                                                             a:placeholder="Enter search term..."/>
-                                                <h:commandButton value="Search" action="#{postManagedBean.searchPosts}" class="btn btn-primary mt-2"/>
+                                                             a:placeholder="Enter search title...">
+                                                    <f:ajax event="keyup" execute="@this" render="j_idt19:j_idt40:postsPanel" listener="#{postManagedBean.searchPosts}" />
+                                                </h:inputText>
+                                                <!-- No need for a command button -->
                                             </div>
+
                                             <!-- PostType Filter -->
                                             <div class="col">
                                                 <h:outputLabel value="Filter by Post Type:" />
                                                 <h:selectOneMenu id="postType" value="#{postManagedBean.searchType}" class="form-control">
-                                                      <f:selectItem itemValue="lecture" itemLabel="All" />
+                                                    <f:selectItem itemValue="all" itemLabel="All" />
                                                     <f:selectItem itemValue="lecture" itemLabel="Lecture" />
                                                     <f:selectItem itemValue="labs" itemLabel="Labs" />
                                                     <f:selectItem itemValue="tutorials" itemLabel="Tutorials" />
                                                     <f:selectItem itemValue="project" itemLabel="Project" />
                                                     <f:selectItem itemValue="others" itemLabel="Others" />
-                                                    <f:ajax listener="#{postManagedBean.searchPostByType}" render="j_idt28:j_idt46"/>
+                                                    <f:ajax listener="#{postManagedBean.searchPostByType}" render="j_idt19:j_idt40:postsPanel"/>
                                                 </h:selectOneMenu>
                                             </div>
                                         </div>
@@ -185,10 +186,13 @@
                                                                 </span>
                                                             </div>
                                                             <!-- /.user-block -->
-                                                            <span class="username">
-                                                                <a href="#">#{post.title}</a>
-                                                            </span>
-
+                                                            <h:link outcome="/viewPost">
+                                                                <h3 class="username">
+                                                                    #{post.title}
+                                                                </h3>
+                                                                <f:param name="postId" value="#{post.id}" />
+                                                                <f:param name="courseId" value="#{courseManagedBean.selectedCourse.courseId}" />
+                                                            </h:link>
 
                                                             <p>
                                                                 <h:outputText value="#{post.content}" escape="false" />
@@ -207,8 +211,7 @@
                                                                         class="fas fa-share mr-1"></i> Share</a>
                                                                 <h:commandLink action="#{postManagedBean.likePost(post.id)}"
                                                                                styleClass="#{postManagedBean.isPostLikedByStudent(post.id) ? 'liked' : 'not-liked'}">
-                                                                    <i
-                                                                        class="#{postManagedBean.isPostLikedByStudent(post.id ) ? 'fas' : 'far'} fa-thumbs-up mr-1"></i>
+                                                                    <i class="#{postManagedBean.isPostLikedByStudent(post.id ) ? 'fas' : 'far'} fa-thumbs-up mr-1"></i>
                                                                     Like
                                                                     <f:ajax render="@form" />
                                                                 </h:commandLink>

@@ -43,4 +43,6 @@ public interface PostSessionBeanLocal {
 
     public void createPost(Post post, Long studentid, Long courseid);
 
+    public List<Post> searchPostsByTitle(String title);
+
 }

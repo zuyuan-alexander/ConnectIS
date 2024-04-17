@@ -64,3 +64,11 @@
         <h:outputLabel for="replyAnonymitySwitch" styleClass="custom-control-label">Reply Anonymously</h:outputLabel>
     </div>
 </h:panelGroup>
+
+
+<h:commandButton value="Reply" styleClass="btn btn-reply"
+                 action="#{commentManagedBean.setActiveCommentId(comment.id)}">
+    <f:ajax render=":j_idt31:j_idt55:#{status.index}:replyFormPanel" />
+    <f:param name="commentIndex" value="#{status.index}" />
+</h:commandButton>
+<h:inputHidden id="commentIndex" value="#{commentManagedBean.commentIndex}" />

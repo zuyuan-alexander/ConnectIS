@@ -138,20 +138,13 @@
 
                 <!-- Right navbar links -->
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <h:form>
-                            <h:commandLink class="btn btn-primary" action="createPost.xhtml?faces-redirect=true" 
-                                           style="moz-border-radius: 25px; webkit-border-radius: 25px; border-radius: 25px;">
-                                <i class="fa fa-plus"></i> Create
-                            </h:commandLink>
-                        </h:form>
-                    </li>
+                   
                     <li class="nav-item">
                         <h:form>
                             <div class="dropdown">
                                 <button class="dropbtn btn">
                                     <img class="dropdown" src="/ConnectIS-war/upload/#{studentManagedBean.profilePicture}" 
-                                         style="width: 40pt; height: 40pt; border-radius: 50%;" alt="Profile Picture"/>
+                                         style="width: 40px; height: 40px; border-radius: 50%;" alt="Profile Picture"/>
                                     <span>#{studentManagedBean.firstname} #{studentManagedBean.lastname}</span>
                                 </button>
                                 <div class="dropdown-content">
@@ -229,18 +222,6 @@
                                 </c:forEach><br/>
                             </li>
 
-                            <li class="nav-item">
-                                <h:form>
-                                    <h:commandLink class="btn btn-primary" action="createPost.xhtml?faces-redirect=true" 
-                                                   style="moz-border-radius: 25px; webkit-border-radius: 25px; border-radius: 25px; color: white; width: 100%;">
-                                        <i class="fa fa-plus"></i> Create
-                                    </h:commandLink>
-                                </h:form>
-                                <br/>
-                                <h:form id="logoutForm">
-                                    <h:commandButton value="Logout" action="#{authenticationManagedBean.logout()}" class="btn btn-primary" style="width: 100%;"/>
-                                </h:form>
-                            </li>
                         </ul>
                     </nav>
                     <!-- /.sidebar-menu -->
