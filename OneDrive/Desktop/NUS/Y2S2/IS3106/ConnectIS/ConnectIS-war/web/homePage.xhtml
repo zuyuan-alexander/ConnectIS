@@ -14,7 +14,7 @@
             </ui:define>
 
             <ui:define name="content">
-                
+
                 <!-- to load selected student -->
                 <f:metadata>
                     <f:event type="preRenderView" listener="#{studentManagedBean.loadSelectedStudent()}" />
@@ -73,7 +73,12 @@
                                                         <div class="user-block">
                                                             <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image"/>
                                                             <span class="username">
-                                                                <a href="#">#{post.student.firstname} #{post.student.lastname}</a>
+                                                                <h:form>
+                                                                    <h:commandLink actionListener="#{otherManagedBean.viewOtherUserProfile(post.student.id)}"
+                                                                                   action="viewOtherUserProfile.xhtml?faces-redirect=true">
+                                                                        #{post.student.firstname} #{post.student.lastname}
+                                                                    </h:commandLink>
+                                                                </h:form>
                                                             </span>
                                                             <span class="description">Shared in Group #{post.course.courseCode}</span>
                                                         </div>

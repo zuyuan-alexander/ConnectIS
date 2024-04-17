@@ -44,23 +44,43 @@
 
         <style>
             .pin-button {
-                background-color: #007BFF; /* Initial color */
-                color: white;
-                border: none;
-                padding: 10px 20px;
+                background-color: white; /* Changed to white background */
+                color: #007BFF; /* Changed to blue words */
+                border: 2px solid #007BFF; /* Added blue border */
+                padding: 6px 12px; /* Adjusted padding to make it more compact */
                 text-align: center;
                 text-decoration: none;
                 display: inline-block;
-                font-size: 16px;
+                font-size: 14px; /* Adjusted font-size to make it smaller */
                 margin: 4px 2px;
                 transition-duration: 0.4s;
                 cursor: pointer;
             }
 
-            .pin-button:hover {
-                background-color: #0056b3;
+            .pinned-button {
+                background-color: #007BFF;
+                background-image: none; 
                 color: white;
+                border: none;
+                padding: 6px 12px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                margin: 4px 2px;
+                transition-duration: 0.4s;
+                cursor: pointer;
             }
+
+            /*            .pin-button:hover {
+                            background-color: #0056b3;
+                            color: white;
+                        }
+                        
+                        .pinned-button:hover {
+                            background-color: #0056b3;
+                            color: white;
+                        }*/
 
             .dropdown-content {
                 display: none;
@@ -175,7 +195,6 @@
                                 <a href="#{request.contextPath}/courseHomePage.xhtml"
                                    class="nav-link #{request.requestURI == '/ConnectIS-war/courseHomePage.xhtml' ? 'active' : ''}">
                                     <i class="nav-icon fa fa-bookmark"></i>
-                                    <i class="nav-icon fa fa-users"></i>
                                     <p>
                                         My Saved Courses
                                     </p>
@@ -201,7 +220,8 @@
                             <li class="nav-item">
                                 <c:forEach items="#{courseManagedBean.allCourses}" var="course">
                                     <li class="nav-item">
-                                        <a href="#{request.contextPath}/courseHomePage.xhtml?courseId=#{course.courseId}" class="nav-link">
+                                        <a href="#{request.contextPath}/courseHomePage.xhtml?courseId=#{course.courseId}" 
+                                           class="nav-link #{courseManagedBean.getCourseLinkClass(course.courseId)}">
                                             <i class="nav-icon fa fa-book"></i>
                                             <p>#{course.courseCode}</p>
                                         </a>

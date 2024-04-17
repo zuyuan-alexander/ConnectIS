@@ -67,6 +67,7 @@ public class StudentManagedBean implements Serializable {
     private String anonymousName;
 
     private Student selectedStudent;
+    private Student otherStudent;
 
     public StudentManagedBean() {
     }
@@ -86,8 +87,8 @@ public class StudentManagedBean implements Serializable {
         newStudent.setAnonymousName("");
         studentSessionBean.createStudent(newStudent);
     }
-    
-     public String signup(ActionEvent evt) {
+
+    public String signup(ActionEvent evt) {
         FacesContext context = FacesContext.getCurrentInstance();
         Date today = new Date();
         if (!password.equals(confirmPassword)) {
@@ -207,11 +208,11 @@ public class StudentManagedBean implements Serializable {
             selectedStudent.setProfilePicture(getProfilePicture());
             updateStudent(evt);
             return "/viewProfile.xhtml?faces-redirect=true";
-        } catch(NullPointerException ex) {
+        } catch (NullPointerException ex) {
             FacesContext.getCurrentInstance().addMessage("profilePictureForm:profilePicture",
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                                "Invalid Change! Please upload a profile picture before submitting", 
-                                "Invalid Change! Please upload a profile picture before submitting"));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Invalid Change! Please upload a profile picture before submitting",
+                            "Invalid Change! Please upload a profile picture before submitting"));
             return null;
         }
     }
@@ -256,7 +257,19 @@ public class StudentManagedBean implements Serializable {
             Logger.getLogger(StudentManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    public void unfollowCourse(Course c, Student s) {
+        try {
+            Course course = courseSessionBean.getCourse(c.getCourseId());
+            Student student = studentSessionBean.getStudent(s.getId());
+            if (course != null && student != null) {
+                studentSessionBean.removePinnedCourse(course, student);
+            }
+        } catch (NoResultException ex) {
+            Logger.getLogger(StudentManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public boolean isCoursePinned(Course c, Student s) {
         try {
             Course course = courseSessionBean.getCourse(c.getCourseId());
@@ -275,7 +288,6 @@ public class StudentManagedBean implements Serializable {
         return true;
     }
 
-   
     // getter and setter
     public Long getId() {
         return id;
@@ -428,7 +440,13 @@ public class StudentManagedBean implements Serializable {
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
-    
-    
+
+    public Student getOtherStudent() {
+        return otherStudent;
+    }
+
+    public void setOtherStudent(Student otherStudent) {
+        this.otherStudent = otherStudent;
+    }
 
 }

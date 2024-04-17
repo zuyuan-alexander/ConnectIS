@@ -36,6 +36,7 @@
                 <!-- to load selected student -->
                 <f:metadata>
                     <f:event type="preRenderView" listener="#{studentManagedBean.loadSelectedStudent()}" />
+                    <f:event type="preRenderView" listener="#{otherManagedBean.loadOtherStudent()}" />
                 </f:metadata>
 
                 <!-- Content Header (Page header) -->
@@ -43,7 +44,7 @@
                     <div class="container-fluid">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <h1 class="m-0 text-dark">User's Profile</h1>
+                                <h1 class="m-0 text-dark">#{otherManagedBean.firstname} #{otherManagedBean.lastname}'s Profile</h1>
                             </div>
                             <!-- /.col -->
                             <div class="col-sm-6">
@@ -73,73 +74,51 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="profile-div card-body d-flex flex-column align-items-center">
-                                            <!-- Adjust the width and height values here -->
-                                            <img class="profile-picture" src="/ConnectIS-war/upload/#{studentManagedBean.profilePicture}" width="150pt" height="150pt" style="border-radius: 50%;" alt="Profile Picture"/><br/><br/>
-                                            <h:commandLink action="changeProfilePicture.xhtml?faces-redirect=true" class="btn btn-warning">
-                                                <i class="fa fa-camera"></i> Change Profile Picture
-                                            </h:commandLink>
+                                            <img class="profile-picture" src="/ConnectIS-war/upload/#{otherManagedBean.profilePicture}" 
+                                                 width="250pt;" height="250pt;" style="border-radius: 50%;" alt="Profile Picture"/><br/><br/>
                                         </div>
                                     </div>
-
 
                                     <div class="col-md-8">
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <strong><i class="fas fa-user mr-1"></i> First Name</strong>
-                                                    <p class="text-muted">#{studentManagedBean.firstname}</p>
+                                                    <p class="text-muted">#{otherManagedBean.firstname}</p>
                                                     <hr />
 
                                                     <strong><i class="fas fa-user mr-1"></i> Last Name</strong>
-                                                    <p class="text-muted">#{studentManagedBean.lastname}</p>
+                                                    <p class="text-muted">#{otherManagedBean.lastname}</p>
                                                     <hr />
 
-                                                    <strong><i class="fas fa-venus-mars mr-1"></i> Gender</strong>
-                                                    <p class="text-muted">
-                                                        <h:outputText value="Female" rendered="#{studentManagedBean.gender == '1'}" />
-                                                        <h:outputText value="Male" rendered="#{studentManagedBean.gender == '2'}" />
-                                                    </p>
-                                                    <hr />
-
-                                                    <strong><i class="fas fa-birthday-cake mr-1"></i> Date of Birth</strong>
-                                                    <p class="text-muted">
-                                                        <h:outputText value="#{studentManagedBean.dob}">
-                                                            <f:convertDateTime type="date" pattern="dd/MM/yyyy" />
-                                                        </h:outputText>
-                                                    </p>
+                                                    <strong><i class="fas fa-envelope mr-1"></i> Email</strong>
+                                                    <p class="text-muted">#{otherManagedBean.email}</p>
                                                     <hr />
 
                                                     <strong><i class="fas fa-phone mr-1"></i> Contact Number</strong>
-                                                    <p class="text-muted">#{studentManagedBean.contactnumber}</p>
+                                                    <p class="text-muted">#{otherManagedBean.contactnumber}</p>
                                                     <hr />
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <strong><i class="fas fa-envelope mr-1"></i> Email</strong>
-                                                    <p class="text-muted">#{studentManagedBean.email}</p>
-                                                    <hr />
-
                                                     <strong><i class="fas fa-calendar mr-1"></i> Academic Year</strong>
-                                                    <p class="text-muted">#{studentManagedBean.academicYear}</p>
+                                                    <p class="text-muted">#{otherManagedBean.academicYear}</p>
                                                     <hr />
 
                                                     <strong><i class="fas fa-university mr-1"></i> Degree</strong>
                                                     <p class="text-muted">
-                                                        <h:outputText value="Undergraduate" rendered="#{studentManagedBean.degree == '1'}" />
-                                                        <h:outputText value="Master's" rendered="#{studentManagedBean.degree == '2'}" />
-                                                        <h:outputText value="PhD" rendered="#{studentManagedBean.degree == '3'}" />
+                                                        <h:outputText value="Undergraduate" rendered="#{otherManagedBean.degree == '1'}" />
+                                                        <h:outputText value="Master's" rendered="#{otherManagedBean.degree == '2'}" />
+                                                        <h:outputText value="PhD" rendered="#{otherManagedBean.degree == '3'}" />
                                                     </p>
                                                     <hr />
 
                                                     <strong><i class="fas fa-book mr-1"></i> Specialization</strong>
-                                                    <p class="text-muted">#{studentManagedBean.specialization}</p>
+                                                    <p class="text-muted">#{otherManagedBean.specialization}</p>
                                                     <hr />   
 
                                                     <div>
-                                                        <h:commandLink class="btn btn-warning mr-3" action="editProfile.xhtml?faces-redirect=true">
-                                                            <i class="fa fa-fw fa-edit"></i> Edit Profile
-                                                        </h:commandLink>
-                                                        <h:commandLink class="btn btn-warning mr-3 mt-2" action="changePassword.xhtml?faces-redirect=true">
-                                                            <i class="fa fa-key"></i> Change Password
+                                                        <h:commandLink class="btn btn-warning ml-3" action="editProfile.xhtml?faces-redirect=true">
+                                                            <i class="fa fa-comments"></i> Message #{otherManagedBean.firstname} #{otherManagedBean.lastname}
                                                         </h:commandLink>
                                                     </div>
                                                 </div>

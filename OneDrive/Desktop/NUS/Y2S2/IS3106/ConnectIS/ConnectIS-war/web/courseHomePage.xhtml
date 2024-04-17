@@ -15,6 +15,10 @@
     </ui:define>
 
     <ui:define name="content">
+        <!-- to load selected student -->
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{studentManagedBean.loadSelectedStudent()}" />
+        </f:metadata>
 
         <f:metadata>
             <f:event type="preRenderView" listener="#{studentManagedBean.loadSelectedStudent()}" />
@@ -81,7 +85,27 @@
                                         #{courseManagedBean.semester}
                                     </p>
 
+
                                     <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
+
+                                <h:form>
+                                    <p:commandButton value="Pin"
+                                                     action="#{studentManagedBean.followCourse(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
+                                                     styleClass="pin-button"
+                                                     rendered="#{!studentManagedBean.isCoursePinned(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
+                                                     update="@form">
+                                        <p:ajax />
+                                    </p:commandButton>
+
+                                    <p:commandButton value="Unpin"
+                                                     action="#{studentManagedBean.unfollowCourse(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
+                                                     styleClass="pinned-button"
+                                                     rendered="#{studentManagedBean.isCoursePinned(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
+                                                     update="@form">
+                                        <p:ajax />
+                                    </p:commandButton>
+                                </h:form>
+
 
                                     <p class="text-muted">NIL</p>
                                 </div>
