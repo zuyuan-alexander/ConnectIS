@@ -20,6 +20,13 @@
         <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
+                <div style="margin-bottom: 20px;">
+                    <!-- After the <h:form> closing tag -->
+                    <a href="#{request.contextPath}/viewProfile.xhtml" class="btn btn-outline-secondary" style="background-color: white; color: grey;">
+                        <i class="fas fa-arrow-left"></i> Back to View Profile
+                    </a>
+
+                </div>
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1 class="m-0 text-dark">User's Profile</h1>
@@ -48,17 +55,24 @@
 
         <div class="ui-fluid">
             <h:messages style="display:block; text-transform: none; color: red;" />
-            <h:form id="profilePicture" enctype="multipart/form-data">
-                <h:inputFile value="#{studentManagedBean.uploadedFile}" />
-                <h:commandButton action="#{studentManagedBean.upload()}" value="Upload" styleClass="btn btn-primary" />
-                <br/>
-                <img src="/ConnectIS-war/upload/#{studentManagedBean.tempPicture}" width="300pt;" height="300pt;" />
-                <br /><br/>
-            </h:form>
-            <h:form id="profilePictureForm">
-                <h:commandButton value="Update Profile Picture" styleClass="btn btn-primary"
-                                 action="#{studentManagedBean.changeProfilePicture(evt)}" />
-                <h:message for="profilePicture" style="display:block; text-transform: none; color: red;" />
+            <h:form id="profilePicture" enctype="multipart/form-data" style="margin-left: 20px;">
+                <div style="display: flex; align-items: center;">
+                    <div style="flex-shrink: 0;">
+                        <img class="profile-picture" src="/ConnectIS-war/upload/#{studentManagedBean.profilePicture}" width="150pt" height="150pt" style="border-radius: 50%; border: 2px solid black;" alt="Profile Picture"/>
+                    </div>
+                    <div style="margin-left: 20px;">
+                        <div>
+                            <span class="font-weight-bold"><h4>#{studentManagedBean.firstname} #{studentManagedBean.lastname}</h4></span>
+                        </div>
+                        <div>
+                            <span class="text-black-50">#{studentManagedBean.email}</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <h:inputFile value="#{studentManagedBean.uploadedFile}" />
+                    <h:commandButton action="#{studentManagedBean.upload(evt)}" value="Upload" styleClass="btn btn-primary" />
+                </div>
             </h:form>
         </div>
     </ui:define>
