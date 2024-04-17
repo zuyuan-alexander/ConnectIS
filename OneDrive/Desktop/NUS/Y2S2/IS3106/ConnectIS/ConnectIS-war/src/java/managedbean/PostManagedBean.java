@@ -8,10 +8,10 @@ import entity.Comment;
 import entity.Course;
 import entity.Post;
 import entity.Student;
-import java.io.IOException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -52,8 +52,6 @@ public class PostManagedBean implements Serializable {
 
     @Inject
     private AuthenticationManagedBean authenBean;
-    
-    
 
     private String title;
     private String content;
@@ -69,7 +67,11 @@ public class PostManagedBean implements Serializable {
 
     private Course selectedCourse;
     private List<Post> postsInSelectedCourse;
+    private List<Post> filterPost;
     private List<Comment> filteredComment;
+
+    private String searchString;
+    private String searchType = "all";
 
     /**
      * Creates a new instance of PostManagedBean
@@ -89,11 +91,12 @@ public class PostManagedBean implements Serializable {
             try {
                 selectedCourse = courseSessionBean.getCourse(courseId);
                 postsInSelectedCourse = postSessionBean.retrievePostByCourse(selectedCourse);
+                filterPost = postsInSelectedCourse;
             } catch (NoResultException ex) {
                 Logger.getLogger(PostManagedBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-      
+
         String postIdParam = params.get("postId");
         if (postIdParam != null) {
             Long postId = Long.valueOf(postIdParam);
@@ -130,12 +133,23 @@ public class PostManagedBean implements Serializable {
     public String addPost() {
         System.out.println("Triggering add post");
         Post p = new Post();
+        if (postType.equalsIgnoreCase("lecture")) {
+            p.setPostType(PostTypeEnum.LECTURE);
+        } else if (postType.equalsIgnoreCase("labs")) {
+            p.setPostType(PostTypeEnum.LAB);
+        } else if (postType.equalsIgnoreCase("tutorial")) {
+            p.setPostType(PostTypeEnum.TUTORIAL);
+        } else if (postType.equalsIgnoreCase("project")) {
+            p.setPostType(PostTypeEnum.PROJECT);
+        } else if (postType.equalsIgnoreCase("others")) {
+            p.setPostType(PostTypeEnum.OTHERS);
+        }
+
         p.setTitle(title);
         p.setContent(content);
         p.setCreationDate(new Date());
         p.setAnonymous(anonymous);
 
-       
         postSessionBean.createPost(p, loggedinStudent.getId(), selectedCourse.getCourseId());
         return "/courseHomePage.xhtml?courseId=" + selectedCourse.getCourseId() + "&faces-redirect=true";
 
@@ -167,17 +181,17 @@ public class PostManagedBean implements Serializable {
         postSessionBean.deletePost(postId);
         return "/courseHomePage.xhtml?courseId=" + selectedCourse.getCourseId() + "&faces-redirect=true";
     }
-    
+
     public int countComments(Long postId) {
         return commentSessionBean.findAllCommentsByPost(postId).size();
     }
-    
+
     public String updatePost() {
         selectedPost.setTitle(this.getTitle());
         selectedPost.setContent(this.getContent());
         selectedPost.setAnonymous(this.isAnonymous());
-        
-         if (postType.equalsIgnoreCase("lecture")) {
+
+        if (postType.equalsIgnoreCase("lecture")) {
             selectedPost.setPostType(PostTypeEnum.LECTURE);
         } else if (postType.equalsIgnoreCase("lab")) {
             selectedPost.setPostType(PostTypeEnum.LAB);
@@ -191,6 +205,52 @@ public class PostManagedBean implements Serializable {
 
         postSessionBean.updatePost(selectedPost);
         return "/courseHomePage.xhtml?courseId=" + selectedCourse.getCourseId() + "&faces-redirect=true";
+    }
+
+    // Method to search and filter posts
+    public String searchPosts() {
+        System.out.println("Search String is: " + searchString);
+        System.out.println("Search Type is: " + searchType);
+
+        if (searchString.isEmpty() || searchString == null) {
+            return null;
+        }
+        List<Post> newfilterPost = new ArrayList<>();
+        newfilterPost.add(postSessionBean.retrievePostByTitle(searchString));
+        filterPost = newfilterPost;
+        return "/courseHomePage.xhtml?courseId=" + selectedCourse.getCourseId();
+    }
+
+    public void searchPostByType() {
+        System.out.println("searchPostByType is called");
+
+        List<Post> newfilterPost = new ArrayList<>();
+
+        if ("all".equalsIgnoreCase(searchType)) {
+            filterPost = postsInSelectedCourse;
+            return; // Exit the method early if searchType is "all"
+        }
+
+        for (Post post : postsInSelectedCourse) {
+            if (searchType.equalsIgnoreCase("lecture") && post.getPostType() == PostTypeEnum.LECTURE) {
+                newfilterPost.add(post);
+            } else if (searchType.equalsIgnoreCase("lab") && post.getPostType() == PostTypeEnum.LAB) {
+                newfilterPost.add(post);
+            } else if (searchType.equalsIgnoreCase("tutorial") && post.getPostType() == PostTypeEnum.TUTORIAL) {
+                newfilterPost.add(post);
+            } else if (searchType.equalsIgnoreCase("project") && post.getPostType() == PostTypeEnum.PROJECT) {
+                newfilterPost.add(post);
+            } else if (searchType.equalsIgnoreCase("others") && post.getPostType() == PostTypeEnum.OTHERS) {
+                newfilterPost.add(post);
+            }
+        }
+
+        filterPost = newfilterPost;
+
+        for (Post p : newfilterPost) {
+            System.out.println("Post Title: " + p.getTitle());
+        }
+//        return "/courseHomePage.xhtml?courseId=" + selectedCourse.getCourseId();
     }
 
     public String getTitle() {
@@ -295,6 +355,38 @@ public class PostManagedBean implements Serializable {
 
     public void setPostsInSelectedCourse(List<Post> postsInSelectedCourse) {
         this.postsInSelectedCourse = postsInSelectedCourse;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
+    }
+
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
+    }
+
+    public List<Post> getFilterPost() {
+        return filterPost;
+    }
+
+    public void setFilterPost(List<Post> filterPost) {
+        this.filterPost = filterPost;
+    }
+
+    public List<Comment> getFilteredComment() {
+        return filteredComment;
+    }
+
+    public void setFilteredComment(List<Comment> filteredComment) {
+        this.filteredComment = filteredComment;
     }
 
 }

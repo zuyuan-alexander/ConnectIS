@@ -5,6 +5,7 @@
 package managedbean;
 
 import entity.Comment;
+import entity.Course;
 import entity.Post;
 import entity.Student;
 import javax.inject.Named;
@@ -45,6 +46,18 @@ public class CommentManagedBean implements Serializable {
     private String content;
     private boolean anonymous;
 
+    private int commentIndex;
+
+// Getter and Setter methods for commentIndex
+    public int getCommentIndex() {
+        return commentIndex;
+    }
+
+    public void setCommentIndex(int commentIndex) {
+        this.commentIndex = commentIndex;
+    }
+
+    
     private Comment newReply; // This should be initialized when a new comment is prepared
     private Comment selectedComment;
 
@@ -65,32 +78,18 @@ public class CommentManagedBean implements Serializable {
     }
 
     public String replyToComment(Long commentId) {
+        System.out.println("Comment Index: " + commentIndex);
+        Course selectedCourse = postBean.getSelectedCourse();
         if (newReply.getContent() != null || !newReply.getContent().isEmpty()) {
             commentSessionBean.createComment(newReply, commentId, selectedPost.getId(), loggedinStudent.getId());
             newReply = new Comment();
         }
-        
-        return null;
+
+        return "viewPost?faces-redirect=true&includeViewParams=true&postId=" + selectedPost.getId() + "&courseId=" + selectedCourse.getCourseId();
     }
-    
+
     public void cancelReply() {
         this.activeCommentId = null;
-    }
-
-    public String testComment(Long commentId) {
-        System.out.println("This is being called");
-        Comment comment6 = new Comment("Nested Comment Test", true);
-        selectedComment = commentSessionBean.getComment(commentId);
-        newReply.setContent(this.content);
-        newReply.setAnonymous(this.anonymous);
-        if (newReply.getContent() != null || !newReply.getContent().isEmpty()) {
-            commentSessionBean.createComment(comment6, commentId, selectedPost.getId(), loggedinStudent.getId());
-            newReply = new Comment();
-        }
-
-        setContent(null);
-        setAnonymous(false);
-        return null;
     }
 
     public String addComment() {
@@ -161,7 +160,5 @@ public class CommentManagedBean implements Serializable {
     public void setActiveCommentId(Long activeCommentId) {
         this.activeCommentId = activeCommentId;
     }
-    
-    
 
 }

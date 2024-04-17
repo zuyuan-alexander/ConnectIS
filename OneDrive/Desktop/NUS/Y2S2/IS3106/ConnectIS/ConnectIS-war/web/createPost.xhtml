@@ -49,27 +49,18 @@
                                     <h:message for="postTitle" class="invalid-feedback" />
                                 </div>
                                 <div class="form-group">
-                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                        <label class="btn btn-outline-primary active" onclick="updatePostType('lecture')">
-                                            <input type="radio" name="postType" id="postType1" value="lecture" autocomplete="off"/> Lecture
-                                        </label>
-                                        <label class="btn btn-outline-primary" onclick="updatePostType('labs')">
-                                            <input type="radio" name="postType" id="postType2" value="labs" autocomplete="off"/> Labs
-                                        </label>
-                                        <label class="btn btn-outline-primary" onclick="updatePostType('tutorials')">
-                                            <input type="radio" name="postType" id="postType3" value="tutorials" autocomplete="off"/> Tutorials
-                                        </label>
-                                        <label class="btn btn-outline-primary" onclick="updatePostType('project')">
-                                            <input type="radio" name="postType" id="postType4" value="project" autocomplete="off"/> Project
-                                        </label>
-                                        <label class="btn btn-outline-primary" onclick="updatePostType('others')">
-                                            <input type="radio" name="postType" id="postType5" value="others" autocomplete="off"/> Others
-                                        </label>
-
-                                        <h:inputHidden id="hiddenPostType" value="#{postManagedBean.postType}" />
-                                    </div>
+                                    
+                                        <h:outputLabel for="postType">Post Type</h:outputLabel>
+                                        <h:selectOneMenu id="postType" value="#{postManagedBean.postType}" class="form-control">
+                                            <f:selectItem itemValue="lecture" itemLabel="Lecture" />
+                                            <f:selectItem itemValue="labs" itemLabel="Labs" />
+                                            <f:selectItem itemValue="tutorials" itemLabel="Tutorials" />
+                                            <f:selectItem itemValue="project" itemLabel="Project" />
+                                            <f:selectItem itemValue="others" itemLabel="Others" />
+                                        </h:selectOneMenu>
 
                                 </div>
+
                                 <div class="form-group">
                                     <div id="summernote"></div>
                                     <h:inputHidden id="text" value="#{postManagedBean.content}"/>
@@ -120,18 +111,16 @@
                     function submitPost() {
                         var content = $('#summernote').summernote('code');
                         console.log(content);
-                        document.getElementById('j_idt12:text').value = content;
+                        document.getElementById('j_idt28:text').value = content;
                         document.getElementById('postContentDisplay').innerHTML = content;
 
                     }
 
                 </script>
 
-
-
                 <script>
                     function updatePostType(selectedType) {
-                        document.getElementById('j_idt12:hiddenPostType').value = selectedType;
+                        document.getElementById('j_idt28:hiddenPostType').value = selectedType;
                     }
                 </script>
 

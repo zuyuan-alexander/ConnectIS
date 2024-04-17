@@ -168,8 +168,11 @@
                                                                             <h:commandButton value="Reply" styleClass="btn btn-reply"
                                                                                              action="#{commentManagedBean.setActiveCommentId(comment.id)}">
                                                                                 <f:ajax render=":j_idt31:j_idt55:#{status.index}:replyFormPanel" />
+                                                                                <f:param name="commentIndex" value="#{status.index}" />
                                                                             </h:commandButton>
-                                                                            
+                                                                            <h:inputHidden id="commentIndex" value="#{commentManagedBean.commentIndex}" />
+
+
 
                                                                         </div>
                                                                         <p class="small mb-0">
@@ -178,6 +181,7 @@
                                                                     </div>
                                                                     <!-- Nested Comments -->
                                                                     <h:panelGroup rendered="#{not empty comment.replies}">
+
                                                                         <ui:repeat value="#{comment.replies}" var="nestedComment">
                                                                             <div style="margin-left: 20px;"> <!-- Indent nested comments -->
                                                                                 <div class="d-flex flex-start">
@@ -194,41 +198,44 @@
                                                                                         </p>
                                                                                         <p class="small mb-0">
                                                                                             #{nestedComment.content}
-                                                                                        </p>
+                                                                                        </p>    
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                         </ui:repeat>
                                                                     </h:panelGroup>
                                                                     <!-- Reply Form, initially hidden -->
-                                                                    <h:panelGroup id="replyFormPanel">
-                                                                        <ui:fragment rendered="#{commentManagedBean.activeCommentId != null}">
-                                                                            <h:panelGroup id="replyForm#{commentManagedBean.activeCommentId}" styleClass="reply-form">
-                                                                                <div class="input-group mb-3">
-                                                                                    <h:inputTextarea id="replyCommentContent" value="#{commentManagedBean.newReply.content}"
-                                                                                                     styleClass="form-control"
-                                                                                                     a:placeholder="Write a reply..." 
-                                                                                                     title="Write a reply"/>
-                                                                                    <div class="input-group-append">
-                                                                                        <h:commandButton value="Reply" action="#{commentManagedBean.replyToComment(commentManagedBean.activeCommentId)}"
-                                                                                                         styleClass="btn btn-primary">
-                                                                                            <f:ajax execute="@form" render=":commentsContainer" />
-                                                                                        </h:commandButton>
-                                                                                        <h:commandButton value="Cancel" type="button" onclick="hideReplyForm(status.index)">
-                                                                                            <f:ajax execute="@this" render=":replyFormPanel"/>
-                                                                                        </h:commandButton>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="d-flex justify-content-end">
-                                                                                    <div class="custom-control custom-switch">
-                                                                                        <h:selectBooleanCheckbox id="replyAnonymitySwitch" value="#{commentManagedBean.newReply.anonymous}" 
-                                                                                                                 styleClass="custom-control-input" />
-                                                                                        <h:outputLabel for="replyAnonymitySwitch" styleClass="custom-control-label">Reply Anonymously</h:outputLabel>
-                                                                                    </div>
-                                                                                </div>
 
-                                                                            </h:panelGroup>
-                                                                        </ui:fragment>
+                                                                    <h:panelGroup id="replyFormPanel">
+                                                                        <h:form>
+                                                                            <ui:fragment rendered="#{commentManagedBean.activeCommentId != null}">
+                                                                                <h:panelGroup id="replyForm#{commentManagedBean.activeCommentId}" styleClass="reply-form">
+                                                                                    <div class="input-group mb-3">
+                                                                                        <h:inputTextarea id="replyCommentContent" value="#{commentManagedBean.newReply.content}"
+                                                                                                         styleClass="form-control"
+                                                                                                         a:placeholder="Write a reply..." 
+                                                                                                         title="Write a reply"/>
+                                                                                        <div class="input-group-append">
+                                                                                            <h:commandButton value="Reply" action="#{commentManagedBean.replyToComment(commentManagedBean.activeCommentId)}"
+                                                                                                             styleClass="btn btn-primary">
+                                                                                                <f:ajax execute="@form" render=":commentsContainer" />
+                                                                                            </h:commandButton>
+                                                                                            <h:commandButton value="Cancel" type="button" onclick="hideReplyForm(status.index)">
+                                                                                                <f:ajax execute="@this" render=":replyFormPanel"/>
+                                                                                            </h:commandButton>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="d-flex justify-content-end">
+                                                                                        <div class="custom-control custom-switch">
+                                                                                            <h:selectBooleanCheckbox id="replyAnonymitySwitch" value="#{commentManagedBean.newReply.anonymous}" 
+                                                                                                                     styleClass="custom-control-input" />
+                                                                                            <h:outputLabel for="replyAnonymitySwitch" styleClass="custom-control-label">Reply Anonymously</h:outputLabel>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                </h:panelGroup>
+                                                                            </ui:fragment>
+                                                                        </h:form>
                                                                     </h:panelGroup>
                                                                 </div>
                                                             </div>
@@ -259,10 +266,11 @@
                 //this works
                 document.getElementById('j_idt31:j_idt55:0:replyFormPanel').style.display = 'none';
                 //this does not because the method calling the index is null.
-                 document.getElementById(replyId).style.display = 'none';
+                document.getElementById(replyId).style.display = 'none';
             }
 
         </script>
+
     </ui:define>
 
     <style>
