@@ -24,29 +24,32 @@
                     </div>
                     <div class="messages-box">
                         <div class="list-group rounded-0">
-                            <ui:repeat value="#{chatManagedBean.loggedinStudent.chats}" var="chat">
-                                <a href="#" class="list-group-item list-group-item-action list-group-item-light rounded-0">
+                            <ui:repeat value="#{chatManagedBean.chats}" var="chat">
+                                <h:commandLink action="#{chatManagedBean.loadSelectedChat(chat.id)}" 
+                                               styleClass="list-group-item list-group-item-action list-group-item-light rounded-0">
+                                    <f:ajax execute="@this" render=":chatBox" />
                                     <div class="media">
-                                        <img src="https://bootstrapious.com/i/snippets/sn-chat/avatar.svg" alt="user" width="50" class="rounded-circle"/>
+                                        <img src="/ConnectIS-war/upload/#{chat.getOtherStudent(authenticationManagedBean.loggedinStudent.id).profilePicture}" alt="user" width="50" class="rounded-circle"/>
                                         <div class="media-body ml-4">
                                             <div class="d-flex align-items-center justify-content-between mb-1">
                                                 <h6 class="mb-0">
-                                                    #{chat.getOtherStudentName(loggedInStudent.id)}
+                                                    #{chat.getOtherStudentName(authenticationManagedBean.loggedinStudent.id)}
                                                 </h6>
 
 
                                                 <small class="small font-weight-bold">
-                                                    <h:outputText value="#{chat.lastMessage.creationDate}">
+                                                    <h:outputText value="#{chat.getLastMessage().creationDate}">
                                                         <f:convertDateTime pattern="dd MMM yyyy HH:mm:ss" timeZone="UTC" />
                                                     </h:outputText>
+
                                                 </small>
                                             </div>
                                             <p class="font-italic text-muted mb-0 text-small">
-                                                #{chat.lastMessage.content}
+                                                #{chat.getLastMessage().content}
                                             </p>
                                         </div>
                                     </div>
-                                </a>
+                                </h:commandLink>
                             </ui:repeat>
 
                         </div>
@@ -55,31 +58,55 @@
             </div>
             <!-- Chat Box-->
             <div class="col-7 px-0">
-                <div class="px-4 py-5 chat-box bg-white">
-                    <!-- Dynamic Messages-->
-                    {{#each messages as message}}
-                    <div class="media w-50 {{#if message.isSender}}mb-3{{else}}ml-auto mb-3{{/if}}">
-                        <div class="media-body">
-                            <div class="bg-{{#if message.isSender}}light{{else}}primary text-white{{/if}} rounded py-2 px-3 mb-2">
-                                <p class="text-small mb-0 {{#if message.isSender}}text-muted{{else}}text-white{{/if}}">{{message.content}}</p>
+                <h:panelGroup id="chatBox" layout="block">
+                    <div class="px-4 py-5 chat-box bg-white">
+                        <!-- Dynamic Messages -->
+                        <ui:repeat value="#{chatManagedBean.selectedChat.messages}" var="message">
+                            <div class="media mb-3">
+                                <img src="/ConnectIS-war/upload/#{message.sender.profilePicture}" alt="user" width="50" class="rounded-circle mr-3"/>
+                                <div class="media-body">
+                                    <h6 class="mt-0 mb-1 #{message.sender.id eq authenticationManagedBean.loggedinStudent.id ? 'text-primary' : ''}">
+                                        #{message.sender.firstname}
+                                    </h6>
+
+                                    <div class="rounded py-2 px-3 mb-2 bg-light">
+                                        <p class="text-small mb-0 text-muted">
+                                            #{message.content}
+                                        </p>
+                                    </div>
+                                    <p class="small text-muted">
+                                        <h:outputText value="#{message.creationDate}">
+                                            <f:convertDateTime pattern="dd MMM yyyy HH:mm:ss" timeZone="UTC" />
+                                        </h:outputText>
+                                    </p>
+                                </div>
                             </div>
-                            <p class="small text-muted">{{message.creationDate}}</p>
-                        </div>
+                        </ui:repeat>
                     </div>
-                    {{/each}}
-                </div>
 
-                <!-- Typing area -->
-                <form action="#" class="bg-light">
-                    <div class="input-group">
-                        <input type="text" placeholder="Type a message" aria-describedby="button-addon2" class="form-control rounded-0 border-0 py-4 bg-light"/>
-                        <div class="input-group-append">
-                            <button id="button-addon2" type="submit" class="btn btn-link"> <i class="fa fa-paper-plane"></i></button>
+
+                    <!-- Typing area -->
+                    <h:form class="bg-light">
+                        <div class="input-group">
+                            <h:inputText value="#{chatManagedBean.content}" 
+                                         a:placeholder="Type a message" 
+                                         a:aria-describedby="button-addon2" 
+                                         styleClass="form-control rounded-0 border-0 py-4 bg-light"/>
+                            <div class="input-group-append">
+                                <h:commandButton id="button-addon2" 
+                                                 type="submit" 
+                                                 action="#{chatManagedBean.sendMessage}" 
+                                                 styleClass="btn btn-link">
+                                    <f:ajax execute="@form" render=":chatBox" />
+                                    <i class="fa fa-paper-plane"></i>
+                                </h:commandButton>
+                            </div>
                         </div>
-                    </div>
-                </form>
-
+                    </h:form>
+                </h:panelGroup>
             </div>
+
+
         </div>
 
 
@@ -123,7 +150,7 @@
     </ui:define>
 
     <ui:define name="script">
-        script
+
     </ui:define>
 
 </ui:composition>

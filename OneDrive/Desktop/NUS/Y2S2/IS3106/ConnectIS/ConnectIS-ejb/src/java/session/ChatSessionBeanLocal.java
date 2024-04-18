@@ -5,6 +5,8 @@
 package session;
 
 import entity.Chat;
+import entity.Message;
+import java.util.List;
 import javax.ejb.Local;
 import javax.persistence.NoResultException;
 
@@ -14,9 +16,15 @@ import javax.persistence.NoResultException;
  */
 @Local
 public interface ChatSessionBeanLocal {
-    
+
     public Chat findChat(Long chatId) throws NoResultException;
 
     public void createChat(Chat newChat);
+
+    public void createMessage(Message newMessage, Long senderId);
+
+    public List<Chat> findChatsForStudent(Long studentId);
     
+     public boolean doesChatExistBetweenStudents(Long studentId1, Long studentId2);
+
 }

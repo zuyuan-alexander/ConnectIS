@@ -27,30 +27,33 @@ public class Message implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long messageId;
-    private Long chatId;
+
+    @ManyToOne(fetch = FetchType.LAZY)  
+    @JoinColumn(name = "sender_id")
     private Student sender;
+
+    @ManyToOne(fetch = FetchType.LAZY)  
+    @JoinColumn(name = "receiver_id")
+    private Student receiver;
+
     private String content;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
-
-    public Message(String content, Date creationDate) {
+    public Message(String content) {
         this.content = content;
         this.creationDate = new Date();
     }
 
     public Message() {
-         this.creationDate = new Date();;
+        this.creationDate = new Date();;
     }
 
-
-
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -84,14 +87,6 @@ public class Message implements Serializable {
         this.messageId = messageId;
     }
 
-    public Long getChatId() {
-        return chatId;
-    }
-
-    public void setChatId(Long chatId) {
-        this.chatId = chatId;
-    }
-
     public Student getSender() {
         return sender;
     }
@@ -99,7 +94,6 @@ public class Message implements Serializable {
     public void setSender(Student sender) {
         this.sender = sender;
     }
-
 
     public String getContent() {
         return content;
@@ -124,5 +118,15 @@ public class Message implements Serializable {
     public void setChat(Chat chat) {
         this.chat = chat;
     }
+
+    public Student getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(Student receiver) {
+        this.receiver = receiver;
+    }
     
+    
+
 }

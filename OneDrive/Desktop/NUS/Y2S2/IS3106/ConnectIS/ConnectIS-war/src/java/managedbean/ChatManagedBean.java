@@ -5,10 +5,12 @@
 package managedbean;
 
 import entity.Chat;
+import entity.Message;
 import entity.Student;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -27,13 +29,15 @@ public class ChatManagedBean implements Serializable {
 
     @Inject
     private AuthenticationManagedBean authenBean;
-    
+
     @Inject
     private OtherManagedBean otherBean;
 
     private Student loggedinStudent;
+    private List<Chat> chats;
     private Chat selectedChat;
     private Long selectedChatId;
+    private String content;
     private Student student1;
     private Student student2;
     private boolean student1Anonymous;
@@ -47,13 +51,31 @@ public class ChatManagedBean implements Serializable {
 
     @PostConstruct
     public void Init() {
+
+        loggedinStudent = authenBean.getLoggedinStudent();
+        chats = chatSessionBean.findChatsForStudent(loggedinStudent.getId());
+        if (loggedinStudent.getChats().isEmpty()) {
+            System.out.println("In Init, size of loggedinStudentChats: 0");
+            System.out.println("In Init, size of loggedinStudentChats: 0");
+        } else {
+            System.out.println("In Init, size of loggedinStudentChats: " + loggedinStudent.getChats().size());
+        }
+
         if (selectedChatId != null) {
-            loadSelectedChat();
+            loadSelectedChat(selectedChatId);
         }
     }
 
-    public void loadSelectedChat() {
-        selectedChat = chatSessionBean.findChat(selectedChatId);
+    public void loadSelectedChat(Long chatId) {
+        System.out.println("loadSelected chat is called with chatId: " + chatId);
+
+        selectedChat = chatSessionBean.findChat(chatId);
+        if (selectedChat.getMessages().isEmpty()) {
+            System.out.println("SelectedChat now has " + 0 + " messages.");
+        } else {
+            System.out.println("SelectedChat now has " + selectedChat.getMessages().size() + " messages.");
+        }
+
         if (selectedChat.getStudent1().equals(loggedinStudent)) {
             student1 = selectedChat.getStudent1();
             student1Anonymous = selectedChat.isStudent1Anonymous();
@@ -67,12 +89,31 @@ public class ChatManagedBean implements Serializable {
         }
 
     }
-    
-    public void createNormalChat() {
-        Student otherStudent = otherBean.getOtherStudent();
-        Chat newChat = new Chat(loggedinStudent, otherStudent, false, false);
-        chatSessionBean.createChat(newChat);
 
+    public String createNormalChat() {
+        Student otherStudent = otherBean.getOtherStudent();
+        Boolean chatExist = chatSessionBean.doesChatExistBetweenStudents(otherStudent.getId(), loggedinStudent.getId());
+        System.out.println("loggedinStudent name: " + loggedinStudent.getFirstname());
+        System.out.println("otherStudent name: " + otherStudent.getFirstname());
+        if (loggedinStudent != null & otherStudent != null & !loggedinStudent.equals(otherStudent) & !chatExist) {
+            Chat newChat = new Chat(loggedinStudent, otherStudent, false, false);
+            chatSessionBean.createChat(newChat);
+            return "viewChats.xhtml?faces-redirect=true";
+        }
+
+        return null;
+    }
+
+    public void sendMessage() {
+        System.out.println("Send message is being called");
+        Message m = new Message();
+        m.setContent(content);
+        if (selectedChat != null) {
+            m.setChat(selectedChat);
+            if (loggedinStudent != null) {
+                chatSessionBean.createMessage(m, loggedinStudent.getId());
+            }
+        }
     }
 
     public Student getStudent1() {
@@ -115,9 +156,6 @@ public class ChatManagedBean implements Serializable {
         this.student2Anonymous = student2Anonymous;
     }
 
- 
-    
-
     public Student getLoggedinStudent() {
         return loggedinStudent;
     }
@@ -132,6 +170,22 @@ public class ChatManagedBean implements Serializable {
 
     public void setSelectedChat(Chat selectedChat) {
         this.selectedChat = selectedChat;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public List<Chat> getChats() {
+        return chats;
+    }
+
+    public void setChats(List<Chat> chats) {
+        this.chats = chats;
     }
 
 }

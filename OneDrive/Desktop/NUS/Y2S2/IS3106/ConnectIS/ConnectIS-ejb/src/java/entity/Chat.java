@@ -8,10 +8,14 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 /**
  *
@@ -25,11 +29,16 @@ public class Chat implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)  // Using ManyToOne to denote many chats can have one student
+    @JoinColumn(name = "student1_id")
     private Student student1;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student2_id")
     private Student student2;
+
     private boolean student1Anonymous;
     private boolean student2Anonymous;
-    private Message lastMessage;
 
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages;
@@ -46,21 +55,33 @@ public class Chat implements Serializable {
 
     public String getOtherStudentName(Long loggedInStudentId) {
         if (student1.getId().equals(loggedInStudentId)) {
-            return student2Anonymous ? "Anonymous" : student2.getFirstname() +  " " + student2.getLastname();
+            System.out.println("Logged-in student is student1, Name: " + student1.getFirstname());
+            return student2Anonymous ? "Anonymous" : student2.getFirstname() + " " + student2.getLastname();
         } else {
-            return student1Anonymous ? "Anonymous" : student1.getFirstname() +  " " + student2.getLastname();
+            System.out.println("Logged-in student is not student1, student1 Name: " + student2.getFirstname());
+            return student1Anonymous ? "Anonymous" : student1.getFirstname() + " " + student1.getLastname();
+        }
+    }
+
+    public Student getOtherStudent(Long loggedInStudentId) {
+        // Check if the logged in student is student1
+        if (student1 != null && student1.getId().equals(loggedInStudentId)) {
+            // Return student2 as the other student
+            return student2;
+        } else {
+            // Return student1 as the other student
+            return student1;
         }
     }
 
     public Message getLastMessage() {
-        lastMessage = messages.get(messages.size());
-        return lastMessage;
-    }
+        if (!messages.isEmpty()) {
+            return messages.get(messages.size() - 1);
+        } else {
+            return new Message();
+        }
 
-    public void setLastMessage(Message lastMessage) {
-        this.lastMessage = lastMessage;
     }
-    
 
     public Long getId() {
         return id;
@@ -126,11 +147,6 @@ public class Chat implements Serializable {
     public void setStudent2Anonymous(boolean student2Anonymous) {
         this.student2Anonymous = student2Anonymous;
     }
-
- 
-
-   
- 
 
     public List<Message> getMessages() {
         return messages;
