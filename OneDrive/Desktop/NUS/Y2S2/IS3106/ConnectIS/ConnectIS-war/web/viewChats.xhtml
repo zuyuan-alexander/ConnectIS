@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./layout/homePageTemplate.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core" 
+                xmlns:h="http://xmlns.jcp.org/jsf/html" 
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:define name="title">
+        View Chat
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="row rounded-lg overflow-hidden shadow">
+            <!-- Users box-->
+            <div class="col-5 px-0">
+                <div class="bg-white">
+                    <div class="bg-gray px-4 py-2 bg-light">
+                        <p class="h5 mb-0 py-1">Recent</p>
+                    </div>
+                    <div class="messages-box">
+                        <div class="list-group rounded-0">
+                            <ui:repeat value="#{chatManagedBean.loggedinStudent.chats}" var="chat">
+                                <a href="#" class="list-group-item list-group-item-action list-group-item-light rounded-0">
+                                    <div class="media">
+                                        <img src="https://bootstrapious.com/i/snippets/sn-chat/avatar.svg" alt="user" width="50" class="rounded-circle"/>
+                                        <div class="media-body ml-4">
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                                <h6 class="mb-0">
+                                                    #{chat.getOtherStudentName(loggedInStudent.id)}
+                                                </h6>
+
+
+                                                <small class="small font-weight-bold">
+                                                    <h:outputText value="#{chat.lastMessage.creationDate}">
+                                                        <f:convertDateTime pattern="dd MMM yyyy HH:mm:ss" timeZone="UTC" />
+                                                    </h:outputText>
+                                                </small>
+                                            </div>
+                                            <p class="font-italic text-muted mb-0 text-small">
+                                                #{chat.lastMessage.content}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </ui:repeat>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Chat Box-->
+            <div class="col-7 px-0">
+                <div class="px-4 py-5 chat-box bg-white">
+                    <!-- Dynamic Messages-->
+                    {{#each messages as message}}
+                    <div class="media w-50 {{#if message.isSender}}mb-3{{else}}ml-auto mb-3{{/if}}">
+                        <div class="media-body">
+                            <div class="bg-{{#if message.isSender}}light{{else}}primary text-white{{/if}} rounded py-2 px-3 mb-2">
+                                <p class="text-small mb-0 {{#if message.isSender}}text-muted{{else}}text-white{{/if}}">{{message.content}}</p>
+                            </div>
+                            <p class="small text-muted">{{message.creationDate}}</p>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+
+                <!-- Typing area -->
+                <form action="#" class="bg-light">
+                    <div class="input-group">
+                        <input type="text" placeholder="Type a message" aria-describedby="button-addon2" class="form-control rounded-0 border-0 py-4 bg-light"/>
+                        <div class="input-group-append">
+                            <button id="button-addon2" type="submit" class="btn btn-link"> <i class="fa fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+        <style>
+            ::-webkit-scrollbar {
+                width: 5px;
+            }
+
+            ::-webkit-scrollbar-track {
+                width: 5px;
+                background: #f5f5f5;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                width: 1em;
+                background-color: #ddd;
+                outline: 1px solid slategrey;
+                border-radius: 1rem;
+            }
+
+            .text-small {
+                font-size: 0.9rem;
+            }
+
+            .messages-box,
+            .chat-box {
+                height: 510px;
+                overflow-y: scroll;
+            }
+
+            .rounded-lg {
+                border-radius: 0.5rem;
+            }
+
+            input::placeholder {
+                font-size: 0.9rem;
+                color: #999;
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="script">
+        script
+    </ui:define>
+
+</ui:composition>
