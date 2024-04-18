@@ -25,9 +25,8 @@
                     <div class="container-fluid">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <h1>Home</h1>
                                 <h2>
-                                    <h:outputText value="#{authenticationManagedBean.loggedinStudent.firstname}" />
+                                    Welcome Back, <h:outputText value="#{authenticationManagedBean.loggedinStudent.firstname}" />
                                 </h2>
 
                             </div>
@@ -40,16 +39,21 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="card card-primary">
-                                    <div class="card-body box-profile">
+                                    <div class="card-body box-profile" style="margin-bottom: 0; padding-bottom: 0;">
                                         <h3 class="card-title">Trending Posts</h3>
                                     </div>
                                     <hr></hr>
                                     <!-- /.card-header -->
-                                    <div class="card-body">
+                                    <div class="card-body" style="padding-top: 0;">
                                         <c:forEach items="#{postManagedBean.posts}" var="post">
                                             <span class="username">
-                                                <h:outputText value="#{post.course.courseCode}: " />
-                                                <strong><h:outputText value="#{post.title}" style="font-size:17px;" /></strong>
+                                                <strong><h:outputText value="#{post.course.courseCode}: " /></strong>
+                                                <strong>
+                                                    <h:link value="#{post.title}" style="font-size:17px;" outcome="/viewPost">
+                                                        <f:param name="postId" value="#{post.id}" />
+                                                        <f:param name="courseId" value="#{post.course.courseId}" />
+                                                    </h:link>
+                                                </strong>
                                             </span>
                                             <div>
                                                 <span class="description">
@@ -59,6 +63,7 @@
                                                     <h6 style="font-size: 12px;">#{postManagedBean.countComments(post.id)} comments  ·  #{postManagedBean.getLikesCount(post.id)} likes</h6>
                                                 </span>
                                             </div>
+                                            <hr></hr>
                                         </c:forEach>
                                     </div>
                                     <!-- /.card-body -->
