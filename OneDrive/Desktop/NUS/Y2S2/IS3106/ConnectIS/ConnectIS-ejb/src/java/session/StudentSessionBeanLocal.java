@@ -5,7 +5,10 @@
 package session;
 
 import entity.Course;
+import entity.Post;
+import entity.PostLike;
 import entity.Student;
+import java.util.List;
 import javax.ejb.Local;
 import javax.persistence.NoResultException;
 
@@ -32,5 +35,9 @@ public interface StudentSessionBeanLocal {
     public void addPinnedCourse(Course course, Student student);
 
     public void removePinnedCourse(Course course, Student student);
+
+    public List<Post> getCreatedPosts(Student s);
+
+    public List<PostLike> getLikedPosts(Student s);
     
 }

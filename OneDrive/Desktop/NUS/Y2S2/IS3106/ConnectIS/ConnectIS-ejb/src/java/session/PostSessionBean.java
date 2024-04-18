@@ -107,14 +107,19 @@ public class PostSessionBean implements PostSessionBeanLocal {
         oldPost.setPostType(post.getPostType());
         oldPost.setContent(post.getContent());
         oldPost.setAnonymous(post.isAnonymous());
+        em.merge(oldPost);
     }
 
     @Override
     public void deletePost(Long id) {
-        Post post = findPostById(id);
+        Post post = em.find(Post.class, id);
         if (post != null) {
             Course c = post.getCourse();
             c.getPosts().remove(post);
+            Student s = post.getStudent();
+            s.getPosts().remove(post);
+            em.merge(s);
+            em.merge(s);
             em.remove(post);
         }
     }
@@ -129,15 +134,19 @@ public class PostSessionBean implements PostSessionBeanLocal {
             PostLike like = new PostLike();
             like.setStudent(student);
             like.setPost(post);
-
+            student.getLikes().add(like);
+            em.merge(student);
             em.persist(like);
         } else {
-            PostLike selectedPostlike = (PostLike) em.createQuery(
-                    "SELECT l FROM PostLike l WHERE l.student = :student AND l.post = :post")
-                    .setParameter("student", student)
-                    .setParameter("post", post)
-                    .getSingleResult();
-            em.remove(selectedPostlike);
+            Query query = em.createQuery("SELECT l FROM PostLike l WHERE l.student.id = :studentId AND l.post.id = :postId");
+            query.setParameter("studentId", student.getId());
+            query.setParameter("postId", post.getId());
+            PostLike selectedPostLike = (PostLike) query.getSingleResult();
+            Student s = em.find(Student.class, selectedPostLike.getStudent().getId());
+            s.getLikes().remove(selectedPostLike);
+            em.merge(s);
+            em.remove(selectedPostLike);
+
         }
     }
 
@@ -147,9 +156,9 @@ public class PostSessionBean implements PostSessionBeanLocal {
         Post post = em.find(Post.class, postId);
 
         Long likesCount = (Long) em.createQuery(
-                "SELECT COUNT(l) FROM PostLike l WHERE l.student = :student AND l.post = :post")
-                .setParameter("student", student)
-                .setParameter("post", post)
+                "SELECT COUNT(l) FROM PostLike l WHERE l.student.id = :studentId AND l.post.id = :postId")
+                .setParameter("studentId", student.getId())
+                .setParameter("postId", post.getId())
                 .getSingleResult();
         return likesCount > 0;
     }

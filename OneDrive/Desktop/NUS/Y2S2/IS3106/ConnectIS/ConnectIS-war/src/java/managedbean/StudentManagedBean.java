@@ -5,6 +5,8 @@
 package managedbean;
 
 import entity.Course;
+import entity.Post;
+import entity.PostLike;
 import entity.Student;
 import exception.NoResultException;
 import java.io.IOException;
@@ -16,7 +18,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -68,6 +72,9 @@ public class StudentManagedBean implements Serializable {
 
     private Student selectedStudent;
     private Student otherStudent;
+
+    private List<Post> posts;
+    private List<PostLike> likedPosts;
 
     public StudentManagedBean() {
     }
@@ -144,6 +151,9 @@ public class StudentManagedBean implements Serializable {
             setSpecialization(s.getSpecialization());
             setIsUserAnonymous(s.getIsUserAnonymous());
             setAnonymousName(s.getAnonymousName());
+            setPosts(s.getPosts());
+            setLikedPosts(s.getLikes());
+
         } catch (NoResultException ex) {
             ex.getMessage();
         }
@@ -161,6 +171,8 @@ public class StudentManagedBean implements Serializable {
         selectedStudent.setSpecialization(getSpecialization());
         selectedStudent.setIsUserAnonymous(getIsUserAnonymous());
         selectedStudent.setAnonymousName(getAnonymousName());
+        selectedStudent.setPosts(getPosts());
+        selectedStudent.setLikes(getLikedPosts());
         try {
             studentSessionBean.updateStudent(selectedStudent);
         } catch (NoResultException ex) {
@@ -448,6 +460,22 @@ public class StudentManagedBean implements Serializable {
 
     public void setOtherStudent(Student otherStudent) {
         this.otherStudent = otherStudent;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public List<PostLike> getLikedPosts() {
+        return likedPosts;
+    }
+
+    public void setLikedPosts(List<PostLike> likedPosts) {
+        this.likedPosts = likedPosts;
     }
 
 }

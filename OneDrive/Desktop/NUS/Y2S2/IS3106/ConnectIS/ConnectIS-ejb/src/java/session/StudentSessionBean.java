@@ -5,15 +5,13 @@
 package session;
 
 import entity.Course;
+import entity.Post;
+import entity.PostLike;
 import entity.Student;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import exception.NoResultException;
+import java.util.List;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -59,20 +57,28 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
 
     @Override
     public void updateStudent(Student s) throws exception.NoResultException {
-        Student oldStudent = getStudent(s.getId());
-        oldStudent.setProfilePicture(s.getProfilePicture());
-        oldStudent.setFirstname(s.getFirstname());
-        oldStudent.setLastname(s.getLastname());
-        oldStudent.setGender(s.getGender());
-        oldStudent.setDob(s.getDob());
-        oldStudent.setContactnumber(s.getContactnumber());
-        oldStudent.setEmail(s.getEmail());
-        oldStudent.setPassword(s.getPassword());
-        oldStudent.setAcademicYear(s.getAcademicYear());
-        oldStudent.setDegree(s.getDegree());
-        oldStudent.setSpecialization(s.getSpecialization());
-        oldStudent.setIsUserAnonymous(s.getIsUserAnonymous());
-        oldStudent.setAnonymousName(s.getAnonymousName());
+        if (s.getId() != null) {
+            Student oldStudent = getStudent(s.getId());
+            oldStudent.setProfilePicture(s.getProfilePicture());
+            oldStudent.setFirstname(s.getFirstname());
+            oldStudent.setLastname(s.getLastname());
+            oldStudent.setGender(s.getGender());
+            oldStudent.setDob(s.getDob());
+            oldStudent.setContactnumber(s.getContactnumber());
+            oldStudent.setEmail(s.getEmail());
+            oldStudent.setPassword(s.getPassword());
+            oldStudent.setAcademicYear(s.getAcademicYear());
+            oldStudent.setDegree(s.getDegree());
+            oldStudent.setSpecialization(s.getSpecialization());
+            oldStudent.setIsUserAnonymous(s.getIsUserAnonymous());
+            oldStudent.setAnonymousName(s.getAnonymousName());
+            oldStudent.setPosts(s.getPosts());
+            oldStudent.setLikes(s.getLikes());
+            em.merge(oldStudent);
+        } else {
+            throw new javax.persistence.NoResultException("Student not found!");
+
+        }
     }
 
     @Override
@@ -109,6 +115,26 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
         q.setParameter("inContact", contact);
         Long count = (Long) q.getSingleResult();
         return count > 0;
+    }
+
+    @Override
+    public List<Post> getCreatedPosts(Student s) {
+        Student student = em.find(Student.class, s.getId());
+        if (s != null) {
+            return student.getPosts();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public List<PostLike> getLikedPosts(Student s) {
+        Student student = em.find(Student.class, s.getId());
+        if (s != null) {
+            return student.getLikes();
+        } else {
+            return null;
+        }
     }
 
 }

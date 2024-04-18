@@ -59,11 +59,13 @@
                                     <p:commandButton value="Pin"
                                         action="#{studentManagedBean.followCourse(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
                                         styleClass="pin-button"
-                                        rendered="#{!studentManagedBean.isCoursePinned(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}" />
-                                    <p:commandButton value="Pinned"
-                                        action="#{studentManagedBean.followCourse(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
+                                        rendered="#{!studentManagedBean.isCoursePinned(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}" 
+                                        update="@form"/>
+                                    <p:commandButton value="Unpin"
+                                        action="#{studentManagedBean.unfollowCourse(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
                                         styleClass="pin-button"
-                                        rendered="#{studentManagedBean.isCoursePinned(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}" />
+                                        rendered="#{studentManagedBean.isCoursePinned(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}" 
+                                        update="@form"/>
 
                                 </div>
                             </div>
@@ -85,23 +87,6 @@
 
                                 <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
 
-                                <h:form>
-                                    <p:commandButton value="Pin"
-                                        action="#{studentManagedBean.followCourse(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
-                                        styleClass="pin-button"
-                                        rendered="#{!studentManagedBean.isCoursePinned(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
-                                        update="@form">
-                                        <p:ajax />
-                                    </p:commandButton>
-
-                                    <p:commandButton value="Unpin"
-                                        action="#{studentManagedBean.unfollowCourse(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
-                                        styleClass="pinned-button"
-                                        rendered="#{studentManagedBean.isCoursePinned(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
-                                        update="@form">
-                                        <p:ajax />
-                                    </p:commandButton>
-                                </h:form>
 
 
                                 <p class="text-muted">NIL</p>

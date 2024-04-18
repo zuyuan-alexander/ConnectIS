@@ -53,6 +53,9 @@ public class PostManagedBean implements Serializable {
     @Inject
     private AuthenticationManagedBean authenBean;
 
+    @Inject
+    private StudentManagedBean studentManagedBean;
+
     private String title;
     private String content;
     private String postType;
@@ -165,8 +168,8 @@ public class PostManagedBean implements Serializable {
     }
 
     public void likePost(Long postId) {
-
         postSessionBean.likePost(loggedinStudent.getId(), postId);
+        studentManagedBean.loadSelectedStudent();
     }
 
     public String deletePost(Long postId) {

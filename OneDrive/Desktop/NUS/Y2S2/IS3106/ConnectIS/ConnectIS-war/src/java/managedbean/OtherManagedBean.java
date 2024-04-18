@@ -4,12 +4,15 @@
  */
 package managedbean;
 
+import entity.Post;
+import entity.PostLike;
 import entity.Student;
 import exception.NoResultException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +49,9 @@ public class OtherManagedBean implements Serializable {
     private String specialization;
 
     private Student otherStudent;
+    
+    private List<Post> posts;
+    private List<PostLike> likedPosts;
 
     public OtherManagedBean() {
     }
@@ -54,8 +60,16 @@ public class OtherManagedBean implements Serializable {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         HttpSession session = request.getSession();
 
-        session.setAttribute("otherStudentId", studentId);
-        return "viewOtherUserProfile.xhtml?faces-redirect=true";
+        Long currentUserId = (Long) session.getAttribute("userId");
+
+        if (studentId.equals(currentUserId)) {
+
+            return "viewProfile.xhtml?faces-redirect=true";
+        } else {
+
+            session.setAttribute("otherStudentId", studentId);
+            return "viewOtherUserProfile.xhtml?faces-redirect=true";
+        }
     }
 
     public void loadOtherStudent() {
@@ -77,6 +91,8 @@ public class OtherManagedBean implements Serializable {
             setAcademicYear(s.getAcademicYear());
             setDegree(s.getDegree());
             setSpecialization(s.getSpecialization());
+            setPosts(s.getPosts());
+            setLikedPosts(s.getLikes());
         } catch (NoResultException ex) {
             ex.getMessage();
         }
@@ -192,6 +208,22 @@ public class OtherManagedBean implements Serializable {
 
     public void setOtherStudent(Student otherStudent) {
         this.otherStudent = otherStudent;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public List<PostLike> getLikedPosts() {
+        return likedPosts;
+    }
+
+    public void setLikedPosts(List<PostLike> likedPosts) {
+        this.likedPosts = likedPosts;
     }
 
 }
