@@ -49,6 +49,9 @@ public class Student implements Serializable {
 
     @OneToMany(mappedBy = "student")
     private List<PostLike> likes;
+    
+    @OneToMany
+    private List<Chat> chats;
 
     public Student() {
     }
@@ -265,6 +268,15 @@ public class Student implements Serializable {
     public void setLikes(List<PostLike> likes) {
         this.likes = likes;
     }
+
+    public List<Chat> getChats() {
+        return chats;
+    }
+
+    public void setChats(List<Chat> chats) {
+        this.chats = chats;
+    }
+    
     
     
 

@@ -117,9 +117,10 @@
                                                     <hr />   
 
                                                     <div>
-                                                        <h:commandLink class="btn btn-warning ml-3" action="editProfile.xhtml?faces-redirect=true">
+                                                        <h:commandLink class="btn btn-warning ml-3" action="#{chatManagedBean.createNormalChat()}">
                                                             <i class="fa fa-comments"></i> Message #{otherManagedBean.firstname} #{otherManagedBean.lastname}
                                                         </h:commandLink>
+
                                                     </div>
                                                 </div>
                                             </div>
