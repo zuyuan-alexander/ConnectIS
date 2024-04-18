@@ -88,16 +88,18 @@
                     <!-- Typing area -->
                     <h:form class="bg-light">
                         <div class="input-group">
-                            <h:inputText value="#{chatManagedBean.content}" 
+                            <h:inputText id = "messageInput" value="#{chatManagedBean.content}" 
                                          a:placeholder="Type a message" 
                                          a:aria-describedby="button-addon2" 
-                                         styleClass="form-control rounded-0 border-0 py-4 bg-light"/>
+                                         styleClass="form-control rounded-0 border-0 py-4 bg-light">
+                            </h:inputText>
                             <div class="input-group-append">
                                 <h:commandButton id="button-addon2" 
                                                  type="submit" 
                                                  action="#{chatManagedBean.sendMessage}" 
-                                                 styleClass="btn btn-link">
-                                    <f:ajax execute="@form" render=":chatBox" />
+                                                 styleClass="btn btn-link"
+                                                 >
+                                    <f:ajax execute="@form" render=":chatBox"  onevent="afterSendMessage" />
                                     <i class="fa fa-paper-plane"></i>
                                 </h:commandButton>
                             </div>
@@ -150,7 +152,14 @@
     </ui:define>
 
     <ui:define name="script">
-
+        <script>
+            function afterSendMessage(data) {
+                if (data.status === 'success') {
+                    document.getElementById('j_idt29:messageInput').focus();
+                  
+                }
+            }
+        </script>
     </ui:define>
 
 </ui:composition>

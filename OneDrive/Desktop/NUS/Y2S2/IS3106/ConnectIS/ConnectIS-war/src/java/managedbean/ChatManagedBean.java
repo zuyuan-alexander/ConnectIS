@@ -112,6 +112,8 @@ public class ChatManagedBean implements Serializable {
             m.setChat(selectedChat);
             if (loggedinStudent != null) {
                 chatSessionBean.createMessage(m, loggedinStudent.getId());
+                loadSelectedChat(selectedChat.getId());
+                setContent(null);
             }
         }
     }
