@@ -23,6 +23,7 @@
             <f:metadata>
                 <f:viewParam name="postId" value="#{postManagedBean.selectedPostId}" />
                 <f:event type="preRenderView" listener="#{postManagedBean.loadSelectedPost}" />
+                <f:event type="preRenderView" listener="#{studentManagedBean.loadSelectedStudent()}" />
             </f:metadata>
 
             <h:form>

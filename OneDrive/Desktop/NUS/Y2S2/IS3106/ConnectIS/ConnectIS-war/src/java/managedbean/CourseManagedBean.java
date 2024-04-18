@@ -5,6 +5,7 @@
 package managedbean;
 
 import entity.Course;
+import entity.Student;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
@@ -21,6 +22,7 @@ import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import session.CourseSessionBeanLocal;
+import session.StudentSessionBeanLocal;
 
 /**
  *
@@ -32,6 +34,9 @@ public class CourseManagedBean implements Serializable {
 
     @EJB
     private CourseSessionBeanLocal courseSessionBeanLocal;
+    
+    @EJB
+    private StudentSessionBeanLocal studentSessionBeanLocal;
 
     private Long courseId;
     private String courseCode;
@@ -44,6 +49,7 @@ public class CourseManagedBean implements Serializable {
 
     private Course selectedCourse;
 
+    private List<Course> pinnedCourses;
     private List<Course> filteredCourses;
     private List<Course> allCourses;
 
@@ -69,7 +75,7 @@ public class CourseManagedBean implements Serializable {
                 Logger.getLogger(CourseManagedBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
+        loadPinnedCourses();
     }
 
     public void handleSearch() {
@@ -89,6 +95,22 @@ public class CourseManagedBean implements Serializable {
         this.semester = selectedCourse.getSemester();
     }
 
+    public void loadPinnedCourses() {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        HttpSession session = request.getSession();
+
+        try {
+            Long userId = (Long) session.getAttribute("userId");
+            Student s = studentSessionBeanLocal.getStudent(userId);
+            this.pinnedCourses = s.getPinnedCourses();
+            for (Course c : this.pinnedCourses) {
+                System.out.println("Pinned Course: " + c.getCourseCode());
+            }
+        } catch (exception.NoResultException ex) {
+            ex.getMessage();
+        }
+    }
+
     public String getCourseLinkClass(Long courseId) {
         // Obtain the current instance of FacesContext
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -102,7 +124,7 @@ public class CourseManagedBean implements Serializable {
 
         // Construct the full request URL with the query string
         String fullRequestURI = requestURI + (queryString != null ? "?" + queryString : "");
-        
+
         // Check if the constructed URI matches the expected URI for an active course
         return fullRequestURI.equals("/ConnectIS-war/courseHomePage.xhtml?courseId=" + courseId) ? "active" : "";
     }
@@ -177,6 +199,14 @@ public class CourseManagedBean implements Serializable {
 
     public void setSemester(String semester) {
         this.semester = semester;
+    }
+
+    public List<Course> getPinnedCourses() {
+        return pinnedCourses;
+    }
+
+    public void setPinnedCourses(List<Course> pinnedCourses) {
+        this.pinnedCourses = pinnedCourses;
     }
 
 }

@@ -75,18 +75,20 @@
                                                         <c:forEach items="#{postManagedBean.posts}" var="post">
 
                                                             <div class="user-block">
-                                                                <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image"/>
+                                                                <h:panelGroup rendered="#{post.anonymous}">
+                                                                    <img class="img-circle img-bordered-sm" src="/ConnectIS-war/upload/anonymous.png" alt="user image" />
+                                                                </h:panelGroup>
+                                                                <h:panelGroup rendered="#{not post.anonymous}">
+                                                                    <img class="img-circle img-bordered-sm" src="/ConnectIS-war/upload/#{post.student.profilePicture}" alt="user image" />
+                                                                </h:panelGroup>
                                                                 <span class="username">
-                                                                    <h:form>
-                                                                        <h:panelGroup rendered="#{not post.anonymous}">
-                                                                            <h:commandLink actionListener="#{otherManagedBean.viewOtherUserProfile(post.student.id)}"
-                                                                                           action="viewOtherUserProfile.xhtml?faces-redirect=true">
-                                                                                #{post.student.firstname} #{post.student.lastname}
-                                                                            </h:commandLink>
-                                                                        </h:panelGroup>
-                                                                        <h:outputText rendered="#{post.anonymous}"
-                                                                                      value="Anonymous" />
-                                                                    </h:form>
+                                                                    <h:panelGroup rendered="#{not post.anonymous}">
+                                                                        <h:commandLink action="#{otherManagedBean.viewOtherUserProfile(post.student.id)}">
+                                                                            #{post.student.firstname} #{post.student.lastname}
+                                                                        </h:commandLink>
+                                                                    </h:panelGroup>
+                                                                    <h:outputText rendered="#{post.anonymous}"
+                                                                                  value="Anonymous" />
                                                                 </span>
 
                                                                 <span class="description">

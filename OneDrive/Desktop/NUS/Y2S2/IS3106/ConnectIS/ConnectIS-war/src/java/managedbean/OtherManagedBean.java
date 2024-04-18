@@ -50,11 +50,12 @@ public class OtherManagedBean implements Serializable {
     public OtherManagedBean() {
     }
 
-    public void viewOtherUserProfile(Long studentId) {
+    public String viewOtherUserProfile(Long studentId) {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         HttpSession session = request.getSession();
 
         session.setAttribute("otherStudentId", studentId);
+        return "viewOtherUserProfile.xhtml?faces-redirect=true";
     }
 
     public void loadOtherStudent() {
