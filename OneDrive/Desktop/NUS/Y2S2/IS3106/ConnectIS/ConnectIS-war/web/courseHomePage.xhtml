@@ -56,16 +56,20 @@
 
                                     <p class="text-muted text-center">#{courseManagedBean.courseName}</p>
 
-                                    <p:commandButton value="Pin"
-                                                     action="#{studentManagedBean.followCourse(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
-                                                     styleClass="pin-button"
-                                                     rendered="#{!studentManagedBean.isCoursePinned(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}" 
-                                                     update="@form"/>
-                                    <p:commandButton value="Unpin"
-                                                     action="#{studentManagedBean.unfollowCourse(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
-                                                     styleClass="pin-button"
-                                                     rendered="#{studentManagedBean.isCoursePinned(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}" 
-                                                     update="@form"/>
+                                    <div style="display: flex; justify-content: center;">   
+                                        <p:commandButton value="Pin"
+                                                         action="#{studentManagedBean.followCourse(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
+                                                         styleClass="pin-button"
+                                                         icon="fa fa-thumb-tack"
+                                                         rendered="#{!studentManagedBean.isCoursePinned(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}" 
+                                                         update="@form"/>
+                                        <p:commandButton value="Unpin"
+                                                         action="#{studentManagedBean.unfollowCourse(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}"
+                                                         styleClass="pin-button"
+                                                         icon="fa fa-thumb-tack"
+                                                         rendered="#{studentManagedBean.isCoursePinned(courseManagedBean.selectedCourse, authenticationManagedBean.loggedinStudent)}" 
+                                                         update="@form"/>
+                                    </div>
 
                                 </div>
                             </div>
@@ -155,7 +159,7 @@
                                                     </div>
                                                 </h:form>
                                             </div>
-                                            
+
                                             <div class="post">
                                                 <h:panelGroup id="postsPanel">
                                                     <c:forEach items="#{postManagedBean.filterPost}" var="post">
@@ -190,10 +194,10 @@
                                                             </span>
                                                         </div>
                                                         <!-- /.user-block -->
-                                                        <h:link outcome="/viewPost">
-                                                            <h3 class="username">
+                                                        <h:link outcome="/viewPost" style="text-decoration: none; color: black;">                                                            
+                                                            <h4 class="username" style="font-weight: bold; text-decoration: underline;" >
                                                                 #{post.title}
-                                                            </h3>
+                                                            </h4>
                                                             <f:param name="postId" value="#{post.id}" />
                                                             <f:param name="courseId"
                                                                      value="#{courseManagedBean.selectedCourse.courseId}" />

@@ -83,17 +83,25 @@
                                     <h:message for="lastName" class="invalid-feedback" />
                                 </div>
 
-                                <!-- year -->
+                                <!-- academic year -->
                                 <div class="form-group">
-                                    <h:outputLabel for="year">Year</h:outputLabel><br/>
-                                    <h:inputText id="year" value="#{studentManagedBean.academicYear}" required="true" requiredMessage="Year is required" />
-                                    <h:message for="year" class="invalid-feedback" />
+                                    <h:outputLabel for="academicyear">Academic Year</h:outputLabel>
+                                    <h:selectOneMenu value="#{studentManagedBean.academicYear}" class="form-control" style="width: 10%;">
+                                        <f:selectItem itemValue="1" itemLabel="1" />
+                                        <f:selectItem itemValue="2" itemLabel="2" />
+                                        <f:selectItem itemValue="3" itemLabel="3" />
+                                        <f:selectItem itemValue="4" itemLabel="4" />
+                                        <f:selectItem itemValue="5" itemLabel="5" />
+                                        <f:selectItem itemValue="6" itemLabel="6" />
+                                        <f:selectItem itemValue="7" itemLabel="More than 6" />
+                                    </h:selectOneMenu>
+                                    <h:message for="academicyear" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
                                 </div>
 
                                 <!-- degree -->
                                 <div class="form-group">
                                     <h:outputLabel for="degree">Degree</h:outputLabel>
-                                    <h:selectOneMenu value="#{studentManagedBean.degree}" class="form-control">
+                                    <h:selectOneMenu value="#{studentManagedBean.degree}" class="form-control" style="width: 15%;">
                                         <f:selectItem itemValue="1" itemLabel="Undergraduate" />
                                         <f:selectItem itemValue="2" itemLabel="Master's" />
                                         <f:selectItem itemValue="3" itemLabel="PhD" />
@@ -110,7 +118,7 @@
                                 <!-- gender -->
                                 <div class="form-group">
                                     <h:outputLabel for="gender">Gender</h:outputLabel>
-                                    <h:selectOneMenu value="#{studentManagedBean.gender}" class="form-control">
+                                    <h:selectOneMenu value="#{studentManagedBean.gender}" class="form-control" style="width: 10%;">
                                         <f:selectItem itemValue="1" itemLabel="Female" />
                                         <f:selectItem itemValue="2" itemLabel="Male" />
                                     </h:selectOneMenu>

@@ -47,149 +47,183 @@
                 font-size: 50pt;
                 color: white;
             }
-        </style>
-    </ui:define>
 
+            .form_class {
+                width: 800px;
+                padding: 60px;
+                border-radius: 8px;
+                background: rgba(0, 0, 0, 0.7); /* Dark background with opacity */
+                background: linear-gradient(145deg, rgba(0, 0, 0, 0.8), rgba(23, 23, 23, 0.8)); /* Gradient overlay */
+                color: #fff;
+                box-shadow: 5px 5px 10px rgb(0,0,0,0.3);
+                backdrop-filter: blur(5px);
+                box-shadow: 5px 5px 10px rgb(0,0,0,0.3);
+            }
+            .form_div {
+                color: #FFFFFF
+            }
+            .form_div > label {
+                letter-spacing: 3px;
+                font-size: 1rem;
+            }
+            .info_div {
+                text-align: center;
+                margin-top: 40px;
+                letter-spacing: 1px;
+                font-size: 20px;
+                font-style: italic;
+            }
+            .field_class {
+                width: 100%;
+                border-radius: 6px;
+                border-style: solid;
+                border-width: 1px;
+                padding: 5px 0px;
+                text-indent: 6px;
+                margin-top: 10px;
+                margin-bottom: 20px;
+                font-family: 'system-ui';
+                font-size: 0.9rem;
+                letter-spacing: 2px;
+            }
+            .submit_class {
+                border-style: none;
+                border-radius: 5px;
+                background-color: #FFE6D4;
+                padding: 8px 20px;
+                font-family: 'system-ui';
+                text-transform: uppercase;
+                letter-spacing: .8px;
+                display: block;
+                margin: auto;
+                margin-top: 10px;
+                box-shadow: 2px 2px 5px rgb(0,0,0,0.2);
+                cursor: pointer;
+                width: 70%;
+            }
+
+            .brand-logo {
+                width: 30%;
+                height: auto;
+                background-color: black;
+                border-radius: 50%;
+                opacity: .8;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>
+
+    </ui:define>
 
     <ui:define name="content">
         <div class="limiter">
             <div class="container-signUp100 bgimg">
-                <div class="card card-primary" style="width: 70%;">
-                    <div class="card-header d-flex align-items-center justify-content-center" style="background-image: url(/ConnectIS-war/upload/bg-image2.jpg);">
-                        <span class="dancing-script-login">
-                            Sign Up
-                        </span>
+                <h:form id="signUpForm" class="form_class">     
+                    <div class="form_div" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <img src="dist/img/logo.png" alt="ConnectIS Logo" class="brand-image img-circle elevation-3" style="opacity: 0.8; height: 200px; width: 200px;" />
+                        <div class="form-group" style="width: 80%;">
+
+
+                            <h:outputLabel for="firstname">First Name</h:outputLabel>
+                            <h:inputText binding="#{firstname}" id="firstname" value="#{studentManagedBean.firstname}" required="true" requiredMessage="First Name is required"
+                                         class="form-control #{firstname.valid ? '' :'is-invalid'}" />
+                            <h:message for="firstname" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                        </div>
+                        <div class="form-group" style="width: 80%;">
+                            <h:outputLabel for="lastname">Last Name</h:outputLabel>
+                            <h:inputText binding="#{lastname}" id="lastname" value="#{studentManagedBean.lastname}" required="true" requiredMessage="Last Name is required"
+                                         class="form-control #{lastname.valid ? '' :'is-invalid'}" />
+                            <h:message for="lastname" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                        </div>
+                        <div class="form-group" style="width: 80%;">
+                            <div class="icheck-primary">
+                                <input type="radio" jsf:id="genderF" value="1" class="minimal" a:checked="#{(studentManagedBean.gender == 0 || studentManagedBean.gender == 1) ? 'checked' : null}"
+                                       a:name="#{genderItem.clientId}" />
+                                <label jsf:for="genderF">Female</label>
+                            </div>
+                            <div class="icheck-primary">
+                                <input type="radio" jsf:id="genderM" value="2" class="minimal" a:checked="#{(studentManagedBean.gender == 2) ? 'checked' : null}"
+                                       a:name="#{genderItem.clientId}" />
+                                <label jsf:for="genderM">Male</label>
+                                <h:inputHidden binding="#{genderItem}" value="#{studentManagedBean.gender}" />
+                            </div>
+                        </div>
+                        <div class="form-group" style="width: 80%;">
+                            <h:outputLabel for="inputDOB">Date of Birth (dd/mm/yyyy)</h:outputLabel>
+                            <div class="input-group date" id="dobpicker" data-target-input="nearest">
+                                <div class="input-group-prepend" data-target="#dobpicker" data-toggle="datetimepicker">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                                <h:inputText binding="#{inputDOB}" id="inputDOB" value="#{studentManagedBean.dob}" required="true" requiredMessage="DOB is required"
+                                             converterMessage="Format should be dd/mm/yyy" class="form-control datepicker #{inputDOB.valid ? '' :'is-invalid'}" a:data-target="#dobpicker" a:data-toggle="datetimepicker">
+                                    <f:convertDateTime pattern="dd/MM/yyy" />
+                                </h:inputText>
+                                <h:message for="inputDOB" class="invalid-feedback" style="display:block; text-transform: none; color: red;"  />
+                            </div>
+                        </div>
+                        <div class="form-group" style="width: 80%;">
+                            <h:outputLabel for="email">Email</h:outputLabel>
+                            <h:inputText binding="#{email}" id="email" value="#{studentManagedBean.email}" required="true" requiredMessage="Email is required"
+                                         class="form-control #{email.valid ? '' :'is-invalid'}" />
+                            <h:message for="email" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                        </div>
+                        <div class="form-group" style="width: 80%;">
+                            <h:outputLabel for="contact">Contact Number</h:outputLabel>
+                            <h:inputText binding="#{contact}" id="contact" value="#{studentManagedBean.contactnumber}" required="true" requiredMessage="Contact Number is required"
+                                         class="form-control #{contact.valid ? '' :'is-invalid'}" />
+                            <h:message for="contact" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                        </div>
+                        <!-- academic year -->
+                        <div class="form-group" style="width: 80%;">
+                            <h:outputLabel for="academicYear">Academic Year</h:outputLabel>
+                            <h:selectOneMenu value="#{studentManagedBean.academicYear}" class="form-control">
+                                <f:selectItem itemValue="1" itemLabel="1" />
+                                <f:selectItem itemValue="2" itemLabel="2" />
+                                <f:selectItem itemValue="3" itemLabel="3" />
+                                <f:selectItem itemValue="4" itemLabel="4" />
+                                <f:selectItem itemValue="5" itemLabel="5" />
+                                <f:selectItem itemValue="6" itemLabel="6" />
+                                <f:selectItem itemValue="More than 6" itemLabel="More than 6" />
+                            </h:selectOneMenu>
+                            <h:message for="academicYear" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                        </div>
+                        <div class="form-group" style="width: 80%;">
+                            <h:outputLabel for="degree">Degree</h:outputLabel>
+                            <h:selectOneMenu value="#{studentManagedBean.degree}" class="form-control">
+                                <f:selectItem itemValue="1" itemLabel="Undergraduate" />
+                                <f:selectItem itemValue="2" itemLabel="Master's" />
+                                <f:selectItem itemValue="3" itemLabel="PhD" />
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="form-group" style="width: 80%;">
+                            <h:outputLabel for="specialization">Specialization</h:outputLabel>
+                            <h:selectOneMenu value="#{studentManagedBean.specialization}" class="form-control">
+                                <f:selectItem itemValue="Digital Product and Platform Management" itemLabel="Digital Product and Platform Management" />
+                                <f:selectItem itemValue="Financial Technology" itemLabel="Financial Technology" />
+                                <f:selectItem itemValue="Intelligent Systems Solutioning" itemLabel="Intelligent Systems Solutioning" />
+                                <f:selectItem itemValue="NA" itemLabel="NA" />
+                            </h:selectOneMenu>
+                        </div>
+                        <div class="form-group" style="width: 80%;">
+                            <h:outputLabel for="password">Password</h:outputLabel>
+                            <p:password binding="#{password}" id="password" value="#{studentManagedBean.password}" required="true" requiredMessage="Password is required"
+                                        class="form-control #{password.valid ? '' :'is-invalid'}" feedback="true" />
+                            <h:message for="password" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                        </div>
+                        <!-- Confirm Password -->
+                        <div class="form-group" style="width: 80%;">
+                            <h:outputLabel for="confirmPassword">Confirm Password</h:outputLabel>
+                            <p:password binding="#{confirmPassword}" id="confirmPassword" value="#{studentManagedBean.confirmPassword}" required="true" requiredMessage="Confirm Password is required"
+                                        class="form-control #{confirmPassword.valid ? '' :'is-invalid'}" feedback="true" />
+                            <h:message for="confirmPassword" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                        </div>
+                        <h:commandButton class="submit_class" type="submit" action="#{studentManagedBean.signup(evt)}" value="Sign Up"/>
+                            <h:button value="Back to Login" outcome="login.xhtml" class="submit_class"/>
+                        
                     </div>
-
-                    <h:form id="signUpForm">
-                        <div class="card-body">
-                            <h3>Personal Information</h3>
-                            <hr/>
-
-                            <!-- first name -->
-                            <div class="form-group">
-                                <h:outputLabel for="firstname">First Name</h:outputLabel>
-                                <h:inputText binding="#{firstname}" id="firstname" value="#{studentManagedBean.firstname}" required="true" requiredMessage="First Name is required"
-                                             class="form-control #{firstname.valid ? '' :'is-invalid'}" />
-                                <h:message for="firstname" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
-                            </div>
-
-                            <!-- last name -->
-                            <div class="form-group">
-                                <h:outputLabel for="lastname">Last Name</h:outputLabel>
-                                <h:inputText binding="#{lastname}" id="lastname" value="#{studentManagedBean.lastname}" required="true" requiredMessage="Last Name is required"
-                                             class="form-control #{lastname.valid ? '' :'is-invalid'}" />
-                                <h:message for="lastname" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
-                            </div>
-
-                            <!-- gender -->
-                            <div class="form-group">
-                                <div class="icheck-primary">
-                                    <input type="radio" jsf:id="genderF" value="1" class="minimal" a:checked="#{(studentManagedBean.gender == 0 || studentManagedBean.gender == 1) ? 'checked' : null}"
-                                           a:name="#{genderItem.clientId}" />
-                                    <label jsf:for="genderF">Female</label>
-                                </div>
-                                <div class="icheck-primary">
-                                    <input type="radio" jsf:id="genderM" value="2" class="minimal" a:checked="#{(studentManagedBean.gender == 2) ? 'checked' : null}"
-                                           a:name="#{genderItem.clientId}" />
-                                    <label jsf:for="genderM">Male</label>
-                                    <h:inputHidden binding="#{genderItem}" value="#{studentManagedBean.gender}" />
-                                </div>
-                            </div>
-
-                            <!-- DOB -->
-                            <div class="form-group">
-                                <h:outputLabel for="inputDOB">Date of Birth (dd/mm/yyyy)</h:outputLabel>
-                                <div class="input-group date" id="dobpicker" data-target-input="nearest">
-                                    <div class="input-group-prepend" data-target="#dobpicker" data-toggle="datetimepicker">
-                                        <span class="input-group-text">
-                                            <i class="fa fa-calendar"></i>
-                                        </span>
-                                    </div>
-                                    <h:inputText binding="#{inputDOB}" id="inputDOB" value="#{studentManagedBean.dob}" required="true" requiredMessage="DOB is required"
-                                                 converterMessage="Format should be dd/mm/yyy" class="form-control datepicker #{inputDOB.valid ? '' :'is-invalid'}" a:data-target="#dobpicker" a:data-toggle="datetimepicker">
-                                        <f:convertDateTime pattern="dd/MM/yyy" />
-                                    </h:inputText>
-                                    <h:message for="inputDOB" class="invalid-feedback" style="display:block; text-transform: none; color: red;"  />
-                                </div>
-                            </div>
-
-                            <!-- contact -->
-                            <div class="form-group">
-                                <h:outputLabel for="contact">Contact</h:outputLabel>
-                                <h:inputText binding="#{contact}" id="contact" value="#{studentManagedBean.contactnumber}" required="true" requiredMessage="Contact Number is required"
-                                             class="form-control #{contact.valid ? '' :'is-invalid'}" />
-                                <h:message for="contact" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
-                            </div>
-
-                            <!-- email -->
-                            <div class="form-group">
-                                <h:outputLabel for="email">Email</h:outputLabel>
-                                <h:inputText binding="#{email}" id="email" value="#{studentManagedBean.email}" required="true" requiredMessage="Email is required"
-                                             class="form-control #{email.valid ? '' :'is-invalid'}" />
-                                <h:message for="email" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
-                            </div>
-
-                            <br/><br/>
-                            <h3>Academic Information</h3>
-                            <hr/>
-
-                            <!-- academic year -->
-                            <div class="form-group">
-                                <h:outputLabel for="academicyear">Academic Year</h:outputLabel>
-                                <h:inputText binding="#{academicyear}" id="academicyear" value="#{studentManagedBean.academicYear}" required="true" requiredMessage="Academic Year is required"
-                                             class="form-control #{academicyear.valid ? '' :'is-invalid'}" />
-                                <h:message for="academicyear" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
-                            </div>
-
-                            <!-- degree -->
-                            <div class="form-group">
-                                <h:outputLabel for="degree">Degree</h:outputLabel>
-                                <h:selectOneMenu value="#{studentManagedBean.degree}" class="form-control">
-                                    <f:selectItem itemValue="1" itemLabel="Undergraduate" />
-                                    <f:selectItem itemValue="2" itemLabel="Master's" />
-                                    <f:selectItem itemValue="3" itemLabel="PhD" />
-                                </h:selectOneMenu>
-                            </div>
-
-                            <!-- specialization -->
-                            <div class="form-group">
-                                <h:outputLabel for="specialization">Specialization</h:outputLabel>
-                                <h:inputText binding="#{specialization}" id="specialization" value="#{studentManagedBean.specialization}" required="true" requiredMessage="Specialization is required"
-                                             class="form-control #{specialization.valid ? '' :'is-invalid'}" />
-                                <h:message for="specialization" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
-                            </div>
-
-                            <br/><br/>
-                            <h3>Password</h3>
-                            <hr/>
-
-                            <!-- Password -->
-                            <div class="form-group">
-                                <h:outputLabel for="password">Password</h:outputLabel>
-                                <p:password binding="#{password}" id="password" value="#{studentManagedBean.password}" required="true" requiredMessage="Password is required"
-                                               class="form-control #{password.valid ? '' :'is-invalid'}" feedback="true" />
-                                <h:message for="password" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
-                            </div>
-
-                            <!-- Confirm Password -->
-                            <div class="form-group">
-                                <h:outputLabel for="confirmPassword">Confirm Password</h:outputLabel>
-                                <p:password binding="#{confirmPassword}" id="confirmPassword" value="#{studentManagedBean.confirmPassword}" required="true" requiredMessage="Confirm Password is required"
-                                               class="form-control #{confirmPassword.valid ? '' :'is-invalid'}" feedback="true" />
-                                <h:message for="confirmPassword" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
-                            </div>
-
-                        </div>
-                        <!-- /.card-body -->
-
-                        <div class="card-footer">
-                            <h:button value="Cancel" class="btn btn-default" outcome="login" />
-                            <h:commandButton value="Sign Up" class="btn btn-primary float-right" 
-                                             action="#{studentManagedBean.signup(evt)}" />
-                        </div>
-                    </h:form>
-                </div>
+                </h:form>
             </div>
         </div>
     </ui:define>
@@ -226,4 +260,3 @@
     </ui:define>
 
 </ui:composition>
-
