@@ -33,7 +33,7 @@
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-right">
                                     <li class="breadcrumb-item">
-                                        <a href="#{request.contextPath}">Home</a>
+                                        <a href="#{request.contextPath}/homePage.xhtml">Home</a>
                                     </li>
                                     <li class="breadcrumb-item active">
                                         Edit Profile
@@ -59,13 +59,16 @@
                         <!-- /.card-header -->
                         <!-- form start -->
                         <h:form>
+                            <div style="margin-left: 20px; margin-right: 20px;">
+                                <h:messages style="color: red; border: 1px solid red; background-color: white; padding: 10px; margin: 10px 0; border-radius: 5px; list-style-type: none; padding-left: 10;" />
+                            </div>
+
                             <div class="card-body">
-                                <!-- email -->
                                 <div class="form-group">
                                     <h:outputLabel for="email">Email</h:outputLabel><br/>
                                     <h:outputText id="email" value="#{studentManagedBean.email}" />
                                 </div>
-                                
+
                                 <!-- first name -->
                                 <div class="form-group">
                                     <h:outputLabel for="firstName">First Name</h:outputLabel><br/>
@@ -86,7 +89,7 @@
                                     <h:inputText id="year" value="#{studentManagedBean.academicYear}" required="true" requiredMessage="Year is required" />
                                     <h:message for="year" class="invalid-feedback" />
                                 </div>
-                                
+
                                 <!-- degree -->
                                 <div class="form-group">
                                     <h:outputLabel for="degree">Degree</h:outputLabel>
@@ -129,7 +132,7 @@
                                         <h:message for="dob" class="invalid-feedback" />
                                     </div>
                                 </div>
-                                
+
                                 <!-- contact -->
                                 <div class="form-group">
                                     <h:outputLabel for="contact">Contact Number</h:outputLabel><br/>

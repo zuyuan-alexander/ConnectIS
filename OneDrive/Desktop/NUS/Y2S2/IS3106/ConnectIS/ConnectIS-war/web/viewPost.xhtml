@@ -42,7 +42,8 @@
                                                 </h:panelGroup>
                                                 <h:panelGroup rendered="#{not postManagedBean.selectedPost.anonymous}">
                                                     <img class="img-circle img-bordered-sm" src="/ConnectIS-war/upload/#{postManagedBean.selectedPost.student.profilePicture}" alt="user image" />
-                                                </h:panelGroup>                                                <span class="username">
+                                                </h:panelGroup>                                                
+                                                <span class="username">
                                                     <h:outputText value="#{postManagedBean.selectedPost.anonymous ? 'Anonymous' : postManagedBean.selectedPost.student.firstname.concat(' ').concat(postManagedBean.selectedPost.student.lastname)}" escape="false" />
                                                 </span>
 
@@ -93,7 +94,7 @@
 
 
                                             <span class="username">
-                                                <a href="#">#{postManagedBean.selectedPost.title}</a>
+                                                <a href="#"><h4>#{postManagedBean.selectedPost.title}</h4></a>
                                             </span>
 
 
@@ -150,15 +151,20 @@
                                     <!-- Comments Section -->
                                     <div class="card">
                                         <div class="card-body p-4">
-                                            <h4 class="text-center mb-4 pb-2">Comments section</h4>
+                                            <h6 class="text-center mb-4 pb-2">Comments</h6>
                                             <h:panelGroup id="commentsContainer">
                                                 <ui:repeat value="#{postManagedBean.selectedPost.comments}" var="comment" varStatus="status">
                                                     <div class="row" style="margin-bottom: 15px;">
                                                         <div class="col">
                                                             <div class="d-flex flex-start">
-                                                                <h:graphicImage value="dist/img/user1-128x128.jpg" alt="user image" 
+                                                                <h:graphicImage value="upload/anonymous.png" alt="user image" 
                                                                                 styleClass="img-circle img-bordered-sm" 
-                                                                                style="width: 50px; height: 50px;margin-right: 10px;"/>
+                                                                                style="width: 50px; height: 50px;margin-right: 10px;"
+                                                                                rendered="#{comment.anonymous}"/>
+                                                                <h:graphicImage value="upload/#{comment.student.profilePicture}" alt="user image" 
+                                                                                styleClass="img-circle img-bordered-sm" 
+                                                                                style="width: 50px; height: 50px;margin-right: 10px;"
+                                                                                rendered="#{!comment.anonymous}"/>
                                                                 <div class="flex-grow-1 flex-shrink-1">
                                                                     <div >
                                                                         <div class="d-flex justify-content-between align-items-center">
@@ -173,21 +179,18 @@
                                                                             #{comment.content}
                                                                         </p>
 
-                                                                        <div class="comment-actions" style="border: 0.5px dotted #ccc; padding: 4px; display: flex; align-items: center; gap: 5px; font-size: 0.8em;">
+                                                                        <div class="comment-actions" style="padding: 4px; display: flex; align-items: center; gap: 5px; font-size: 0.8em;">
 
-                                                                            <h:commandButton value="Reply" styleClass="btn btn-sm btn-light" action="#{commentManagedBean.setActiveCommentId(comment.id)}">
+                                                                            <h:commandButton value="Reply" styleClass="btn btn-sm btn-light" style="text-decoration: underline;" action="#{commentManagedBean.setActiveCommentId(comment.id)}">
                                                                                 <f:ajax render=":j_idt31:j_idt55:#{status.index}:replyFormPanel" />
                                                                                 <f:param name="commentIndex" value="#{status.index}" />
-                                                                                <i class="bi bi-reply"></i>
                                                                             </h:commandButton>
 
                                                                             <!-- Render Edit and Delete buttons only for comments from logged-in student -->
                                                                             <h:panelGroup rendered="#{comment.student.id eq commentManagedBean.loggedinStudent.id}">
-                                                                                <h:commandButton value="Edit" styleClass="btn btn-sm btn-light" >
-                                                                                    <i class="bi bi-pencil"></i>
-                                                                                </h:commandButton>
-                                                                                <a class="btn btn-sm btn-light" data-toggle="modal" data-target="#confirmDeleteCommentModal" onclick="setSelectedCommentId(#{comment.id})">
-                                                                                    Delete<i class="bi bi-trash"></i>
+                                                                                <h:commandButton value="Edit" styleClass="btn btn-sm btn-light" style="text-decoration: underline;" />
+                                                                                <a class="btn btn-sm btn-light" style="text-decoration: underline;" data-toggle="modal" data-target="#confirmDeleteCommentModal" onclick="setSelectedCommentId(#{comment.id})">
+                                                                                    Delete
                                                                                 </a>
                                                                                 <!-- Bootstrap Modal for Delete Comment Confirmation -->
                                                                                 <div class="modal fade" id="confirmDeleteCommentModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteCommentModalLabel" aria-hidden="true">
@@ -224,7 +227,7 @@
                                                                     <h:panelGroup rendered="#{not empty comment.replies}">
 
                                                                         <ui:repeat value="#{comment.replies}" var="nestedComment">
-                                                                            <div style="margin-left: 20px;"> <!-- Indent nested comments -->
+                                                                            <div style="margin-left: 20px; margin-top:20px;"> <!-- Indent nested comments -->
                                                                                 <div class="d-flex flex-start">
                                                                                     <h:graphicImage value="dist/img/user1-128x128.jpg" alt="user image" 
                                                                                                     styleClass="img-circle img-bordered-sm" 
@@ -241,21 +244,19 @@
                                                                                             #{nestedComment.content}
                                                                                         </p>  
 
-                                                                                        <div class="comment-actions" style="border: 0.5px dotted #ccc; padding: 4px; display: flex; align-items: center; gap: 5px; font-size: 0.8em;">
+                                                                                        <div class="comment-actions" style="padding: 4px; display: flex; align-items: center; gap: 5px; font-size: 0.8em;">
 
-                                                                                            <h:commandButton value="Reply" styleClass="btn btn-sm btn-light" action="#{commentManagedBean.setActiveCommentId(nestedComment.id)}">
+                                                                                            <h:commandButton value="Reply" styleClass="btn btn-sm btn-light" style="text-decoration: underline;" action="#{commentManagedBean.setActiveCommentId(nestedComment.id)}">
                                                                                                 <f:ajax render=":j_idt31:j_idt55:#{status.index}:replyFormPanel" />
                                                                                                 <f:param name="commentIndex" value="#{status.index}" />
-                                                                                                <i class="bi bi-reply"></i>
                                                                                             </h:commandButton>
 
                                                                                             <!-- Render Edit and Delete buttons only for comments from logged-in student -->
                                                                                             <h:panelGroup rendered="#{nestedComment.student.id eq commentManagedBean.loggedinStudent.id}">
-                                                                                                <h:commandButton value="Edit" styleClass="btn btn-sm btn-light">
-                                                                                                    <i class="bi bi-pencil"></i>
+                                                                                                <h:commandButton value="Edit" styleClass="btn btn-sm btn-light" style="text-decoration: underline;">
                                                                                                 </h:commandButton>
-                                                                                                <a class="btn btn-sm btn-light" data-toggle="modal" data-target="#confirmDeleteNestedCommentModal" onclick="setSelectedCommentId(#{nestedComment.id})">
-                                                                                                    Delete<i class="bi bi-trash"></i>
+                                                                                                <a class="btn btn-sm btn-light" style="text-decoration: underline;" data-toggle="modal" data-target="#confirmDeleteNestedCommentModal" onclick="setSelectedCommentId(#{nestedComment.id})">
+                                                                                                    Delete
                                                                                                 </a>
 
                                                                                                 <!-- Bootstrap Modal for Delete Nested Comment Confirmation -->
@@ -329,6 +330,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <hr></hr>
                                                 </ui:repeat>
                                             </h:panelGroup>
                                         </div>
