@@ -142,7 +142,9 @@
                                                                  style="margin-right: 10px;"/>
                                                 <div class="input-group-append">
                                                     <h:commandButton value="Comment" action="#{commentManagedBean.addComment}"
-                                                                     styleClass="btn btn-primary" />
+                                                                     styleClass="btn btn-primary">
+                                                        <f:ajax execute="@form" render=":cardContainer" />
+                                                    </h:commandButton>
                                                 </div>
                                             </div>
                                             <div class="custom-control custom-switch">
@@ -155,10 +157,11 @@
 
 
                                     <!-- Comments Section -->
-                                    <div class="card">
+                                    <div class="card" id="cardContainer">
                                         <div class="card-body p-4">
                                             <h6 class="text-center mb-4 pb-2">Comments</h6>
                                             <h:panelGroup id="commentsContainer">
+
                                                 <ui:repeat value="#{postManagedBean.selectedPost.comments}" var="comment" varStatus="status">
                                                     <div class="row" style="margin-bottom: 15px;">
                                                         <div class="col">
@@ -197,22 +200,24 @@
                                                                         <div class="comment-actions" style="padding: 4px; display: flex; align-items: center; gap: 5px; font-size: 0.8em;">
 
                                                                             <h:commandButton value="Reply" styleClass="btn btn-sm btn-light" style="text-decoration: underline;" action="#{commentManagedBean.setActiveCommentId(comment.id)}">
-                                                                                <f:ajax render=":j_idt31:j_idt55:#{status.index}:replyFormPanel" />
+                                                                                <f:ajax render=":j_idt20:j_idt49:#{status.index}:replyFormPanel" />
                                                                                 <f:param name="commentIndex" value="#{status.index}" />
                                                                             </h:commandButton>
 
                                                                             <!-- Render Edit and Delete buttons only for comments from logged-in student -->
                                                                             <h:panelGroup rendered="#{comment.student.id eq commentManagedBean.loggedinStudent.id}">
                                                                                 <h:commandButton value="Edit" styleClass="btn btn-sm btn-light" style="text-decoration: underline;" />
-                                                                                <a class="btn btn-sm btn-light" style="text-decoration: underline;" data-toggle="modal" data-target="#confirmDeleteCommentModal" onclick="setSelectedCommentId(#{comment.id})">
+                                                                                <!-- Delete Button -->
+                                                                                <a class="btn btn-sm btn-light" style="text-decoration: underline;" data-toggle="modal" data-target="#confirmDeleteCommentModal#{comment.id}" onclick="setSelectedCommentId(#{comment.id})">
                                                                                     Delete
                                                                                 </a>
+
                                                                                 <!-- Bootstrap Modal for Delete Comment Confirmation -->
-                                                                                <div class="modal fade" id="confirmDeleteCommentModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteCommentModalLabel" aria-hidden="true">
+                                                                                <div class="modal fade" id="confirmDeleteCommentModal#{comment.id}" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteCommentModalLabel#{comment.id}" aria-hidden="true">
                                                                                     <div class="modal-dialog" role="document">
                                                                                         <div class="modal-content">
                                                                                             <div class="modal-header">
-                                                                                                <h5 class="modal-title" id="confirmDeleteCommentModalLabel">Confirm Delete</h5>
+                                                                                                <h5 class="modal-title" id="confirmDeleteCommentModalLabel#{comment.id}">Confirm Delete</h5>
                                                                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                                                     <span aria-hidden="true">&times;</span>
                                                                                                 </button>
@@ -229,6 +234,7 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
+
 
 
 
@@ -270,7 +276,7 @@
                                                                                         <div class="comment-actions" style="padding: 4px; display: flex; align-items: center; gap: 5px; font-size: 0.8em;">
 
                                                                                             <h:commandButton value="Reply" styleClass="btn btn-sm btn-light" style="text-decoration: underline;" action="#{commentManagedBean.setActiveCommentId(nestedComment.id)}">
-                                                                                                <f:ajax render=":j_idt31:j_idt55:#{status.index}:replyFormPanel" />
+                                                                                                <f:ajax render=":j_idt20:j_idt49:#{status.index}:replyFormPanel" />
                                                                                                 <f:param name="commentIndex" value="#{status.index}" />
                                                                                             </h:commandButton>
 
@@ -375,14 +381,15 @@
         <script>
             function hideReplyForm(index) {
                 console.log(index);
-                var replyId = 'j_idt31:j_idt55:' + index + ':replyFormPanel';
+                var replyId = 'j_idt20:j_idt49:' + index + ':replyFormPanel';
                 //this works
-                document.getElementById('j_idt31:j_idt55:0:replyFormPanel').style.display = 'none';
+                document.getElementById('j_idt20:j_idt49:0:replyFormPanel').style.display = 'none';
                 //this does not because the method calling the index is null.
                 document.getElementById(replyId).style.display = 'none';
             }
 
             function setSelectedCommentId(commentId) {
+                console.log(commentId);
                 // Assuming you have a hidden input to hold the selectedCommentId in your form
                 document.getElementById('hiddenSelectedCommentId').value = commentId;
             }

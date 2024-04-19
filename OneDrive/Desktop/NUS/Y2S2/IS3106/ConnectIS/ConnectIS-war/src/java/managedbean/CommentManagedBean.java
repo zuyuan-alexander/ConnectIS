@@ -93,16 +93,19 @@ public class CommentManagedBean implements Serializable {
     }
 
     public String addComment() {
+        Course selectedCourse = postBean.getSelectedCourse();
         newReply.setContent(this.content);
         newReply.setAnonymous(this.anonymous);
         if (newReply.getContent() != null || !newReply.getContent().isEmpty()) {
             commentSessionBean.createComment(newReply, selectedPost.getId(), loggedinStudent.getId());
             newReply = new Comment();
+            return "viewPost?faces-redirect=true&includeViewParams=true&postId=" + selectedPost.getId() + "&courseId=" + selectedCourse.getCourseId();
         }
 
         setContent(null);
         setAnonymous(false);
         return null;
+       
     }
 
     public String deleteComment(Long commentId) {

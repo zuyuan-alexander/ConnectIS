@@ -59,6 +59,7 @@
             <!-- Chat Box-->
             <div class="col-7 px-0">
                 <h:panelGroup id="chatBox" layout="block">
+                    <h:form class="bg-light">
                     <div class="px-4 py-5 chat-box bg-white">
                         <!-- Dynamic Messages -->
                         <ui:repeat value="#{chatManagedBean.selectedChat.messages}" var="message">
@@ -86,7 +87,7 @@
 
 
                     <!-- Typing area -->
-                    <h:form class="bg-light">
+                    
                         <div class="input-group">
                             <h:inputText value="#{chatManagedBean.content}" 
                                          a:placeholder="Type a message" 
@@ -98,7 +99,7 @@
                                                  action="#{chatManagedBean.sendMessage}" 
                                                  styleClass="btn btn-link"
                                                  value = "Reply">
-                                    <f:ajax execute="@form" render=":chatBox" />                              
+                                    <f:ajax execute="@form" render="@form" />                              
                                 </h:commandButton>
                             </div>
                         </div>
