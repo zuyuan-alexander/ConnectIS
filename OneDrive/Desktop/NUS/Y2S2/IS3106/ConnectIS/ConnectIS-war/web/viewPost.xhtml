@@ -200,7 +200,7 @@
                                                                         <div class="comment-actions" style="padding: 4px; display: flex; align-items: center; gap: 5px; font-size: 0.8em;">
 
                                                                             <h:commandButton value="Reply" styleClass="btn btn-sm btn-light" style="text-decoration: underline;" action="#{commentManagedBean.setActiveCommentId(comment.id)}">
-                                                                                <f:ajax render=":j_idt20:j_idt49:#{status.index}:replyFormPanel" />
+                                                                                <f:ajax render=":j_idt20:j_idt52:#{status.index}:replyFormPanel" />
                                                                                 <f:param name="commentIndex" value="#{status.index}" />
                                                                             </h:commandButton>
 
@@ -275,8 +275,8 @@
 
                                                                                         <div class="comment-actions" style="padding: 4px; display: flex; align-items: center; gap: 5px; font-size: 0.8em;">
 
-                                                                                            <h:commandButton value="Reply" styleClass="btn btn-sm btn-light" style="text-decoration: underline;" action="#{commentManagedBean.setActiveCommentId(nestedComment.id)}">
-                                                                                                <f:ajax render=":j_idt20:j_idt49:#{status.index}:replyFormPanel" />
+                                                                                            <h:commandButton value="Reply" styleClass="btn btn-sm btn-light" style="text-decoration: underline;" action="#{commentManagedBean.setActiveCommentId(comment.id)}">
+                                                                                                <f:ajax render=":j_idt20:j_idt52:#{status.index}:replyFormPanel" />
                                                                                                 <f:param name="commentIndex" value="#{status.index}" />
                                                                                             </h:commandButton>
 
@@ -381,9 +381,9 @@
         <script>
             function hideReplyForm(index) {
                 console.log(index);
-                var replyId = 'j_idt20:j_idt49:' + index + ':replyFormPanel';
+                var replyId = 'j_idt20:j_idt52:' + index + ':replyFormPanel';
                 //this works
-                document.getElementById('j_idt20:j_idt49:0:replyFormPanel').style.display = 'none';
+                document.getElementById('j_idt20:j_idt52:0:replyFormPanel').style.display = 'none';
                 //this does not because the method calling the index is null.
                 document.getElementById(replyId).style.display = 'none';
             }
