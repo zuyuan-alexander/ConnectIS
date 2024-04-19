@@ -127,6 +127,39 @@ public class ChatSessionBean implements ChatSessionBeanLocal {
         query.setParameter("studentId", studentId);
         return query.getResultList();
     }
+    
+     @Override
+    public String getOtherStudentName(Long chatId, Long loggedInStudentId) {
+        Chat chat = em.find(Chat.class, chatId);
+        if (chat.getStudent1().getId().equals(loggedInStudentId)) {
+            return chat.isStudent2Anonymous() ? "Anonymous" : 
+                chat.getStudent2().getFirstname() + " " + chat.getStudent2().getLastname();
+        } else {
+            return chat.isStudent1Anonymous() ? "Anonymous" : 
+                chat.getStudent1().getFirstname() + " " + chat.getStudent1().getLastname();
+        }
+    }
+
+    @Override
+    public Student getOtherStudent(Long chatId, Long loggedInStudentId) {
+        Chat chat = em.find(Chat.class, chatId);
+        if (chat.getStudent1() != null && chat.getStudent1().getId().equals(loggedInStudentId)) {
+            return chat.getStudent2();
+        } else {
+            return chat.getStudent1();
+        }
+    }
+
+    @Override
+    public Message getLastMessage(Long chatId) {
+        Chat chat = em.find(Chat.class, chatId);
+        List<Message> messages = chat.getMessages();
+        if (!messages.isEmpty()) {
+            return messages.get(messages.size() - 1);
+        } else {
+            return new Message(); // Consider returning null or an Optional<Message> here
+        }
+    }
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")

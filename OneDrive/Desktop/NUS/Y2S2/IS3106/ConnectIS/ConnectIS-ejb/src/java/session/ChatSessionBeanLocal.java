@@ -6,6 +6,7 @@ package session;
 
 import entity.Chat;
 import entity.Message;
+import entity.Student;
 import java.util.List;
 import javax.ejb.Local;
 import javax.persistence.NoResultException;
@@ -26,5 +27,11 @@ public interface ChatSessionBeanLocal {
     public List<Chat> findChatsForStudent(Long studentId);
     
      public boolean doesChatExistBetweenStudents(Long studentId1, Long studentId2);
+
+    public String getOtherStudentName(Long chatId, Long loggedInStudentId);
+
+    public Student getOtherStudent(Long chatId, Long loggedInStudentId);
+
+    public Message getLastMessage(Long chatId);
 
 }
