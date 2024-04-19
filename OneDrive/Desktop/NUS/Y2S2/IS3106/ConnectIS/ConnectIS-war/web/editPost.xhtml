@@ -51,21 +51,23 @@
                                                  class="form-control" />
                                     <h:message for="postTitle" class="invalid-feedback" />
                                 </div>
-                                 <div class="form-group">
-                                    
-                                        <h:outputLabel for="postType">Post Type</h:outputLabel>
-                                        <h:selectOneMenu id="postType" value="#{postManagedBean.postType}" class="form-control">
-                                            <f:selectItem itemValue="lecture" itemLabel="Lecture" />
-                                            <f:selectItem itemValue="labs" itemLabel="Labs" />
-                                            <f:selectItem itemValue="tutorials" itemLabel="Tutorials" />
-                                            <f:selectItem itemValue="project" itemLabel="Project" />
-                                            <f:selectItem itemValue="others" itemLabel="Others" />
-                                        </h:selectOneMenu>
+                                <div class="form-group">
+
+                                    <h:outputLabel for="postType">Post Type</h:outputLabel>
+                                    <h:selectOneMenu id="postType" value="#{postManagedBean.postType}" class="form-control">
+                                        <f:selectItem itemValue="lecture" itemLabel="Lecture" />
+                                        <f:selectItem itemValue="labs" itemLabel="Labs" />
+                                        <f:selectItem itemValue="tutorials" itemLabel="Tutorials" />
+                                        <f:selectItem itemValue="project" itemLabel="Project" />
+                                        <f:selectItem itemValue="others" itemLabel="Others" />
+                                    </h:selectOneMenu>
 
                                 </div>
                                 <div class="form-group">
                                     <div id="summernote"></div>
-                                    <h:inputHidden id="text" value="#{postManagedBean.content}"/>
+                                    <div class="hiddenInput">
+                                        <h:inputHidden id="text" value="#{postManagedBean.content}" />
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="custom-control custom-switch">
@@ -83,14 +85,8 @@
 
                             <!-- Additional divs and content can go here -->
                         </h:form>
-                        
-                        
-                          <div id="postContentDisplay">
-                                <div>
-                                    <!-- Display the post content -->
-                                    <h:outputText value="#{postManagedBean.content}" escape="false" />
-                                </div>
-                            </div>
+
+
 
                     </div>
                 </section>
@@ -113,33 +109,16 @@
                     function submitPost() {
                         var content = $('#summernote').summernote('code');
                         console.log(content);
-                        document.getElementById('j_idt29:text').value = content;
-                        document.getElementById('postContentDisplay').innerHTML = content;
-
-                    }
-
-                </script>
-                <script>
-                    $(document).ready(function () {
-                        // Initialize the radio button for the current post type
-                        initializePostType();
-                    });
-
-                    function updatePostType(selectedType) {
-                        document.getElementById('j_idt13:hiddenPostType').value = selectedType;
-                    }
-
-                    function initializePostType() {
-                        var currentType = '#{postManagedBean.selectedPost.postType}';
-                        if (currentType) {
-                            var radioButton = document.querySelector(`input[name="postType"][value="${currentType}"]`);
-                            if (radioButton) {
-                                radioButton.checked = true;
-                                radioButton.closest('label').classList.add('active');
-                            }
+                        var hiddenInputs = document.querySelectorAll('.hiddenInput input[type="hidden"]');
+                        if (hiddenInputs.length > 0) {
+                            var hiddenInput = hiddenInputs[0]; // Assuming there's only one hidden input within .hiddenInput
+                            hiddenInput.value = content;
                         }
                     }
+
+
                 </script>
+
             </ui:define>
 
         </ui:composition>

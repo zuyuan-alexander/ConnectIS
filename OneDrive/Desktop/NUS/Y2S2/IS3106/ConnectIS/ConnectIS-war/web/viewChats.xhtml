@@ -96,9 +96,9 @@
                                 <h:commandButton id="button-addon2" 
                                                  type="submit" 
                                                  action="#{chatManagedBean.sendMessage}" 
-                                                 styleClass="btn btn-link">
-                                    <f:ajax execute="@form" render=":chatBox" />
-                                    <i class="fa fa-paper-plane"></i>
+                                                 styleClass="btn btn-link"
+                                                 value = "Reply">
+                                    <f:ajax execute="@form" render=":chatBox" />                              
                                 </h:commandButton>
                             </div>
                         </div>
