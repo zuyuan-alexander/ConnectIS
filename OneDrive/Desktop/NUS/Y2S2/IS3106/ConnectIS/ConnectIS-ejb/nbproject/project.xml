@@ -8,6 +8,7 @@
             <included-library dirs="200">libs.javaee-api-8.0.classpath</included-library>
             <included-library dirs="200">libs.javaee-web-api-8.0.classpath</included-library>
             <included-library dirs="200">libs.jpa20-persistence.classpath</included-library>
+            <included-library dirs="200">file.reference.jbcrypt-0.4.jar</included-library>
             <source-roots>
                 <root id="src.dir" name="Source Packages"/>
             </source-roots>

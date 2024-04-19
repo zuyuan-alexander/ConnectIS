@@ -15,6 +15,7 @@ import java.util.List;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.security.PasswordUtil;
 
 /**
  *
@@ -28,6 +29,8 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
 
     @Override
     public void createStudent(Student s) {
+        String hashedPassword = PasswordUtil.hashPassword(s.getPassword());
+        s.setPassword(hashedPassword);
         s.setProfilePicture("dummy.jpeg");
         em.persist(s);
     }
@@ -49,10 +52,24 @@ public class StudentSessionBean implements StudentSessionBeanLocal {
         query.setParameter("inEmail", email);
 
         try {
-            return (Student) query.getSingleResult();
+            Student loggedinStudent = (Student) query.getSingleResult();
+            return loggedinStudent;
         } catch (javax.persistence.NoResultException | NonUniqueResultException ex) {
             throw new NoResultException("Student email " + email + " does not exist!");
         }
+    }
+
+    @Override
+    public boolean checkPassword(Student s, String password) {
+        String storedHashedPassword = s.getPassword();
+        
+         if (storedHashedPassword == null) {
+            System.out.println("User not found!");
+            return false; // User not found or email does not exist
+        }
+        boolean isPasswordCorrect = PasswordUtil.checkPassword(password, storedHashedPassword);
+        
+        return isPasswordCorrect;
     }
 
     @Override

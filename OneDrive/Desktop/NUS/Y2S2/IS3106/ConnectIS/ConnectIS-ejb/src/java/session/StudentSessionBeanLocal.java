@@ -39,5 +39,7 @@ public interface StudentSessionBeanLocal {
     public List<Post> getCreatedPosts(Student s);
 
     public List<PostLike> getLikedPosts(Student s);
+
+    public boolean checkPassword(Student s, String password);
     
 }

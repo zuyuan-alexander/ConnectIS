@@ -58,7 +58,7 @@ public class AuthenticationManagedBean implements Serializable {
         try {
             Student student = studentSessionBean.retrieveStudentByEmail(email);
 
-            if (password.equals(student.getPassword())) {
+            if (studentSessionBean.checkPassword(student, password)) {
                 setUserId(student.getId());
                 session.setAttribute("userId", getUserId());
                 setLoggedinStudent(student);
