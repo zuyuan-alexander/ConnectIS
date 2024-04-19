@@ -106,13 +106,17 @@
                                                                                            pattern="hh:mm a dd/MM/yyyy" />
                                                                     </h:outputText>
                                                                 </span>
-                                                                <span class="description">Shared in Group #{post.course.courseCode}</span>
-                                                            </div>
+                                                                <span class="description">
+                                                                    Shared in Group 
+                                                                    <a href="#{request.contextPath}/courseHomePage.xhtml?courseId=#{post.course.courseId}" class="#{courseManagedBean.getCourseLinkClass(post.course.courseId)}"  style="text-decoration: underline;">
+                                                                        #{post.course.courseCode}
+                                                                    </a>
+                                                                </span>                                                            </div>
                                                             <!-- /.user-block -->
                                                             <h:link outcome="/viewPost" style="text-decoration: none; color: black;">
-                                                                <h3 class="username" style="font-weight: bold;">
+                                                                <h4 class="username" style="font-weight: bold; text-decoration: underline;" >
                                                                     #{post.title}
-                                                                </h3>
+                                                                </h4>
                                                                 <f:param name="postId" value="#{post.id}" />
                                                                 <f:param name="courseId" value="#{post.course.courseId}" />
                                                                 <f:attribute name="hoverStyle" value="color: darkgray;" />
