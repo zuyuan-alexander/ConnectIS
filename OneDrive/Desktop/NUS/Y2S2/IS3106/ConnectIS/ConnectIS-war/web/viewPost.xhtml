@@ -42,9 +42,15 @@
                                                 </h:panelGroup>
                                                 <h:panelGroup rendered="#{not postManagedBean.selectedPost.anonymous}">
                                                     <img class="img-circle img-bordered-sm" src="/ConnectIS-war/upload/#{postManagedBean.selectedPost.student.profilePicture}" alt="user image" />
-                                                </h:panelGroup>                                                
+                                                </h:panelGroup>
                                                 <span class="username">
-                                                    <h:outputText value="#{postManagedBean.selectedPost.anonymous ? 'Anonymous' : postManagedBean.selectedPost.student.firstname.concat(' ').concat(postManagedBean.selectedPost.student.lastname)}" escape="false" />
+                                                    <h:panelGroup rendered="#{not postManagedBean.selectedPost.anonymous}">
+                                                        <h:commandLink action="#{otherManagedBean.viewOtherUserProfile(postManagedBean.selectedPost.student.id)}">
+                                                            #{postManagedBean.selectedPost.student.firstname} #{postManagedBean.selectedPost.student.lastname}
+                                                        </h:commandLink>
+                                                    </h:panelGroup>
+                                                    <h:outputText rendered="#{postManagedBean.selectedPost.anonymous}"
+                                                                  value="Anonymous" />
                                                 </span>
 
                                                 <span class="description">Shared publicly - 
@@ -94,7 +100,7 @@
 
 
                                             <span class="username">
-                                                <a href="#"><h4>#{postManagedBean.selectedPost.title}</h4></a>
+                                                <strong><h4 style="color: royalblue;">#{postManagedBean.selectedPost.title}</h4></strong>
                                             </span>
 
 
@@ -169,11 +175,20 @@
                                                                     <div >
                                                                         <div class="d-flex justify-content-between align-items-center">
                                                                             <p class="mb-1">
-                                                                                #{comment.anonymous ? 'Anonymous' : comment.student.firstname.concat(' ').concat(comment.student.lastname)}
+                                                                                <span class="username">
+                                                                                    <h:panelGroup rendered="#{not comment.anonymous}">
+                                                                                        <h:commandLink action="#{otherManagedBean.viewOtherUserProfile(comment.student.id)}">
+                                                                                            #{comment.student.firstname} #{comment.student.lastname}
+                                                                                        </h:commandLink>
+                                                                                    </h:panelGroup>
+                                                                                    <h:outputText rendered="#{comment.anonymous}"
+                                                                                                  value="Anonymous" />
+                                                                                </span>
                                                                                 <span class="small">- <h:outputText value="#{comment.creationDate}">
                                                                                         <f:convertDateTime pattern="dd MMM yyyy hh:mm a" />
                                                                                     </h:outputText></span>
                                                                             </p>
+
                                                                         </div>
                                                                         <p class="comment-content"  style="font-size: larger;">
                                                                             #{comment.content}
@@ -238,13 +253,16 @@
                                                                                                     style="width: 50px; height: 50px;margin-right: 10px;"
                                                                                                     rendered="#{!comment.anonymous}"/>
                                                                                     <div class="flex-grow-1 flex-shrink-1">
-                                                                                        <!-- Nested Comment Content -->
-                                                                                        <p class="mb-1">
-                                                                                            #{nestedComment.anonymous ? 'Anonymous' : nestedComment.student.firstname.concat(' ').concat(nestedComment.student.lastname)}
-                                                                                            <span class="small">- <h:outputText value="#{nestedComment.creationDate}">
-                                                                                                    <f:convertDateTime pattern="dd MMM yyyy hh:mm a" />
-                                                                                                </h:outputText></span>
-                                                                                        </p>
+                                                                                        <span class="username">
+                                                                                            <h:panelGroup rendered="#{not comment.anonymous}">
+                                                                                                <h:commandLink action="#{otherManagedBean.viewOtherUserProfile(comment.student.id)}">
+                                                                                                    #{comment.student.firstname} #{comment.student.lastname}
+                                                                                                </h:commandLink>
+                                                                                            </h:panelGroup>
+                                                                                            <h:outputText rendered="#{comment.anonymous}"
+                                                                                                          value="Anonymous" />
+                                                                                        </span>
+
                                                                                         <p class="small mb-1"  style="font-size: larger;">
                                                                                             #{nestedComment.content}
                                                                                         </p>  

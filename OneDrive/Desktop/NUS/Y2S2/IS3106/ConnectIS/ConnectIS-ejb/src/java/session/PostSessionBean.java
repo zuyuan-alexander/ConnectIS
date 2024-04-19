@@ -15,6 +15,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -171,6 +172,6 @@ public class PostSessionBean implements PostSessionBeanLocal {
                 .getSingleResult();
         return likesCount;
     }
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+
+
 }

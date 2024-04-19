@@ -45,7 +45,7 @@
                                     <hr></hr>
                                     <!-- /.card-header -->
                                     <div class="card-body" style="padding-top: 0;">
-                                        <c:forEach items="#{postManagedBean.posts}" var="post">
+                                        <c:forEach items="#{postManagedBean.posts}" var="post" begin="0" end="4">
                                             <span class="username">
                                                 <strong><h:outputText value="#{post.course.courseCode}: " /></strong>
                                                 <strong>
