@@ -26,7 +26,7 @@
                 <f:event type="preRenderView" listener="#{studentManagedBean.loadSelectedStudent()}" />
             </f:metadata>
 
-            <h:form>
+            <h:form id="viewPost">
                 <section class="content">
                     <div class="container-fluid">
                         <div class="row">
@@ -199,14 +199,14 @@
 
                                                                         <div class="comment-actions" style="padding: 4px; display: flex; align-items: center; gap: 5px; font-size: 0.8em;">
 
-                                                                            <h:commandButton value="Reply" styleClass="btn btn-sm btn-light" style="text-decoration: underline;" action="#{commentManagedBean.setActiveCommentId(comment.id)}">
-                                                                                <f:ajax render=":j_idt20:j_idt52:#{status.index}:replyFormPanel" />
+                                                                            <h:commandButton value="Reply" styleClass="btn btn-sm btn-light" style="text-decoration: underline;" action="#{commentManagedBean.setActiveCommentId(comment.id)}" onclick="setSelectedCommentId(#{comment.id})">
+                                                                                <f:ajax render=":#{viewPost.clientId}:commentsContainer:#{status.index}:replyFormPanel" />
                                                                                 <f:param name="commentIndex" value="#{status.index}" />
                                                                             </h:commandButton>
 
                                                                             <!-- Render Edit and Delete buttons only for comments from logged-in student -->
                                                                             <h:panelGroup rendered="#{comment.student.id eq commentManagedBean.loggedinStudent.id}">
-                                                                                <h:commandButton value="Edit" styleClass="btn btn-sm btn-light" style="text-decoration: underline;" />
+                                                                                <h:commandButton value="Edit" styleClass="btn btn-sm btn-light" style="text-decoration: underline;" onclick="setSelectedCommentId(#{comment.id})" />
                                                                                 <!-- Delete Button -->
                                                                                 <a class="btn btn-sm btn-light" style="text-decoration: underline;" data-toggle="modal" data-target="#confirmDeleteCommentModal#{comment.id}" onclick="setSelectedCommentId(#{comment.id})">
                                                                                     Delete
@@ -275,15 +275,9 @@
 
                                                                                         <div class="comment-actions" style="padding: 4px; display: flex; align-items: center; gap: 5px; font-size: 0.8em;">
 
-                                                                                            <h:commandButton value="Reply" styleClass="btn btn-sm btn-light" style="text-decoration: underline;" action="#{commentManagedBean.setActiveCommentId(comment.id)}">
-                                                                                                <f:ajax render=":j_idt20:j_idt52:#{status.index}:replyFormPanel" />
-                                                                                                <f:param name="commentIndex" value="#{status.index}" />
-                                                                                            </h:commandButton>
-
                                                                                             <!-- Render Edit and Delete buttons only for comments from logged-in student -->
                                                                                             <h:panelGroup rendered="#{nestedComment.student.id eq commentManagedBean.loggedinStudent.id}">
-                                                                                                <h:commandButton value="Edit" styleClass="btn btn-sm btn-light" style="text-decoration: underline;">
-                                                                                                </h:commandButton>
+                                                                                                
                                                                                                 <a class="btn btn-sm btn-light" style="text-decoration: underline;" data-toggle="modal" data-target="#confirmDeleteNestedCommentModal" onclick="setSelectedCommentId(#{nestedComment.id})">
                                                                                                     Delete
                                                                                                 </a>
@@ -381,11 +375,11 @@
         <script>
             function hideReplyForm(index) {
                 console.log(index);
-                var replyId = 'j_idt20:j_idt52:' + index + ':replyFormPanel';
+                var replyId = '#{viewPost.clientId}:commentsContainer' + index + ':replyFormPanel';
                 //this works
-                document.getElementById('j_idt20:j_idt52:0:replyFormPanel').style.display = 'none';
+                document.getElementById('#{viewPost.clientId}:commentsContainer:0:replyFormPanel').style.display = 'none';
                 //this does not because the method calling the index is null.
-                document.getElementById(replyId).style.display = 'none';
+//                document.getElementById(replyId).style.display = 'none';
             }
 
             function setSelectedCommentId(commentId) {
