@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                template="./layout/authentication.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+    <ui:define name="title">
+        Sign Up
+    </ui:define>
+
+    <ui:define name="styleSheet">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="#{request.contextPath}/plugins/fontawesome-free/css/all.min.css" />
+        <!-- Daterange picker -->
+        <link rel="stylesheet" href="#{request.contextPath}/plugins/daterangepicker/daterangepicker.css"/>
+        <!-- iCheck for checkboxes and radio inputs -->
+        <link rel="stylesheet" href="#{request.contextPath}/plugins/icheck-bootstrap/icheck-bootstrap.min.css" />
+        <!-- Tempusdominus Bootstrap 4 (Date Picker) -->
+        <link rel="stylesheet" href="#{request.contextPath}/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css"/>
+        <!-- DataTables -->
+        <link rel="stylesheet" href="#{request.contextPath}/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" />
+        <link rel="stylesheet" href="#{request.contextPath}/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" />
+        <!-- Theme style (comes with Bootstrap) -->
+        <link rel="stylesheet" href="#{request.contextPath}/dist/css/adminlte.min.css" />
+        <!-- Google Font: Source Sans Pro -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback"/>
+        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script" rel='stylesheet' type='text/css' />
+        <style>
+            .bgimg {
+                background-image: url('/ConnectIS-war/upload/index-background-image.jpg');
+                min-height: 100%;
+                background-position: center;
+                background-size: cover;
+            }
+
+            .dancing-script-login {
+                font-family: "Dancing Script", cursive;
+                font-optical-sizing: auto;
+                font-weight: 700;
+                font-style: normal;
+                font-size: 50pt;
+                color: white;
+            }
+        </style>
+    </ui:define>
+
+
+    <ui:define name="content">
+        <div class="limiter">
+            <div class="container-signUp100 bgimg">
+                <div class="card card-primary" style="width: 70%;">
+                    <div class="card-header d-flex align-items-center justify-content-center" style="background-image: url(/ConnectIS-war/upload/bg-image2.jpg);">
+                        <span class="dancing-script-login">
+                            Sign Up
+                        </span>
+                    </div>
+
+                    <h:form id="signUpForm">
+                        <div class="card-body">
+                            <h3>Personal Information</h3>
+                            <hr/>
+
+                            <!-- first name -->
+                            <div class="form-group">
+                                <h:outputLabel for="firstname">First Name</h:outputLabel>
+                                <h:inputText binding="#{firstname}" id="firstname" value="#{studentManagedBean.firstname}" required="true" requiredMessage="First Name is required"
+                                             class="form-control #{firstname.valid ? '' :'is-invalid'}" />
+                                <h:message for="firstname" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                            </div>
+
+                            <!-- last name -->
+                            <div class="form-group">
+                                <h:outputLabel for="lastname">Last Name</h:outputLabel>
+                                <h:inputText binding="#{lastname}" id="lastname" value="#{studentManagedBean.lastname}" required="true" requiredMessage="Last Name is required"
+                                             class="form-control #{lastname.valid ? '' :'is-invalid'}" />
+                                <h:message for="lastname" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                            </div>
+
+                            <!-- gender -->
+                            <div class="form-group">
+                                <div class="icheck-primary">
+                                    <input type="radio" jsf:id="genderF" value="1" class="minimal" a:checked="#{(studentManagedBean.gender == 0 || studentManagedBean.gender == 1) ? 'checked' : null}"
+                                           a:name="#{genderItem.clientId}" />
+                                    <label jsf:for="genderF">Female</label>
+                                </div>
+                                <div class="icheck-primary">
+                                    <input type="radio" jsf:id="genderM" value="2" class="minimal" a:checked="#{(studentManagedBean.gender == 2) ? 'checked' : null}"
+                                           a:name="#{genderItem.clientId}" />
+                                    <label jsf:for="genderM">Male</label>
+                                    <h:inputHidden binding="#{genderItem}" value="#{studentManagedBean.gender}" />
+                                </div>
+                            </div>
+
+                            <!-- DOB -->
+                            <div class="form-group">
+                                <h:outputLabel for="inputDOB">Date of Birth (dd/mm/yyyy)</h:outputLabel>
+                                <div class="input-group date" id="dobpicker" data-target-input="nearest">
+                                    <div class="input-group-prepend" data-target="#dobpicker" data-toggle="datetimepicker">
+                                        <span class="input-group-text">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <h:inputText binding="#{inputDOB}" id="inputDOB" value="#{studentManagedBean.dob}" required="true" requiredMessage="DOB is required"
+                                                 converterMessage="Format should be dd/mm/yyy" class="form-control datepicker #{inputDOB.valid ? '' :'is-invalid'}" a:data-target="#dobpicker" a:data-toggle="datetimepicker">
+                                        <f:convertDateTime pattern="dd/MM/yyy" />
+                                    </h:inputText>
+                                    <h:message for="inputDOB" class="invalid-feedback" style="display:block; text-transform: none; color: red;"  />
+                                </div>
+                            </div>
+
+                            <!-- contact -->
+                            <div class="form-group">
+                                <h:outputLabel for="contact">Contact</h:outputLabel>
+                                <h:inputText binding="#{contact}" id="contact" value="#{studentManagedBean.contactnumber}" required="true" requiredMessage="Contact Number is required"
+                                             class="form-control #{contact.valid ? '' :'is-invalid'}" />
+                                <h:message for="contact" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                            </div>
+
+                            <!-- email -->
+                            <div class="form-group">
+                                <h:outputLabel for="email">Email</h:outputLabel>
+                                <h:inputText binding="#{email}" id="email" value="#{studentManagedBean.email}" required="true" requiredMessage="Email is required"
+                                             class="form-control #{email.valid ? '' :'is-invalid'}" />
+                                <h:message for="email" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                            </div>
+
+                            <br/><br/>
+                            <h3>Academic Information</h3>
+                            <hr/>
+
+                            <!-- academic year -->
+                            <div class="form-group">
+                                <h:outputLabel for="academicyear">Academic Year</h:outputLabel>
+                                <h:inputText binding="#{academicyear}" id="academicyear" value="#{studentManagedBean.academicYear}" required="true" requiredMessage="Academic Year is required"
+                                             class="form-control #{academicyear.valid ? '' :'is-invalid'}" />
+                                <h:message for="academicyear" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                            </div>
+
+                            <!-- degree -->
+                            <div class="form-group">
+                                <h:outputLabel for="degree">Degree</h:outputLabel>
+                                <h:selectOneMenu value="#{studentManagedBean.degree}" class="form-control">
+                                    <f:selectItem itemValue="1" itemLabel="Undergraduate" />
+                                    <f:selectItem itemValue="2" itemLabel="Master's" />
+                                    <f:selectItem itemValue="3" itemLabel="PhD" />
+                                </h:selectOneMenu>
+                            </div>
+
+                            <!-- specialization -->
+                            <div class="form-group">
+                                <h:outputLabel for="specialization">Specialization</h:outputLabel>
+                                <h:inputText binding="#{specialization}" id="specialization" value="#{studentManagedBean.specialization}" required="true" requiredMessage="Specialization is required"
+                                             class="form-control #{specialization.valid ? '' :'is-invalid'}" />
+                                <h:message for="specialization" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                            </div>
+
+                            <br/><br/>
+                            <h3>Password</h3>
+                            <hr/>
+
+                            <!-- Password -->
+                            <div class="form-group">
+                                <h:outputLabel for="password">Password</h:outputLabel>
+                                <p:password binding="#{password}" id="password" value="#{studentManagedBean.password}" required="true" requiredMessage="Password is required"
+                                               class="form-control #{password.valid ? '' :'is-invalid'}" feedback="true" />
+                                <h:message for="password" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                            </div>
+
+                            <!-- Confirm Password -->
+                            <div class="form-group">
+                                <h:outputLabel for="confirmPassword">Confirm Password</h:outputLabel>
+                                <p:password binding="#{confirmPassword}" id="confirmPassword" value="#{studentManagedBean.confirmPassword}" required="true" requiredMessage="Confirm Password is required"
+                                               class="form-control #{confirmPassword.valid ? '' :'is-invalid'}" feedback="true" />
+                                <h:message for="confirmPassword" class="invalid-feedback" style="display:block; text-transform: none; color: red;" />
+                            </div>
+
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                            <h:button value="Cancel" class="btn btn-default" outcome="login" />
+                            <h:commandButton value="Sign Up" class="btn btn-primary float-right" 
+                                             action="#{studentManagedBean.signup(evt)}" />
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="script">
+        <!-- List of javascripts -->
+        <!-- jQuery -->
+        <script src="#{request.contextPath}/plugins/jquery/jquery.min.js"></script>
+        <!-- jQuery UI 1.11.4 -->
+        <script src="#{request.contextPath}/plugins/jquery-ui/jquery-ui.min.js"></script>
+        <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+        <script>
+            $.widget.bridge('uibutton', $.ui.button);
+        </script>
+        <!-- Bootstrap 4 -->
+        <script src="#{request.contextPath}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- Tempusdominus Bootstrap 4 (Date Picker) -->
+        <script src="#{request.contextPath}/plugins/moment/moment.min.js"></script>
+        <script src="#{request.contextPath}/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="#{request.contextPath}/dist/js/adminlte.js"></script>
+        <!-- DataTables -->
+        <script src="#{request.contextPath}/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="#{request.contextPath}/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="#{request.contextPath}/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="#{request.contextPath}/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+        <script src="#{request.contextPath}/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+        <script>
+            //Date picker
+            $('#dobpicker').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+        </script>
+    </ui:define>
+
+</ui:composition>
+
