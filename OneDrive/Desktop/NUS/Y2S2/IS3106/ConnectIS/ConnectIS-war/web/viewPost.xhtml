@@ -229,9 +229,14 @@
                                                                         <ui:repeat value="#{comment.replies}" var="nestedComment">
                                                                             <div style="margin-left: 20px; margin-top:20px;"> <!-- Indent nested comments -->
                                                                                 <div class="d-flex flex-start">
-                                                                                    <h:graphicImage value="dist/img/user1-128x128.jpg" alt="user image" 
+                                                                                    <h:graphicImage value="upload/anonymous.png" alt="user image" 
                                                                                                     styleClass="img-circle img-bordered-sm" 
-                                                                                                    style="width: 40px; height: 40px; margin-right: 10px;"/>
+                                                                                                    style="width: 50px; height: 50px;margin-right: 10px;"
+                                                                                                    rendered="#{comment.anonymous}"/>
+                                                                                    <h:graphicImage value="upload/#{comment.student.profilePicture}" alt="user image" 
+                                                                                                    styleClass="img-circle img-bordered-sm" 
+                                                                                                    style="width: 50px; height: 50px;margin-right: 10px;"
+                                                                                                    rendered="#{!comment.anonymous}"/>
                                                                                     <div class="flex-grow-1 flex-shrink-1">
                                                                                         <!-- Nested Comment Content -->
                                                                                         <p class="mb-1">
