@@ -42,6 +42,11 @@ public class ChatManagedBean implements Serializable {
     private Student student2;
     private boolean student1Anonymous;
     private boolean student2Anonymous;
+    
+    //Chat
+    private Student otherStudent;
+    private String otherStudentName;
+    private Message lastMessage;
 
     /**
      * Creates a new instance of ChatManagedBean
@@ -68,8 +73,11 @@ public class ChatManagedBean implements Serializable {
 
     public void loadSelectedChat(Long chatId) {
         System.out.println("loadSelected chat is called with chatId: " + chatId);
-
+        selectedChatId = chatId;
         selectedChat = chatSessionBean.findChat(chatId);
+        otherStudent = chatSessionBean.getOtherStudent(chatId, loggedinStudent.getId());
+        lastMessage = chatSessionBean.getLastMessage(chatId);
+
         if (selectedChat.getMessages().isEmpty()) {
             System.out.println("SelectedChat now has " + 0 + " messages.");
         } else {
@@ -112,9 +120,17 @@ public class ChatManagedBean implements Serializable {
             m.setChat(selectedChat);
             if (loggedinStudent != null) {
                 chatSessionBean.createMessage(m, loggedinStudent.getId());
+                loadSelectedChat(selectedChatId);
+                //return "viewChats.xhtml?faces-redirect=true";
             }
         }
+
+        setContent(null);
+
+        //return null;
     }
+    
+    
 
     public Student getStudent1() {
         return student1;
@@ -187,5 +203,31 @@ public class ChatManagedBean implements Serializable {
     public void setChats(List<Chat> chats) {
         this.chats = chats;
     }
+
+    public Student getOtherStudent() {
+        return otherStudent;
+    }
+
+    public void setOtherStudent(Student otherStudent) {
+        this.otherStudent = otherStudent;
+    }
+
+    public String getOtherStudentName() {
+        return otherStudentName;
+    }
+
+    public void setOtherStudentName(String otherStudentName) {
+        this.otherStudentName = otherStudentName;
+    }
+
+    public Message getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(Message lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+    
+    
 
 }
